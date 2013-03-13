@@ -1,0 +1,23 @@
+<script type="text/javascript" src="/includes/js/fileuploader.js"></script>
+
+
+
+<form action="{{ url|e }}" method="post" class="enrolStage">
+    <div id="file-uploader">
+        <noscript>
+            <p>Please enable JavaScript to use file uploader.</p>
+            <!-- or put a simple form for upload here -->
+        </noscript>
+    </div>
+    <input type="hidden" name="stepIndex" value="{{stepIndex|e}}" />
+    <input type="submit" name="submitStep" value="Submit" />
+</form>
+
+<script type="text/javascript">
+    var uploader = new qq.FileUploader({
+        // pass the dom node (ex. $(selector)[0] for jQuery users)
+        element: document.getElementById('file-uploader'),
+        // path to server-side upload script
+        action: '{{ url|e('js') }}&stepIndex={{stepIndex}}&submitStep=ajax'
+    });
+</script>

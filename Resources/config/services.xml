@@ -4,6 +4,16 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="ice.forms" class="Ice\FormBundle\Service\FormService" />
+        <service id="ice.forms" class="Ice\FormBundle\Service\FormService">
+            <call method="setFormFactory">
+                <argument type="service" id="form.factory" />
+            </call>
+            <call method="setTemplating">
+                <argument type="service" id="templating" />
+            </call>
+            <call method="setTwigLoader">
+                <argument type="service" id="twig.loader" />
+            </call>
+        </service>
     </services>
 </container>
