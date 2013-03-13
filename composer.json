@@ -1,0 +1,22 @@
+{
+    "name": "ice/form-bundle",
+    "type": "symfony-bundle",
+    "description": "Bundle providing forms and business logic for course registrations.",
+    "licence": "MIT",
+    "authors": [
+        {
+            "name": "Rob Hogan",
+            "email": "rob.hogan@admin.cam.ac.uk"
+        }
+    ],
+    "require": {
+        "ice/minervaclient-bundle": "dev-master",
+        "misd/guzzle-bundle": "@stable"
+    },
+    "autoload": {
+        "psr-0": {
+            "Ice\\FormBundle": ""
+        }
+    },
+    "target-dir": "Ice/FormBundle"
+}
