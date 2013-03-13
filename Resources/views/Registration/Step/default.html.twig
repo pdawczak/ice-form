@@ -1,0 +1,41 @@
+<form action="{{ url|e }}" method="post" class="enrolStage">
+    {% if description != false %}
+        <p>{{ description|e }}</p>
+    {% endif %}
+    <table>
+    {% for element in form %}
+        {% if 'field' not in element.vars.block_prefixes %}
+            {% for nestedElement in element %}
+                {% if 'hidden' not in nestedElement.vars.block_prefixes %}
+                {% set hasErrors = nestedElement.vars.errors|length > 0 %}
+                <tr class="inputRow{% if hasErrors %} hasErrors{% endif %}">
+                    <td class="labelContainer">
+                        {{ form_label(nestedElement, null, {'label_attr':{'class':'mainLabel'}, 'attr':{'class':'container'}} ) }}
+                    </td>
+                    <td class="inputContainer">
+                        {{ form_widget(nestedElement) }}
+                        {{ form_errors(nestedElement) }}
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if 'hidden' not in element.vars.block_prefixes %}
+            {% set hasErrors = element.vars.errors|length > 0 %}
+            <tr class="inputRow{% if hasErrors %} hasErrors{% endif %}">
+                <td class="labelContainer">
+                    {{ form_label(element, null, {'label_attr':{'class':'mainLabel'}, 'attr':{'class':'container'}} ) }}
+                </td>
+                <td class="inputContainer">
+                    {{ form_widget(element) }}
+                    {{ form_errors(element) }}
+                </td>
+            </tr>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    </table>
+    {{ form_rest(form) }}
+    <input type="hidden" name="stepIndex" value="{{stepIndex|e}}" />
+    <input type="submit" name="submitStep" value="Continue" />
+</form>
