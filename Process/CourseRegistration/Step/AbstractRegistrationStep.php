@@ -1,21 +1,21 @@
 <?php
 
-namespace Ice\FormBundle\Process\Registration\Step;
+namespace Ice\FormBundle\Process\CourseRegistration\Step;
 
-use Ice\FormBundle\Process\Registration;
+use Ice\FormBundle\Process\CourseRegistration;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 abstract class AbstractRegistrationStep extends AbstractType{
     protected $title;
 
-    /** @var \Ice\FormBundle\Process\Registration */
+    /** @var \Ice\FormBundle\Process\CourseRegistration */
     private $parentProcess;
 
     /**
-     * @param Registration $parentProcess
+     * @param CourseRegistration $parentProcess
      */
-    public function __construct(Registration $parentProcess){
+    public function __construct(CourseRegistration $parentProcess){
         $this->parentProcess = $parentProcess;
     }
 
@@ -39,7 +39,7 @@ abstract class AbstractRegistrationStep extends AbstractType{
     }
 
     /**
-     * @param \Ice\FormBundle\Process\Registration $parentProcess
+     * @param \Ice\FormBundle\Process\CourseRegistration $parentProcess
      * @return AbstractRegistrationStep
      */
     public function setParentProcess($parentProcess)
@@ -49,7 +49,7 @@ abstract class AbstractRegistrationStep extends AbstractType{
     }
 
     /**
-     * @return \Ice\FormBundle\Process\Registration
+     * @return \Ice\FormBundle\Process\CourseRegistration
      */
     public function getParentProcess()
     {

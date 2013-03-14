@@ -1,9 +1,9 @@
 <?php
 namespace Ice\FormBundle\Process;
 
-use Ice\FormBundle\Process\Registration\Step as Step;
+use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
-class Registration extends AbstractProcess{
+class CourseRegistration extends AbstractProcess{
 
 
     /**
@@ -11,7 +11,7 @@ class Registration extends AbstractProcess{
      * @return Step\AbstractRegistrationStep
      */
     public function getStepByReference($reference){
-        $className = 'Ice\\FormBundle\\Process\\Registration\\Step\\'.ucwords($reference);
+        $className = 'Ice\\FormBundle\\Process\\CourseRegistration\\Step\\'.ucwords($reference);
         //$step = new $className($this);
 
         $reflectionClass = new \ReflectionClass($className);

@@ -2,7 +2,7 @@
 
 namespace Ice\FormBundle\Service;
 
-use Ice\FormBundle\Process\Registration;
+use Ice\FormBundle\Process\CourseRegistration;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader as TwigLoader;
@@ -17,11 +17,11 @@ class FormService{
     /** @var TwigLoader */
     private $twigLoader;
 
-    public function beginRegistrationProcess(){
-        $registration = new Registration();
-        $registration->setFormFactory($this->getFormFactory());
-        $registration->setTemplating($this->getTemplating());
-        return $registration;
+    public function beginCourseRegistrationProcess(){
+        $courseRegistration = new CourseRegistration();
+        $courseRegistration->setFormFactory($this->getFormFactory());
+        $courseRegistration->setTemplating($this->getTemplating());
+        return $courseRegistration;
     }
 
     /**
