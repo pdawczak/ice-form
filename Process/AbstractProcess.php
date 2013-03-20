@@ -5,8 +5,10 @@ namespace Ice\FormBundle\Process;
 use Symfony\Component\Form\FormFactory;
 
 use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\HttpFoundation\Request;
+use Ice\VeritasClientBundle\Service\VeritasClient;
 
-class AbstractProcess{
+abstract class AbstractProcess{
     /** @var string */
     private $iceId;
 
@@ -15,6 +17,9 @@ class AbstractProcess{
 
     /** @var TwigEngine */
     private $templating;
+
+    /** @var VeritasClient */
+    private $veritasClient;
 
     /**
      * @param $iceId
@@ -68,5 +73,27 @@ class AbstractProcess{
     public function getTemplating()
     {
         return $this->templating;
+    }
+
+    abstract public function processRequest(Request $request);
+
+    abstract public function isComplete();
+
+    /**
+     * @param \Ice\VeritasClientBundle\Service\VeritasClient $veritasClient
+     * @return CourseRegistration
+     */
+    public function setVeritasClient($veritasClient)
+    {
+        $this->veritasClient = $veritasClient;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\VeritasClientBundle\Service\VeritasClient
+     */
+    public function getVeritasClient()
+    {
+        return $this->veritasClient;
     }
 }

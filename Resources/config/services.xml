@@ -14,6 +14,15 @@
             <call method="setTwigLoader">
                 <argument type="service" id="twig.loader" />
             </call>
+            <call method="setVeritasClient">
+                <argument type="service" id="veritas.client" />
+            </call>
+            <call method="setMinervaClient">
+                <argument type="service" id="minerva.client" />
+            </call>
+            <call method="setJanusClient">
+                <argument type="service" id="janus.client" />
+            </call>
         </service>
     </services>
 </container>

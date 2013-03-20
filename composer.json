@@ -11,6 +11,8 @@
     ],
     "require": {
         "ice/minervaclient-bundle": "dev-master",
+        "ice/janusclient-bundle": "dev-master",
+        "ice/veritasclient-bundle": "dev-master",
         "misd/guzzle-bundle": "@stable"
     },
     "autoload": {
