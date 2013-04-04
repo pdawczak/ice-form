@@ -6,11 +6,11 @@ use Symfony\Component\Form\FormFactory;
 
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\Request;
-use Ice\VeritasClientBundle\Service\VeritasClient;
+use Ice\VeritasClientBundle\Service\VeritasClient,
+    Ice\MinervaClientBundle\Service\MinervaClient,
+    Ice\JanusClientBundle\Service\JanusClient;
 
 abstract class AbstractProcess{
-    /** @var string */
-    private $iceId;
 
     /** @var FormFactory */
     private $formFactory;
@@ -21,23 +21,11 @@ abstract class AbstractProcess{
     /** @var VeritasClient */
     private $veritasClient;
 
-    /**
-     * @param $iceId
-     * @return AbstractProcess
-     */
-    public final function setIceId($iceId)
-    {
-        $this->iceId = $iceId;
-        return $this;
-    }
+    /** @var MinervaClient */
+    private $minervaClient;
 
-    /**
-     * @return string
-     */
-    public final function getIceId()
-    {
-        return $this->iceId;
-    }
+    /** @var JanusClient */
+    private $janusClient;
 
     /**
      * @param \Symfony\Component\Form\FormFactory $formFactory
@@ -95,5 +83,41 @@ abstract class AbstractProcess{
     public function getVeritasClient()
     {
         return $this->veritasClient;
+    }
+
+    /**
+     * @param \Ice\JanusClientBundle\Service\JanusClient $janusClient
+     * @return AbstractProcess
+     */
+    public function setJanusClient($janusClient)
+    {
+        $this->janusClient = $janusClient;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\JanusClientBundle\Service\JanusClient
+     */
+    public function getJanusClient()
+    {
+        return $this->janusClient;
+    }
+
+    /**
+     * @param \Ice\MinervaClientBundle\Service\MinervaClient $minervaClient
+     * @return AbstractProcess
+     */
+    public function setMinervaClient($minervaClient)
+    {
+        $this->minervaClient = $minervaClient;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\MinervaClientBundle\Service\MinervaClient
+     */
+    public function getMinervaClient()
+    {
+        return $this->minervaClient;
     }
 }
