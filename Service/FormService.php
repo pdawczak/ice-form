@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Service;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Minerva\NotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader as TwigLoader;
@@ -29,13 +30,18 @@ class FormService{
     /** @var JanusClient */
     private $janusClient;
 
-    public function beginCourseRegistrationProcess($courseId){
+    public function beginCourseRegistrationProcess($courseId, $iceId = null){
         $courseRegistration = new CourseRegistration();
         $courseRegistration->setCourseId($courseId);
         $courseRegistration->setFormFactory($this->getFormFactory());
         $courseRegistration->setTemplating($this->getTemplating());
         $courseRegistration->setVeritasClient($this->getVeritasClient());
-        $courseRegistration->setVeritasClient($this->getVeritasClient());
+        $courseRegistration->setJanusClient($this->getJanusClient());
+        $courseRegistration->setMinervaClient($this->getMinervaClient());
+
+        if($iceId){
+            $courseRegistration->setRegistrantId($iceId);
+        }
 
         return $courseRegistration;
     }
@@ -132,7 +138,7 @@ class FormService{
     }
 
     /**
-     * @param \Ice\MinervaClientBundle\Service\JanusClient $janusClient
+     * @param \Ice\JanusClientBundle\Service\JanusClient $janusClient
      * @return FormService
      */
     public function setJanusClient($janusClient)
@@ -142,7 +148,7 @@ class FormService{
     }
 
     /**
-     * @return \Ice\MinervaClientBundle\Service\JanusClient
+     * @return \Ice\JanusClientBundle\Service\JanusClient
      */
     public function getJanusClient()
     {
