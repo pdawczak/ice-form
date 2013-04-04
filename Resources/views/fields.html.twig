@@ -1,0 +1,15 @@
+{% extends "bootstrap_form_layout.html.twig" %}
+
+{% block horizontal_row %}
+    {% spaceless %}
+        {% if 'paragraph' in block_prefixes %}
+            <p>{{ data }}</p>
+        {% else %}
+            {{ parent() }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{% block display_widget %}
+    <span id="{{ form.vars.name }}" class="control-label" style="width: auto;">{{ data }}</span>
+{% endblock %}
