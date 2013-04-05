@@ -31,7 +31,7 @@ class MarketingInformationType extends AbstractRegistrationStep{
                     'Other'=>'Other',
                 )
             ))
-            ->add('dietaryRequirementsSpecific', 'textarea', array(
+            ->add('marketingDetail', 'textarea', array(
                 'required'=>false,
                 'label'=>'If other, please specify'
             ))
@@ -54,7 +54,7 @@ class MarketingInformationType extends AbstractRegistrationStep{
 
         foreach(array(
                     1=>'marketingHowHeard',
-                    2=>'dietaryRequirementsSpecific',
+                    2=>'marketingDetail',
                     3=>'marketingOptIn'
                 )
                 as $order=>$fieldName){
@@ -82,7 +82,7 @@ class MarketingInformationType extends AbstractRegistrationStep{
     }
 
     public function prepare(){
-        $this->setEntity(new MarketingInformation());
+        $this->setEntity(MarketingInformation::fromStepProgress($this->getStepProgress()));
         $this->setPrepared();
     }
 

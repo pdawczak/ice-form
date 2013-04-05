@@ -2,6 +2,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Ice\MinervaClientBundle\Entity\StepProgress;
 
 class MarketingInformation{
     /**
@@ -74,5 +75,30 @@ class MarketingInformation{
     public function getMarketingOptIn()
     {
         return $this->marketingOptIn;
+    }
+
+    /**
+     *
+     */
+    public static function fromStepProgress(StepProgress $stepProgress){
+        $instance = new self();
+        $instance->setMarketingHowHeard($instance->getDeserializedValueByFieldName($stepProgress, 'marketingHowHeard'));
+        $instance->setMarketingDetail($instance->getDeserializedValueByFieldName($stepProgress, 'marketingDetail'));
+        $instance->setMarketingOptIn($instance->getDeserializedValueByFieldName($stepProgress, 'marketingOptIn'));
+        return $instance;
+    }
+
+    /**
+     * @param StepProgress $stepProgress
+     * @param $fieldName
+     * @return mixed|null
+     */
+    private function getDeserializedValueByFieldName(StepProgress $stepProgress, $fieldName){
+        try{
+            return $stepProgress->getFieldValueByName($fieldName)->getValue();
+        }
+        catch(NotFoundException $e){
+            return null;
+        }
     }
 }

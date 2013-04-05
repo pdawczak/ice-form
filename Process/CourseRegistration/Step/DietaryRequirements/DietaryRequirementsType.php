@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
 use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Ice\JanusClientBundle\Entity\User;
 
 class DietaryRequirementsType extends AbstractRegistrationStep{
     /**
