@@ -25,6 +25,44 @@ class AccommodationType extends AbstractRegistrationStep{
         ;
     }
 
+    /**
+     * @param Request $request
+     */
+    public function processRequest(Request $request){
+        $this->getForm()->bind($request);
+        /** @var $entity SupportNeeds */
+        $entity = $this->getEntity();
+
+        foreach(array(
+                    1=>'address1',
+                    2=>'address2',
+                    3=>'address3',
+                    4=>'address4',
+                    5=>'city',
+                    6=>'postCode',
+                    7=>'country',
+                    8=>'telephone',
+                )
+                as $order=>$fieldName){
+            $getter = 'get'.ucfirst($fieldName);
+            $this->getStepProgress()->setFieldValue(
+                $fieldName,
+                $order,
+                $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
+                $entity->$getter()
+            );
+        }
+
+        if($this->getForm()->isValid()){
+            $this->setComplete();
+        }
+        else{
+            $this->setComplete(false);
+        }
+        $this->setUpdated();
+        $this->save();
+    }
+
     public function getTemplate(){
         return 'Accommodation.html.twig';
     }

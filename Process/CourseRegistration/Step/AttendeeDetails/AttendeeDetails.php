@@ -1,10 +1,10 @@
 <?php
-namespace Ice\FormBundle\Process\CourseRegistration\Step\Contact;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\AttendeeDetails;
 
 use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
 
-class Contact{
+class AttendeeDetails{
     /** @var string */
     private $address1;
 
@@ -31,7 +31,7 @@ class Contact{
 
     /**
      * @param string $address1
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setAddress1($address1)
     {
@@ -49,7 +49,7 @@ class Contact{
 
     /**
      * @param string $address2
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setAddress2($address2)
     {
@@ -67,7 +67,7 @@ class Contact{
 
     /**
      * @param string $address3
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setAddress3($address3)
     {
@@ -85,7 +85,7 @@ class Contact{
 
     /**
      * @param string $address4
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setAddress4($address4)
     {
@@ -103,7 +103,7 @@ class Contact{
 
     /**
      * @param string $city
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setCity($city)
     {
@@ -121,7 +121,7 @@ class Contact{
 
     /**
      * @param string $country
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setCountry($country)
     {
@@ -139,7 +139,7 @@ class Contact{
 
     /**
      * @param string $postCode
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setPostCode($postCode)
     {
@@ -157,7 +157,7 @@ class Contact{
 
     /**
      * @param string $telephone
-     * @return Contact
+     * @return AttendeeDetails
      */
     public function setTelephone($telephone)
     {
@@ -175,7 +175,7 @@ class Contact{
 
     /**
      * @param StepProgress $stepProgress
-     * @return Contact
+     * @return AttendeeDetails
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();

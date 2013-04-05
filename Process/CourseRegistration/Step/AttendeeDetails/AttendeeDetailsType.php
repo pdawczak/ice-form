@@ -1,6 +1,6 @@
 <?php
 
-namespace Ice\FormBundle\Process\CourseRegistration\Step\Contact;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\AttendeeDetails;
 
 use Ice\JanusClientBundle\Exception\ValidationException;
 use JMS\Serializer\Tests\Fixtures\Person;
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\MinLength;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Ice\JanusClientBundle\Entity\User;
 
-class ContactType extends AbstractRegistrationStep{
+class AttendeeDetailsType extends AbstractRegistrationStep{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -34,34 +34,60 @@ class ContactType extends AbstractRegistrationStep{
     }
 
     /**
+     * @return string
+     */
+    public function getTitle(){
+        return 'Contact';
+    }
+
+    /**
      * @param Request $request
      */
     public function processRequest(Request $request){
         $this->getForm()->bind($request);
-        if($this->getForm()->isValid()){
-            /** @var $entity Contact */
-            $entity = $this->getEntity();
-            $this->getStepProgress()->setFieldValue('address1', 1, 'Address line 1', $entity->getAddress1())
-                ->setFieldValue('address2', 2, 'Address line 2', $entity->getAddress2())
-                ->setFieldValue('address3', 3, 'Address line 3', $entity->getAddress3())
-                ->setFieldValue('address4', 4, 'Address line 4', $entity->getAddress4())
-                ->setFieldValue('city',     5, 'City', $entity->getCity())
-                ->setFieldValue('postCode', 6, 'Post code', $entity->getPostCode())
-                ->setFieldValue('country',  7, 'Country', $entity->getCountry())
-                ->setFieldValue('telephone', 8, 'Telephone', $entity->getTelephone())
-                ;
-            $this->setComplete();
-            $this->save();
+        /** @var $entity AttendeeDetails */
+        $entity = $this->getEntity();
+
+        foreach(array(
+                    1=>'address1',
+                    2=>'address2',
+                    3=>'address3',
+                    4=>'address4',
+                    5=>'city',
+                    6=>'postCode',
+                    7=>'country',
+                    8=>'telephone',
+                )
+                as $order=>$fieldName){
+            $getter = 'get'.ucfirst($fieldName);
+            $this->getStepProgress()->setFieldValue(
+                $fieldName,
+                $order,
+                $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
+                $entity->$getter()
+            );
         }
+
+        if($this->getForm()->isValid()){
+            $this->setComplete();
+        }
+        else{
+            $this->setComplete(false);
+        }
+        $this->setUpdated();
+        $this->save();
     }
 
+    /**
+     * @return mixed|void
+     */
     public function prepare(){
-        $contact = Contact::fromStepProgress($this->getStepProgress());
+        $contact = AttendeeDetails::fromStepProgress($this->getStepProgress());
         $this->setEntity($contact);
         $this->setPrepared();
     }
 
     public function getTemplate(){
-        return 'Contact.html.twig';
+        return 'AttendeeDetails.html.twig';
     }
 }

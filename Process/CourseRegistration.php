@@ -59,11 +59,18 @@ class CourseRegistration extends AbstractProcess
     }
 
     /**
-     * @param int $index
+     * @param $index
      * @return Step\AbstractRegistrationStep
+     * @throws \OutOfBoundsException
      */
     public function getStepByIndex($index){
-        return $this->getSteps()[$index];
+        $steps = $this->getSteps();
+        if(isset($steps[$index])){
+            return $steps[$index];
+        }
+        else{
+            throw new \OutOfBoundsException('No step with index '.$index);
+        }
     }
 
     /**
@@ -159,7 +166,28 @@ class CourseRegistration extends AbstractProcess
                 $submittedStep->prepare();
                 $submittedStep->processRequest($request);
                 if($submittedStep->isComplete()){
-                    $this->setCurrentStepByIndex($submittedStep->getIndex()+1);
+                    $firstIncompleteStep = null;
+                    $wholeProcessComplete = true;
+                    foreach($this->getSteps() as $firstIncompleteStep){
+                        if(!$firstIncompleteStep->isComplete()){
+                            $wholeProcessComplete = false;
+                            break;
+                        }
+                    }
+                    if($wholeProcessComplete){
+                        if($this->getProgress()->getCompleted()===null){
+                            $this->getProgress()->setCompleted(new \DateTime());
+                        }
+                        return;
+                    }
+                    else{
+                        try{
+                            $this->setCurrentStepByIndex($submittedStep->getIndex()+1);
+                        }
+                        catch(\OutOfBoundsException $e){
+                            $this->setCurrentStep($firstIncompleteStep);
+                        }
+                    }
                 }
                 else{
                     $this->setCurrentStep($submittedStep);
@@ -234,7 +262,10 @@ class CourseRegistration extends AbstractProcess
      * @return bool
      */
     public function isComplete(){
-        return false;
+        if(!$this->getProgress()){
+            return false;
+        }
+        return $this->getProgress()->getCompleted()!==null;
     }
 
     /**
