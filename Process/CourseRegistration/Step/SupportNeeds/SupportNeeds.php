@@ -109,6 +109,10 @@ class SupportNeeds{
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();
+        $instance->setAdditionalNeeds($instance->getDeserializedValueByFieldName($stepProgress, 'additionalNeeds'));
+        $instance->setAdditionalNeedsDetail($instance->getDeserializedValueByFieldName($stepProgress, 'additionalNeedsDetail'));
+        $instance->setFirstFloorAccess($instance->getDeserializedValueByFieldName($stepProgress, 'firstFloorAccess'));
+        $instance->setShareSupportNeeds($instance->getDeserializedValueByFieldName($stepProgress, 'shareSupportNeeds'));
         return $instance;
     }
 

@@ -78,7 +78,8 @@ class MarketingInformation{
     }
 
     /**
-     *
+     * @param StepProgress $stepProgress
+     * @return MarketingInformation
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();
