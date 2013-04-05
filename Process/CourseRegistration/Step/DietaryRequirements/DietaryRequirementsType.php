@@ -1,6 +1,6 @@
 <?php
 
-namespace Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\DietaryRequirements;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -10,36 +10,38 @@ use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\JanusClientBundle\Entity\User;
 
-class MarketingInformationType extends AbstractRegistrationStep{
+class DietaryRequirementsType extends AbstractRegistrationStep{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
-            ->add('marketingHowHeard', 'choice', array(
+            ->add('dietaryRequirementsListed', 'choice', array(
                 'expanded'=>true,
                 'multiple'=>true,
-                'label'=>'How did you hear about this course? Please select all that apply.',
+                'label'=>'Please indicate if you have any specific dietary requirements.',
+                'required'=>false,
                 'choices'=>array(
-                    'Advert'=>'Advert',
-                    'Another course'=>'Another course',
-                    'Brochure'=>'Brochure',
-                    'ICE website'=>'ICE website',
-                    'Press article'=>'Press article',
-                    'Recommendation'=>'Recommendation',
-                    'Other'=>'Other',
+                    'Nut allergy'=>'Allergic to nuts',
+                    'Fish allergy'=>'Allergic to fish',
+                    'Shellfish allergy'=>'Allergic to shellfish',
+                    'Egg allergy'=>'Allergic to eggs',
+                    'Wheat allergy'=>'Allergic to wheat',
+                    'Milk allergy'=>'Allergic to cows milk',
+                    'Vegetarian - no fish'=>'Vegetarian - no fish',
+                    'Vegetarian - fish okay'=>'Vegetarian - fish okay',
+                    'Vegan'=>'Vegan',
+                    'Halaal'=>'Halaal',
+                    'Diabetic'=>'Diabetic',
+                    'Gluten free'=>'Gluten free',
+                    'Other'=>'Other'
                 )
             ))
             ->add('dietaryRequirementsSpecific', 'textarea', array(
                 'required'=>false,
                 'label'=>'If other, please specify'
             ))
-            ->add('marketingOptIn', 'checkbox', array(
-                'label'=>'Please tick if you would like to receive occasional emails about upcoming courses, events and
-                    other activities at the Institute'
-                )
-            )
         ;
         parent::buildForm($builder, $options);
     }
@@ -49,13 +51,12 @@ class MarketingInformationType extends AbstractRegistrationStep{
      */
     public function processRequest(Request $request){
         $this->getForm()->bind($request);
-        /** @var $entity MarketingInformation */
+        /** @var $entity DietaryRequirements */
         $entity = $this->getEntity();
 
         foreach(array(
-                    1=>'marketingHowHeard',
-                    2=>'dietaryRequirementsSpecific',
-                    3=>'marketingOptIn'
+                    1=>'dietaryRequirementsListed',
+                    2=>'dietaryRequirementsSpecific'
                 )
                 as $order=>$fieldName){
             $getter = 'get'.ucfirst($fieldName);
@@ -78,11 +79,11 @@ class MarketingInformationType extends AbstractRegistrationStep{
     }
 
     public function getTemplate(){
-        return 'MarketingInformation.html.twig';
+        return 'DietaryRequirements.html.twig';
     }
 
     public function prepare(){
-        $this->setEntity(new MarketingInformation());
+        $this->setEntity(new DietaryRequirements());
         $this->setPrepared();
     }
 
@@ -94,11 +95,11 @@ class MarketingInformationType extends AbstractRegistrationStep{
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
             'validation_groups' => function(FormInterface $form) {
-                /** @var $data MarketingInformation */
+                /** @var $data DietaryRequirements */
                 $data = $form->getData();
                 $groups = array('default');
-                if(in_array('Other', $data->getMarketingHowHeard())){
-                    $groups[] = 'how_heard_other';
+                if(in_array('Other', $data->getDietaryRequirementsListed())){
+                    $groups[] = 'selected_other';
                 }
                 return $groups;
             }

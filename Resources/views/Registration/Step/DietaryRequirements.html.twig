@@ -1,0 +1,22 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeOtherSelected(){
+            if(this.checked) {
+                $('#whenOtherSelected').show();
+            }
+            else {
+                $('#whenOtherSelected').hide();
+            }
+        }
+        $("input:checkbox[value=Other]").change(onChangeOtherSelected).trigger("change");
+    </script>
+{% endblock %}
+
+{% block form_content %}
+    {{ form_row(form.dietaryRequirementsListed, {'form_type':'horizontal'}) }}
+    <div id="whenOtherSelected">{{ form_row(form.dietaryRequirementsSpecific, {'form_type':'horizontal'}) }}</div>
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}
