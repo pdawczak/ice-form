@@ -58,6 +58,10 @@ abstract class AbstractRegistrationStep extends AbstractType{
     public function render(array $vars = array()){
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
+        if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
+            $this->getStepProgress()->setBegan(new \DateTime);
+            $this->save();
+        }
         return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getTemplate(), $vars);
     }
 
@@ -130,6 +134,10 @@ abstract class AbstractRegistrationStep extends AbstractType{
         else if($this->isComplete() && !$complete){ //Change to incomplete
             $this->getStepProgress()->setCompleted(null);
         }
+    }
+
+    public function setUpdated(){
+        $this->getStepProgress()->setUpdated(new \DateTime());
     }
 
     public function isComplete(){
