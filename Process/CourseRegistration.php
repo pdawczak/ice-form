@@ -409,7 +409,9 @@ class CourseRegistration extends AbstractProcess
             $this->getMinervaClient()->createBooking(
                 $ai->getIceId(),
                 $ai->getCourseId(),
-                $booking->getBookedBy()
+                array(
+                    'bookedBy'=>$booking->getBookedBy()
+                )
             );
 
             return $booking;
