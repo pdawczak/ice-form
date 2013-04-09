@@ -126,8 +126,8 @@ class CourseRegistration extends AbstractProcess
     public function getProgress($create = false)
     {
         if(!$this->progress){
-            $booking = $this->getBooking(true);
-            if($progress = $booking->getRegistrationProgress()){
+            $booking = $this->getBooking($create);
+            if($booking && $progress = $booking->getRegistrationProgress()){
                 return $progress;
             }
             else if($create){
