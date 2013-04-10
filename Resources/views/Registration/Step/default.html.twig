@@ -1,10 +1,6 @@
 {% form_theme form 'fields.html.twig' %}
 
 <form action="{{ url|e }}" method="post" class="form-horizontal">
-    {% if description != false %}
-        <p>{{ description|e }}</p>
-    {% endif %}
-
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}
     {% endblock %}
