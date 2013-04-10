@@ -217,6 +217,8 @@ class PersonalDetailsType extends AbstractRegistrationStep{
 
             if($user = $this->getParentProcess()->getRegistrant()){
                 $booking = $this->getParentProcess()->getBooking(true);
+                $this->setComplete();
+                $this->save();
             }
         }
 
