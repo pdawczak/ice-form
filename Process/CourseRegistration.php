@@ -45,6 +45,9 @@ class CourseRegistration extends AbstractProcess
     /** @var \Ice\MinervaClientBundle\Entity\RegistrationProgress */
     private $progress;
 
+    /** @var string|null */
+    private $administratorUsername;
+
     /**
      * @param string $reference
      * @return Step\AbstractRegistrationStep
@@ -466,5 +469,32 @@ class CourseRegistration extends AbstractProcess
             $progress->addStepProgress($stepProgress);
         }
         return $progress;
+    }
+
+
+    /**
+     * Set the administrator's username, or null to indicate that this process is not being completed by an
+     * administrator
+     *
+     * @param $username
+     * @return $this
+     */
+    public function setAdministrator($username){
+        $this->administratorUsername = $username;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAdministrator(){
+        return $this->administratorUsername;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdministrator(){
+        return null !== $this->administratorUsername;
     }
 }
