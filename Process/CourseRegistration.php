@@ -390,7 +390,7 @@ class CourseRegistration extends AbstractProcess
                     $this->academicInformation = $this->getMinervaClient()
                         ->getAcademicInformation($this->getRegistrantId(), $this->getCourseId());
                 }
-                catch(\Minerva\NotFoundException $e){
+                catch(NotFoundException $e){
                     $this->academicInformation = null;
                 }
             }
