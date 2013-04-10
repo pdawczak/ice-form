@@ -1,9 +1,12 @@
 <?php
 namespace Ice\FormBundle\Process;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
 use Ice\MinervaClientBundle\Entity\Booking;
+use Ice\MinervaClientBundle\Entity\BookingItem;
+use Ice\MinervaClientBundle\Entity\Category;
 use Ice\MinervaClientBundle\Entity\RegistrationProgress;
 use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
@@ -11,6 +14,7 @@ use Ice\VeritasClientBundle\Entity\Course;
 use Ice\JanusClientBundle\Entity\User;
 use Ice\MinervaClientBundle\Entity\AcademicInformation;
 
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseRegistration extends AbstractProcess
@@ -235,15 +239,22 @@ class CourseRegistration extends AbstractProcess
     {
         if(null === $this->currentStep){
             foreach($this->getSteps() as $step){
-                if(!$step->isComplete()){
+                if(!$step->isComplete() && $step->isAvailable()){
                     $this->currentStep = $step;
                     break;
                 }
             }
         }
         if(null === $this->currentStep){
-            $steps = $this->getSteps();
-            $this->currentStep = $steps[0];
+            foreach($this->getSteps() as $step){
+                if($step->isAvailable()){
+                    $this->currentStep = $step;
+                    break;
+                }
+            }
+            if(!$this->currentStep){
+                throw new \RuntimeException("No available registration steps");
+            }
         }
         return $this->currentStep;
     }
@@ -436,14 +447,23 @@ class CourseRegistration extends AbstractProcess
                 return $booking;
             }
 
-            $booking = new Booking();
-            $booking->setAcademicInformation($ai);
-            $booking->setBookedBy($ai->getIceId());
+            $booking = $this->buildBooking($ai);
+
+            foreach($booking->getBookingItems() as $bookingItem){
+                $bookingItems[] = array(
+                    'description'=>$bookingItem->getDescription(),
+                    'price'=>$bookingItem->getPrice(),
+                    'code'=>$bookingItem->getCode(),
+                    'category'=>$bookingItem->getCategory()->getCode(),
+                );
+            }
+
             $this->getMinervaClient()->createBooking(
                 $ai->getIceId(),
                 $ai->getCourseId(),
                 array(
-                    'bookedBy'=>$booking->getBookedBy()
+                    'bookedBy'=>$booking->getBookedBy(),
+                    'bookingItems'=>$bookingItems
                 )
             );
 
@@ -469,6 +489,37 @@ class CourseRegistration extends AbstractProcess
             $progress->addStepProgress($stepProgress);
         }
         return $progress;
+    }
+
+    /**
+     * Builds and returns a new Booking suitable for this course and person
+     * @param AcademicInformation $ai
+     * @return Booking
+     */
+    private function buildBooking(AcademicInformation $ai){
+        $booking = new Booking();
+        $booking->setAcademicInformation($ai);
+        $booking->setBookedBy($ai->getIceId());
+
+        $course = $this->getCourse();
+        $bookingItemsArray = array();
+        $courseFees = new BookingItem();
+        $category = new Category();
+        $category
+            ->setCode(5)
+            ->setDescription('Tuition')
+        ;
+        $courseFees
+            ->setDescription('Course fees: '.$course->getTitle())
+            ->setPrice($course->getTuitionFee())
+            ->setCode('TUIT')
+            ->setCategory($category)
+        ;
+        $bookingItemsArray[] = $courseFees;
+        $booking->setBookingItems(new ArrayCollection(
+            $bookingItemsArray
+        ));
+        return $booking;
     }
 
 
