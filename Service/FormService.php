@@ -30,17 +30,26 @@ class FormService{
     /** @var JanusClient */
     private $janusClient;
 
-    public function beginCourseRegistrationProcess($courseId, $iceId = null){
+    /**
+     * Begin OR resume a course registration
+     *
+     * @param int $courseId
+     * @param string|null $registrantId
+     * @return CourseRegistration
+     */
+    public function beginCourseRegistrationProcess($courseId, $registrantId = null){
         $courseRegistration = new CourseRegistration();
-        $courseRegistration->setCourseId($courseId);
-        $courseRegistration->setFormFactory($this->getFormFactory());
-        $courseRegistration->setTemplating($this->getTemplating());
-        $courseRegistration->setVeritasClient($this->getVeritasClient());
-        $courseRegistration->setJanusClient($this->getJanusClient());
-        $courseRegistration->setMinervaClient($this->getMinervaClient());
+        $courseRegistration
+            ->setCourseId($courseId)
+            ->setFormFactory($this->getFormFactory())
+            ->setTemplating($this->getTemplating())
+            ->setVeritasClient($this->getVeritasClient())
+            ->setJanusClient($this->getJanusClient())
+            ->setMinervaClient($this->getMinervaClient())
+        ;
 
-        if($iceId){
-            $courseRegistration->setRegistrantId($iceId);
+        if($registrantId){
+            $courseRegistration->setRegistrantId($registrantId);
         }
 
         return $courseRegistration;
