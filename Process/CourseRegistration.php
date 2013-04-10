@@ -83,10 +83,6 @@ class CourseRegistration extends AbstractProcess
         return $reflectionClass->newInstance($this, $reference);
     }
 
-    public function loadExisting(){
-
-    }
-
     /**
      * @return \Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep[]
      */
@@ -250,12 +246,15 @@ class CourseRegistration extends AbstractProcess
     }
 
     /**
-     * @return string
+     * Returns HTML from <form> to </form> for the current step
+     *
+     * @param array $vars Vars to be passed to the template
+     * @return string HTML output
      */
-    public function renderStep(){
+    public function renderStep(array $vars = array()){
         $currentStep = $this->getCurrentStep();
         if(!$currentStep->isPrepared()) $currentStep->prepare();
-        return $currentStep->render();
+        return $currentStep->render($vars);
     }
 
     /**
