@@ -128,7 +128,7 @@ class CourseRegistration extends AbstractProcess
         if(!$this->progress){
             $booking = $this->getBooking($create);
             if($booking && $progress = $booking->getRegistrationProgress()){
-                return $progress;
+                $this->progress = $progress;
             }
             else if($create){
                 $this->getMinervaClient()->setRegistration($this->getRegistrantId(), $this->getCourseId());
