@@ -37,7 +37,9 @@ class SupportNeedsType extends AbstractRegistrationStep{
                     'label'=>'Please specify your additional needs, e.g. induction loop, large print, braille, wheelchair access',
                     'required'=>false,
                 )
-            )
+            );
+
+        $builder
             ->add('firstFloorAccess', 'choice', array(
                     'choices'=>array(
                         1=>'I AM able to access the first floor without assistance',
@@ -47,8 +49,9 @@ class SupportNeedsType extends AbstractRegistrationStep{
                     'multiple'=>false,
                     'label'=>'Are you able to access the first floor without assistance?'
                 )
-            )
-            ->add('shareSupportNeeds', 'choice', array(
+            );
+
+        $builder->add('shareSupportNeeds', 'choice', array(
                     'choices'=>array(1=>'Yes', 0=>'No'),
                     'expanded'=>true,
                     'multiple'=>false,

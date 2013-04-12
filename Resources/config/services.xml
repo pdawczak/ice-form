@@ -23,6 +23,9 @@
             <call method="setJanusClient">
                 <argument type="service" id="janus.client" />
             </call>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <service id="ice.forms.type.country" class="Ice\FormBundle\Type\CountryType">

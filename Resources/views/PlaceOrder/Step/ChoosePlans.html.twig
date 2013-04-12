@@ -1,0 +1,107 @@
+{% extends "PlaceOrder/Step/default.html.twig" %}
+
+{% block form_content %}
+<style type="text/css">
+    .totalPrice{
+        font-weight: bold;
+    }
+
+    .schedule{
+        margin: 10px;
+        float: right;
+        width: 40%;
+    }
+
+    .schedule label{
+        font-size: 1.3em;
+        font-weight: bold;
+        display: block;
+    }
+
+    .schedule select{
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .scheduleDetail{
+        display: none;
+    }
+
+    .scheduleDetail table{
+        width: 100%;
+    }
+
+    .scheduleDetail table th{
+        text-align: left;
+    }
+</style>
+    {% for line in lines %}
+        {% set booking = line.booking %}
+        {% set course = line.course %}
+        {% set plans = line.plans %}
+        <fieldset><legend>{{ course.title }}</legend>
+
+
+        <div class="description" style="width: 400px; float:left">
+            <table>
+                {% set total=0 %}
+                {% for item in booking.bookingItems %}
+                    {% set total = total + item.price %}
+                    <tr>
+                        <td>
+                            <span class="bookingItemDescription">{{ item.description }}</span>
+                        </td>
+                        <td>
+                            <span class="bookingItemPrice">{{ item.price }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <span class="totalDescription">Total</span>
+                    </td>
+                    <td style="border-top: 1px solid black">
+                        <span class="totalPrice">{{ total }}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="schedule">
+            {{ form_row(form['plan-choice-booking-'~booking.id], {attr:{'class':'planChoice'}}) }}
+            {% for plan in plans %}
+                <div class="scheduleDetail" id="{{ 'plan-choice-booking-'~booking.id~'-detail-'~plan.code }}">
+                    <table>
+                        <tr>
+                            <th>Date due</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                        </tr>
+                        {% for receivable in plan.receivables %}
+                            <tr><td>{{ receivable.dueDate | date('Y-m-d') }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+        </fieldset>
+    {% endfor %}
+    {{ form_rest(form) }}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        function updateScheduleDetails(){
+            $('.scheduleDetail').hide();
+            $('.planChoice').each(function(index, element){
+                if(element.name && element.value){
+                    var id = '#'+element.name+'-detail-'+element.value;
+                    $(id).show();
+                }
+            });
+        };
+        $('.planChoice').on('change', updateScheduleDetails);
+        updateScheduleDetails();
+    </script>
+{% endblock %}

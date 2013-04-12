@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Service;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Ice\FormBundle\Process\PlaceOrder;
 use Minerva\NotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
@@ -10,6 +11,7 @@ use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader as TwigLoader;
 use Ice\VeritasClientBundle\Service\VeritasClient;
 use Ice\MinervaClientBundle\Service\MinervaClient;
 use Ice\MinervaClientBundle\Service\JanusClient;
+use Symfony\Component\DependencyInjection\Container;
 
 class FormService{
     /** @var FormFactory */
@@ -29,6 +31,9 @@ class FormService{
 
     /** @var JanusClient */
     private $janusClient;
+
+    /** @var Container */
+    private $container;
 
     /**
      * Begin OR resume a course registration
@@ -53,6 +58,24 @@ class FormService{
         }
 
         return $courseRegistration;
+    }
+
+    /**
+     * @param string $customerId
+     * @return PlaceOrder
+     */
+    public function placeOrder($customerId){
+        $placeOrder = new PlaceOrder();
+        $placeOrder
+            ->setCustomerId($customerId)
+            ->setFormFactory($this->getFormFactory())
+            ->setTemplating($this->getTemplating())
+            ->setVeritasClient($this->getVeritasClient())
+            ->setJanusClient($this->getJanusClient())
+            ->setMinervaClient($this->getMinervaClient())
+            ->setPaymentPlanService($this->getContainer()->get('mercury.payment_plans'))
+        ;
+        return $placeOrder;
     }
 
     /**
@@ -162,5 +185,23 @@ class FormService{
     public function getJanusClient()
     {
         return $this->janusClient;
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\Container $container
+     * @return AbstractProcess
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+        return $this;
+    }
+
+    /**
+     * @return \Symfony\Component\DependencyInjection\Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

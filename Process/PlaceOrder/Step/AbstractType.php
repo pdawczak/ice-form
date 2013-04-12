@@ -1,0 +1,146 @@
+<?php
+
+namespace Ice\FormBundle\Process\PlaceOrder\Step;
+
+use Symfony\Component\Form\AbstractType as BaseAbstractType;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Process\Exception\RuntimeException;
+use Ice\FormBundle\Process\PlaceOrder;
+
+abstract class AbstractType extends BaseAbstractType{
+    /** @var string */
+    protected $title;
+
+    /** @var Form */
+    private $form;
+
+    /** @var object */
+    private $entity;
+
+    /** @var \Ice\FormBundle\Process\PlaceOrder */
+    private $parentProcess;
+
+    /** @var bool */
+    private $prepared = false;
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options){
+        $builder->add('stepReference', 'hidden', array(
+            'data'=>$this->getReference(),
+            'mapped'=>false
+        ));
+    }
+
+    /**
+     * @param PlaceOrder $parentProcess
+     * @param string|null $reference
+     */
+    public function __construct(PlaceOrder $parentProcess, $reference = null){
+        $this->parentProcess = $parentProcess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(){
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getTemplate();
+
+    /**
+     * @param array $vars
+     * @return mixed
+     */
+    public function render(array $vars = array()){
+        $vars['form'] = $this->getForm()->createView();
+        $vars['url'] = $this->getParentProcess()->getUrl();
+        return $this->getParentProcess()->getTemplating()->render('PlaceOrder/Step/'.$this->getTemplate(), $vars);
+    }
+
+    /**
+     * @return Form|\Symfony\Component\Form\FormInterface
+     */
+    protected function getForm(){
+        if(null === $this->form){
+            $this->form = $this->getParentProcess()->getFormFactory()->create($this, $this->getEntity());
+        }
+        return $this->form;
+    }
+
+    /**
+     * @param \Ice\FormBundle\Process\PlaceOrder $parentProcess
+     * @return AbstractType
+     */
+    public function setParentProcess($parentProcess)
+    {
+        $this->parentProcess = $parentProcess;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\FormBundle\Process\PlaceOrder
+     */
+    public function getParentProcess()
+    {
+        return $this->parentProcess;
+    }
+
+    /**
+     * @param object $entity
+     * @return AbstractType
+     */
+    public function setEntity($entity)
+    {
+        $this->entity = $entity;
+        return $this;
+    }
+
+    /**
+     * @return object
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @param boolean $prepared
+     * @return AbstractType
+     */
+    public function setPrepared($prepared = true)
+    {
+        $this->prepared = $prepared;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPrepared()
+    {
+        return $this->prepared;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function prepare()
+    {
+        $this->setPrepared();
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getReference();
+}

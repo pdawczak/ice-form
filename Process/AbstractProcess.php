@@ -6,9 +6,11 @@ use Symfony\Component\Form\FormFactory;
 
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\Container;
 use Ice\VeritasClientBundle\Service\VeritasClient,
     Ice\MinervaClientBundle\Service\MinervaClient,
     Ice\JanusClientBundle\Service\JanusClient;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 abstract class AbstractProcess{
 
@@ -26,6 +28,18 @@ abstract class AbstractProcess{
 
     /** @var JanusClient */
     private $janusClient;
+
+    /** @var string */
+    private $url;
+
+    /** @var Container */
+    private $container;
+
+    /** @var string */
+    private $administratorUsername;
+
+    /** @var Session */
+    private $session;
 
     /**
      * @param \Symfony\Component\Form\FormFactory $formFactory
@@ -119,5 +133,64 @@ abstract class AbstractProcess{
     public function getMinervaClient()
     {
         return $this->minervaClient;
+    }
+
+    /**
+     * @param string $url
+     * @return AbstractProcess
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set the administrator's username, or null to indicate that this process is not being completed by an
+     * administrator
+     *
+     * @param $username
+     * @return AbstractProcess
+     */
+    public function setAdministrator($username){
+        $this->administratorUsername = $username;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAdministrator(){
+        return $this->administratorUsername;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdministrator(){
+        return null !== $this->administratorUsername;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Session\Session
+     */
+    protected function getSession()
+    {
+        if(null == $this->session){
+            $session = new Session();
+            if(!session_id()){
+                $session->start();
+            }
+            $this->session = $session;
+        }
+        return $this->session;
     }
 }

@@ -3,17 +3,31 @@ namespace Ice\FormBundle\Process\CourseRegistration\Step\PersonalDetails;
 
 use Ice\JanusClientBundle\Entity\User;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class PersonalDetails{
-    /** @var string */
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide an email address")
+     */
     private $email;
 
-    /** @var string */
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a title")
+     */
     private $title;
 
-    /** @var string */
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a first name")
+     */
     private $firstNames;
 
-    /** @var string */
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a last name")
+     */
     private $lastNames;
 
     /** @var string */
@@ -25,8 +39,16 @@ class PersonalDetails{
     /** @var \DateTime */
     private $dob;
 
-    /** @var string */
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a password")
+     */
     private $plainPassword;
+
+    /**
+     * @var string
+     */
+    private $registrantId;
 
     /**
      * @param string $email
@@ -181,11 +203,30 @@ class PersonalDetails{
     }
 
     /**
+     * @param string $registrantId
+     * @return PersonalDetails
+     */
+    public function setRegistrantId($registrantId)
+    {
+        $this->registrantId = $registrantId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegistrantId()
+    {
+        return $this->registrantId;
+    }
+
+    /**
      * @param User $user
      * @return PersonalDetails
      */
     public static function fromUser(User $user){
         $instance = new self();
+        $instance->setRegistrantId($user->getUsername());
         $instance->setTitle($user->getTitle());
         $instance->setFirstNames($user->getFirstNames());
         $instance->setMiddleNames($user->getMiddleNames());

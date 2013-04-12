@@ -1,0 +1,11 @@
+{% form_theme form 'fields.html.twig' %}
+
+<form action="{{ url|e }}" method="post" class="form-horizontal">
+    {% block form_content %}
+        {{ form_widget(form, {form_type: 'horizontal'}) }}
+    {% endblock %}
+    <input type="submit" class="button" value="Proceed" />
+</form>
+
+{% block javascript %}
+{% endblock %}

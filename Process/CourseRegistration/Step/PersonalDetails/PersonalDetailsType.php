@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\MinLength;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Ice\JanusClientBundle\Entity\User;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class PersonalDetailsType extends AbstractRegistrationStep{
     /**
@@ -60,32 +61,20 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                         'Revd'=>'Revd',
                         'Misc'=>'Misc',
                         'Mx'=>'Mx',
-                    ),
-                    'constraints'=> array(
-                        new NotBlank()
                     )
                 ))
                 ->add('firstNames', 'text', array(
-                    'label'=>'First name',
-                    'constraints'=> array(
-                        new NotBlank()
-                    )
+                    'label'=>'First name'
                 ))
                 ->add('middleNames', 'text', array(
                     'label'=>'Middle name(s)',
                     'required'=>false
                 ))
                 ->add('lastNames', 'text', array(
-                    'label'=>'Last name',
-                    'constraints'=> array(
-                        new NotBlank()
-                    )
+                    'label'=>'Last name'
                 ))
                 ->add('email', 'email', array(
-                    'label'=>'Email address',
-                    'constraints'=> array(
-                        new NotBlank()
-                    )
+                    'label'=>'Email address'
                 ))
                 ->add('dob', 'date', array(
                     'label'=>'Date of birth'
@@ -248,5 +237,24 @@ class PersonalDetailsType extends AbstractRegistrationStep{
      */
     public function isAvailable(){
         return true;
+    }
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+        $resolver->setDefaults(array(
+            'validation_groups' => function(FormInterface $form) {
+                /** @var $data PersonalDetails */
+                $data = $form->getData();
+                $groups = array('default');
+                if(!$data->getRegistrantId()){
+                    $groups[] = 'new_user';
+                }
+                return $groups;
+            }
+        ));
     }
 }

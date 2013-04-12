@@ -25,9 +25,6 @@ class CourseRegistration extends AbstractProcess
     /** @var Step\AbstractRegistrationStep[] */
     private $steps;
 
-    /** @var string $url */
-    private $url;
-
     /** @var int $courseId */
     private $courseId;
 
@@ -48,9 +45,6 @@ class CourseRegistration extends AbstractProcess
 
     /** @var \Ice\MinervaClientBundle\Entity\RegistrationProgress */
     private $progress;
-
-    /** @var string|null */
-    private $administratorUsername;
 
     /**
      * @param string $reference
@@ -282,24 +276,6 @@ class CourseRegistration extends AbstractProcess
     }
 
     /**
-     * @param string $url
-     * @return CourseRegistration
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
      * @param int $courseId
      * @return CourseRegistration
      */
@@ -520,32 +496,5 @@ class CourseRegistration extends AbstractProcess
             $bookingItemsArray
         ));
         return $booking;
-    }
-
-
-    /**
-     * Set the administrator's username, or null to indicate that this process is not being completed by an
-     * administrator
-     *
-     * @param $username
-     * @return $this
-     */
-    public function setAdministrator($username){
-        $this->administratorUsername = $username;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getAdministrator(){
-        return $this->administratorUsername;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAdministrator(){
-        return null !== $this->administratorUsername;
     }
 }
