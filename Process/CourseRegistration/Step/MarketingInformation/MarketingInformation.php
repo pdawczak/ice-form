@@ -3,6 +3,7 @@ namespace Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Ice\MinervaClientBundle\Entity\StepProgress;
+use Ice\MinervaClientBundle\Exception\NotFoundException;
 
 class MarketingInformation{
     /**
