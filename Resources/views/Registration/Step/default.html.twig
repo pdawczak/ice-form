@@ -4,7 +4,9 @@
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}
     {% endblock %}
-    <input type="submit" class="button" value="Continue" />
+    <div class="btn-group pull-right">
+        <input type="submit" class="btn btn-primary" value="Continue" />
+    </div>
 </form>
 
 {% block javascript %}
