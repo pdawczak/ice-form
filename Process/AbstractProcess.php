@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\Container;
 use Ice\VeritasClientBundle\Service\VeritasClient,
     Ice\MinervaClientBundle\Service\MinervaClient,
-    Ice\JanusClientBundle\Service\JanusClient;
+    Ice\JanusClientBundle\Service\JanusClient,
+    Ice\MercuryClientBundle\Service\MercuryClient;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 abstract class AbstractProcess{
@@ -22,6 +23,9 @@ abstract class AbstractProcess{
 
     /** @var VeritasClient */
     private $veritasClient;
+
+    /** @var MercuryClient */
+    private $mercuryClient;
 
     /** @var MinervaClient */
     private $minervaClient;
@@ -118,6 +122,24 @@ abstract class AbstractProcess{
     }
 
     /**
+     * @param \Ice\MercuryClientBundle\Service\MercuryClient $mercuryClient
+     * @return AbstractProcess
+     */
+    public function setMercuryClient($mercuryClient)
+    {
+        $this->mercuryClient = $mercuryClient;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\MercuryClientBundle\Service\MercuryClient
+     */
+    public function getMercuryClient()
+    {
+        return $this->mercuryClient;
+    }
+
+    /**
      * @param \Ice\MinervaClientBundle\Service\MinervaClient $minervaClient
      * @return AbstractProcess
      */
@@ -186,9 +208,6 @@ abstract class AbstractProcess{
     {
         if(null == $this->session){
             $session = new Session();
-            if(!session_id()){
-                $session->start();
-            }
             $this->session = $session;
         }
         return $this->session;
