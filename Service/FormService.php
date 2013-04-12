@@ -11,6 +11,7 @@ use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader as TwigLoader;
 use Ice\VeritasClientBundle\Service\VeritasClient;
 use Ice\MinervaClientBundle\Service\MinervaClient;
 use Ice\MinervaClientBundle\Service\JanusClient;
+use Ice\MercuryClientBundle\Service\MercuryClient;
 use Symfony\Component\DependencyInjection\Container;
 
 class FormService{
@@ -22,6 +23,9 @@ class FormService{
 
     /** @var TwigLoader */
     private $twigLoader;
+
+    /** @var MercuryClient */
+    private $mercuryClient;
 
     /** @var MinervaClient */
     private $minervaClient;
@@ -203,5 +207,23 @@ class FormService{
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * @param \Ice\MercuryClientBundle\Service\MercuryClient $mercuryClient
+     * @return FormService
+     */
+    public function setMercuryClient($mercuryClient)
+    {
+        $this->mercuryClient = $mercuryClient;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\MercuryClientBundle\Service\MercuryClient
+     */
+    public function getMercuryClient()
+    {
+        return $this->mercuryClient;
     }
 }

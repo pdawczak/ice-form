@@ -17,6 +17,9 @@
             <call method="setVeritasClient">
                 <argument type="service" id="veritas.client" />
             </call>
+            <call method="setMercuryClient">
+                <argument type="service" id="mercury.client" />
+            </call>
             <call method="setMinervaClient">
                 <argument type="service" id="minerva.client" />
             </call>
