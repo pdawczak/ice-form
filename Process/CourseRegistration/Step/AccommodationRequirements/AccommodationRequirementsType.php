@@ -1,6 +1,6 @@
 <?php
 
-namespace Ice\FormBundle\Process\CourseRegistration\Step\Accommodation;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\AccommodationRequirements;
 
 use Ice\JanusClientBundle\Exception\ValidationException;
 use JMS\Serializer\Tests\Fixtures\Person;
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\MinLength;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Ice\JanusClientBundle\Entity\User;
 
-class AccommodationType extends AbstractRegistrationStep{
+class AccommodationRequirementsType extends AbstractRegistrationStep{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -23,6 +23,7 @@ class AccommodationType extends AbstractRegistrationStep{
         $builder
 
         ;
+        parent::buildForm($builder, $options);
     }
 
     /**
@@ -30,18 +31,10 @@ class AccommodationType extends AbstractRegistrationStep{
      */
     public function processRequest(Request $request){
         $this->getForm()->bind($request);
-        /** @var $entity SupportNeeds */
+        /** @var $entity AccommodationRequirements */
         $entity = $this->getEntity();
 
         foreach(array(
-                    1=>'address1',
-                    2=>'address2',
-                    3=>'address3',
-                    4=>'address4',
-                    5=>'city',
-                    6=>'postCode',
-                    7=>'country',
-                    8=>'telephone',
                 )
                 as $order=>$fieldName){
             $getter = 'get'.ucfirst($fieldName);
@@ -64,11 +57,11 @@ class AccommodationType extends AbstractRegistrationStep{
     }
 
     public function getTemplate(){
-        return 'Accommodation.html.twig';
+        return 'AccommodationRequirements.html.twig';
     }
 
     public function prepare(){
-        $this->setEntity(new Accommodation());
+        $this->setEntity(new AccommodationRequirements());
         $this->setPrepared();
     }
 }

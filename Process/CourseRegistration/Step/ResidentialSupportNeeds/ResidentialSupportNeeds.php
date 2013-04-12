@@ -1,11 +1,11 @@
 <?php
-namespace Ice\FormBundle\Process\CourseRegistration\Step\SupportNeeds;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\ResidentialSupportNeeds;
 
 use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class SupportNeeds{
+class ResidentialSupportNeeds{
     /**
      * @var bool
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
@@ -22,12 +22,18 @@ class SupportNeeds{
      * @var bool
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
      */
+    private $firstFloorAccess;
+
+    /**
+     * @var bool
+     * @Assert\NotNull(groups={"default"}, message="This is a required field")
+     */
     private $shareSupportNeeds;
 
 
     /**
      * @param boolean $additionalNeeds
-     * @return SupportNeeds
+     * @return ResidentialSupportNeeds
      */
     public function setAdditionalNeeds($additionalNeeds)
     {
@@ -45,7 +51,7 @@ class SupportNeeds{
 
     /**
      * @param string $additionalNeedsDetail
-     * @return SupportNeeds
+     * @return ResidentialSupportNeeds
      */
     public function setAdditionalNeedsDetail($additionalNeedsDetail)
     {
@@ -62,8 +68,26 @@ class SupportNeeds{
     }
 
     /**
+     * @param boolean $firstFloorAccess
+     * @return ResidentialSupportNeeds
+     */
+    public function setFirstFloorAccess($firstFloorAccess)
+    {
+        $this->firstFloorAccess = $firstFloorAccess===null?null:($firstFloorAccess==true);
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFirstFloorAccess()
+    {
+        return $this->firstFloorAccess;
+    }
+
+    /**
      * @param boolean $shareSupportNeeds
-     * @return SupportNeeds
+     * @return ResidentialSupportNeeds
      */
     public function setShareSupportNeeds($shareSupportNeeds)
     {
@@ -81,12 +105,13 @@ class SupportNeeds{
 
     /**
      * @param StepProgress $stepProgress
-     * @return SupportNeeds
+     * @return ResidentialSupportNeeds
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();
         $instance->setAdditionalNeeds($instance->getDeserializedValueByFieldName($stepProgress, 'additionalNeeds'));
         $instance->setAdditionalNeedsDetail($instance->getDeserializedValueByFieldName($stepProgress, 'additionalNeedsDetail'));
+        $instance->setFirstFloorAccess($instance->getDeserializedValueByFieldName($stepProgress, 'firstFloorAccess'));
         $instance->setShareSupportNeeds($instance->getDeserializedValueByFieldName($stepProgress, 'shareSupportNeeds'));
         return $instance;
     }

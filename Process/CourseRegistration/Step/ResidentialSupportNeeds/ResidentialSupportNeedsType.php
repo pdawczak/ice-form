@@ -1,9 +1,8 @@
 <?php
 
-namespace Ice\FormBundle\Process\CourseRegistration\Step\SupportNeeds;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\ResidentialSupportNeeds;
 
 use Ice\JanusClientBundle\Exception\ValidationException;
-use JMS\Serializer\Tests\Fixtures\Person;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\JanusClientBundle\Entity\User;
 
 
-class SupportNeedsType extends AbstractRegistrationStep{
+class ResidentialSupportNeedsType extends AbstractRegistrationStep{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -39,6 +38,18 @@ class SupportNeedsType extends AbstractRegistrationStep{
                 )
             );
 
+        $builder
+            ->add('firstFloorAccess', 'choice', array(
+                    'choices'=>array(
+                        1=>'I AM able to access the first floor without assistance',
+                        0=>'I AM NOT able to access the first floor without assistance'
+                    ),
+                    'expanded'=>true,
+                    'multiple'=>false,
+                    'label'=>'Are you able to access the first floor without assistance?'
+                )
+            );
+
         $builder->add('shareSupportNeeds', 'choice', array(
                     'choices'=>array(1=>'Yes', 0=>'No'),
                     'expanded'=>true,
@@ -51,11 +62,11 @@ class SupportNeedsType extends AbstractRegistrationStep{
     }
 
     public function getTemplate(){
-        return 'SupportNeeds.html.twig';
+        return 'ResidentialSupportNeeds.html.twig';
     }
 
     public function prepare(){
-        $this->setEntity(SupportNeeds::fromStepProgress($this->getStepProgress()));
+        $this->setEntity(ResidentialSupportNeeds::fromStepProgress($this->getStepProgress()));
         $this->setPrepared();
     }
 
@@ -64,13 +75,14 @@ class SupportNeedsType extends AbstractRegistrationStep{
      */
     public function processRequest(Request $request){
         $this->getForm()->bind($request);
-        /** @var $entity SupportNeeds */
+        /** @var $entity ResidentialSupportNeeds */
         $entity = $this->getEntity();
 
         foreach(array(
                     2=>'additionalNeeds',
                     3=>'additionalNeedsDetail',
-                    4=>'shareSupportNeeds')
+                    4=>'firstFloorAccess',
+                    5=>'shareSupportNeeds')
                 as $order=>$fieldName){
             $getter = 'get'.ucfirst($fieldName);
             $this->getStepProgress()->setFieldValue(
@@ -99,7 +111,7 @@ class SupportNeedsType extends AbstractRegistrationStep{
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
             'validation_groups' => function(FormInterface $form) {
-                /** @var $data SupportNeeds */
+                /** @var $data ResidentialSupportNeeds */
                 $data = $form->getData();
                 $groups = array('default');
                 if($data->getAdditionalNeeds()){
