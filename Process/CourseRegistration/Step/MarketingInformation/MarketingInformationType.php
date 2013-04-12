@@ -37,7 +37,8 @@ class MarketingInformationType extends AbstractRegistrationStep{
             ))
             ->add('marketingOptIn', 'checkbox', array(
                 'label'=>'Please tick if you would like to receive occasional emails about upcoming courses, events and
-                    other activities at the Institute'
+                    other activities at the Institute',
+                'required'=>false
                 )
             )
         ;
