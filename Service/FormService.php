@@ -77,6 +77,7 @@ class FormService{
             ->setVeritasClient($this->getVeritasClient())
             ->setJanusClient($this->getJanusClient())
             ->setMinervaClient($this->getMinervaClient())
+            ->setMercuryClient($this->getMercuryClient())
             ->setPaymentPlanService($this->getContainer()->get('mercury.payment_plans'))
         ;
         return $placeOrder;
