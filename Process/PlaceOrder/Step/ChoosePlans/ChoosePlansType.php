@@ -36,10 +36,16 @@ class ChoosePlansType extends AbstractType
                 $plansPlain[$k] = $v['description'];
             }
 
+            $data = null;
+            if($existingChoice = $this->getParentProcess()->getProgress()->getPlanChoiceByBookingId($booking->getId())){
+                $data = $existingChoice->getCode();
+            }
+
             $builder->add('plan-choice-booking-'.$booking->getId(), 'choice', array(
                 'label'=>'Your choice of payment plan',
                 'expanded'=>false,
                 'multiple'=>false,
+                'data'=>$data,
                 'empty_value' => 'Choose a plan...',
                 'choices'=>$plansPlain
             ));
@@ -55,16 +61,19 @@ class ChoosePlansType extends AbstractType
         if($this->getForm()->isValid()){
             $planChoices = array();
             foreach($this->lines as $line){
+                /** @var $booking Booking */
                 $booking = $line['booking'];
                 $rawChoice = $data['plan-choice-booking-'.$booking->getId()];
                 if($rawChoice!=='later'){
                     $planChoice = new PlanChoice();
                     $planChoice->setCode($rawChoice);
+                    $planChoice->setBookingId($booking->getId());
                     //TODO: Change this before version 2!
                     $planChoice->setVersion(1);
                     $planChoices[] = $planChoice;
                 }
             }
+            $this->getStepProgress()->setComplete();
             $this->getParentProcess()->getProgress()->setPlanChoices($planChoices);
             $this->getParentProcess()->saveProgress();
         }
@@ -73,6 +82,7 @@ class ChoosePlansType extends AbstractType
     public function render(array $vars = array())
     {
         $vars['lines'] = $this->lines;
+
         return parent::render($vars);
     }
 
@@ -112,7 +122,7 @@ class ChoosePlansType extends AbstractType
     }
 
     public function isComplete(){
-        return false;
+        return $this->getStepProgress()->isComplete();
     }
 
     public function getReference(){

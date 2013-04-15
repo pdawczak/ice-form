@@ -8,6 +8,9 @@ class PlanChoice{
     /** @var string */
     private $version;
 
+    /** @var int */
+    private $bookingId;
+
     /**
      * @param string $code
      * @return PlanChoice
@@ -42,5 +45,23 @@ class PlanChoice{
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * @param int $bookingId
+     * @return PlanChoice
+     */
+    public function setBookingId($bookingId)
+    {
+        $this->bookingId = $bookingId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBookingId()
+    {
+        return $this->bookingId;
     }
 }

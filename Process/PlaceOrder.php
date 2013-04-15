@@ -96,6 +96,12 @@ class PlaceOrder extends AbstractProcess
                 $submittedStep = $this->getStepByReference($stepReference);
                 $request->attributes->remove('stepReference');
                 $this->setCurrentStep($submittedStep);
+                if(null !== $request->get('process-navigation-back', null)){
+                    $this->setCurrentStepByIndex($submittedStep->getIndex()-1);
+                    $this->getCurrentStep()->prepare();
+                    return;
+                }
+
                 $submittedStep->prepare();
                 $submittedStep->processRequest($request);
                 if($submittedStep->isComplete()){
@@ -305,7 +311,7 @@ class PlaceOrder extends AbstractProcess
     public function getProgress()
     {
         if(null===$this->progress){
-            $this->progress = $this->getSession()->get('orderprogress-'.$this->getCustomerId());
+            $this->progress = $this->getSession()->get('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId());
         }
         if(null===$this->progress){
             $this->progress = new Progress();
@@ -313,8 +319,12 @@ class PlaceOrder extends AbstractProcess
         return $this->progress;
     }
 
+    /**
+     * Persist the progress (to the session, in the current implementation)
+     */
     public function saveProgress()
     {
-        $this->getSession()->set('orderprogress-'.$this->getCustomerId(), $this->progress);
+        $this->getSession()->set('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId(), $this->progress);
+        $this->getSession()->save();
     }
 }

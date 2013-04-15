@@ -140,7 +140,26 @@ abstract class AbstractType extends BaseAbstractType{
     }
 
     /**
+     * @return int
+     */
+    public function getIndex()
+    {
+        foreach($this->getParentProcess()->getSteps() as $index=>$step) {
+            if($step->getReference() === $this->getReference()) {
+                return $index;
+            }
+        }
+    }
+
+    /**
      * @return string
      */
     abstract public function getReference();
+
+    /**
+     * @return PlaceOrder\StepProgress
+     */
+    public function getStepProgress(){
+        return $this->getParentProcess()->getProgress()->getStepProgress($this->getReference());
+    }
 }

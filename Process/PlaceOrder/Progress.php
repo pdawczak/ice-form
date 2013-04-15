@@ -4,10 +4,11 @@ namespace Ice\FormBundle\Process\PlaceOrder;
 use Ice\FormBundle\Process\PlaceOrder;
 
 use Ice\FormBundle\Process\PlaceOrder\Step\ChoosePlans\PlanChoice;
+use Ice\MercuryClientBundle\Entity\Order;
 
-class Progress implements \Serializable{
+class Progress{
     /**
-     * @var array
+     * @var StepProgress[]
      */
     private $stepProgresses = array();
 
@@ -15,6 +16,11 @@ class Progress implements \Serializable{
      * @var PlanChoice[]
      */
     private $planChoices = array();
+
+    /**
+     * @var Order
+     */
+    private $confirmedOrder;
 
     /**
      * @param string $reference
@@ -28,24 +34,23 @@ class Progress implements \Serializable{
     }
 
     /**
-     * @return array
+     * @return array|StepProgress[]
      */
     public function getStepProgresses()
     {
         return $this->stepProgresses;
     }
 
+    /**
+     * @param $reference
+     * @return StepProgress
+     */
     public function getStepProgress($reference)
     {
+        if(!isset($this->stepProgresses[$reference])){
+            $this->stepProgresses[$reference] = new StepProgress();
+        }
         return $this->stepProgresses[$reference];
-    }
-
-    public function serialize(){
-
-    }
-
-    public function unserialize($serialized){
-
     }
 
     /**
@@ -64,5 +69,36 @@ class Progress implements \Serializable{
     public function getPlanChoices()
     {
         return $this->planChoices;
+    }
+
+    /**
+     * @param $bookingId
+     * @return PlanChoice
+     */
+    public function getPlanChoiceByBookingId($bookingId){
+        foreach($this->planChoices as $choice){
+            if ($choice->getBookingId() === $bookingId) {
+                return $choice;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param \Ice\MercuryClientBundle\Entity\Order $confirmedOrder
+     * @return Progress
+     */
+    public function setConfirmedOrder($confirmedOrder)
+    {
+        $this->confirmedOrder = $confirmedOrder;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\MercuryClientBundle\Entity\Order
+     */
+    public function getConfirmedOrder()
+    {
+        return $this->confirmedOrder;
     }
 }
