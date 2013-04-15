@@ -208,6 +208,9 @@ abstract class AbstractProcess{
     {
         if(null == $this->session){
             $session = new Session();
+            //Start the session, supressing notices. This is necessary to prevent a 'session already started' notice
+            //when symfony is being used alongside another framework (ie, Joomla)
+            @$session->start();
             $this->session = $session;
         }
         return $this->session;
