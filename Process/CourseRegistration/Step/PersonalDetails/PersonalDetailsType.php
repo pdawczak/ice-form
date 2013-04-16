@@ -155,9 +155,10 @@ class PersonalDetailsType extends AbstractRegistrationStep{
 
         $this->getForm()->bind($request);
 
+        /** @var $data PersonalDetails */
+        $data = $this->getForm()->getData();
+
         if($this->getForm()->isValid()){
-            /** @var $data PersonalDetails */
-            $data = $this->getForm()->getData();
             //No user, now we can create one!
             if(!$this->getParentProcess()->getRegistrantId()){
                 /** @var $newUser User */
@@ -185,12 +186,6 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                             break;
                         }
                     }
-
-                    $this->setComplete();
-                    /** @var $entity PersonalDetails */
-                    $entity = $this->getEntity();
-                    $this->getStepProgress()->setFieldValue('title', 1, 'Title', $entity->getTitle());
-                    $this->save();
                 }
                 catch(ValidationException $e){
                     /** @var $form \Ice\JanusClientBundle\Response\FormError */
@@ -203,14 +198,31 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     $this->getForm()->isValid();
                 }
             }
-
-            if($user = $this->getParentProcess()->getRegistrant()){
-                $booking = $this->getParentProcess()->getBooking(true);
-                $this->setComplete();
-                $this->save();
-            }
         }
 
+        //If still valid after any Janus side validation
+        if($this->getForm()->isValid()) {
+            foreach(array(
+                1=>'title',
+                2=>'firstNames',
+                3=>'middleNames',
+                4=>'lastNames',
+                5=>'email',
+                6=>'dob'
+                    )
+                    as $order=>$fieldName){
+                $getter = 'get'.ucfirst($fieldName);
+                $this->getStepProgress()->setFieldValue(
+                    $fieldName,
+                    $order,
+                    $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
+                    $data->$getter()
+                );
+            }
+
+            $this->setComplete();
+            $this->save();
+        }
     }
 
     public function getTemplate(){
