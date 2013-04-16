@@ -1,7 +1,6 @@
 {% extends "PlaceOrder/Step/default.html.twig" %}
 
 {% block form_content %}
-    Make payment for order {{ order.id }} with transaction reference {{ transactionRequest.reference }}
     <style type="text/css">
         .orderdetails{
 
@@ -95,7 +94,8 @@
             </div>
         </div>
     {% endif %}
+{% endblock %}
 
 
-
+{% block buttons %}
 {% endblock %}
