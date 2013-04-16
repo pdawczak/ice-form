@@ -4,6 +4,7 @@
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}
     {% endblock %}
+        {{ form_rest(form, {form_type: 'horizontal'}) }}
     <div style="clear:both"></div>
     <div class="btn-group pull-right">
     {% block buttons %}

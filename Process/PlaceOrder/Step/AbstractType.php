@@ -34,6 +34,10 @@ abstract class AbstractType extends BaseAbstractType{
         $builder->add('stepReference', 'hidden', array(
             'data'=>$this->getReference(),
             'mapped'=>false
+        ))
+        ->add('progressId', 'hidden', array(
+            'data'=>$this->getParentProcess()->getProgressId(),
+            'mapped'=>false
         ));
     }
 
