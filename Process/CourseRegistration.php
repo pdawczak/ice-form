@@ -137,9 +137,6 @@ class CourseRegistration extends AbstractProcess
                         'order'=>$step->getOrder(),
                         'description'=>$step->getDescription()
                     ));
-                    $newStep = $this->createStepByReference($step->getStepName());
-                    $newStep->setStepProgress($step);
-                    $this->steps[] = $newStep;
                 }
                 $this->progress = $progress;
             }
@@ -486,7 +483,7 @@ class CourseRegistration extends AbstractProcess
             ->setDescription('Tuition')
         ;
         $courseFees
-            ->setDescription('Course fees: '.$course->getTitle())
+            ->setDescription('Course fees')
             ->setPrice($course->getTuitionFee())
             ->setCode('TUIT')
             ->setCategory($category)
