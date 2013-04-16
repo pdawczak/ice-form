@@ -42,6 +42,9 @@ class PlaceOrder extends AbstractProcess
     /** @var Progress */
     private $progress;
 
+    /** @var string */
+    private $progressId;
+
     /**
      * @param $index
      * @return Step\AbstractType
@@ -55,6 +58,27 @@ class PlaceOrder extends AbstractProcess
         else{
             throw new \OutOfBoundsException('No step with index '.$index);
         }
+    }
+
+    /**
+     * @param string $progressId
+     * @return PlaceOrder
+     */
+    public function setProgressId($progressId)
+    {
+        $this->progressId = $progressId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProgressId()
+    {
+        if($this->progressId === null){
+            $this->progressId = uniqid();
+        }
+        return $this->progressId;
     }
 
     /**
@@ -96,6 +120,11 @@ class PlaceOrder extends AbstractProcess
                 $submittedStep = $this->getStepByReference($stepReference);
                 $request->attributes->remove('stepReference');
                 $this->setCurrentStep($submittedStep);
+
+                if(null !== ($progressId = $request->get('progressId'))){
+                    $this->setProgressId($progressId);
+                }
+
                 if(null !== $request->get('process-navigation-back', null)){
                     $this->setCurrentStepByIndex($submittedStep->getIndex()-1);
                     $this->getCurrentStep()->prepare();
@@ -311,7 +340,9 @@ class PlaceOrder extends AbstractProcess
     public function getProgress()
     {
         if(null===$this->progress){
-            $this->progress = $this->getSession()->get('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId());
+            $this->progress = $this->getSession()->get(
+                'IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId().':'.$this->getProgressId()
+            );
         }
         if(null===$this->progress){
             $this->progress = new Progress();
@@ -324,7 +355,7 @@ class PlaceOrder extends AbstractProcess
      */
     public function saveProgress()
     {
-        $this->getSession()->set('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId(), $this->progress);
+        $this->getSession()->set('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId().':'.$this->getProgressId(), $this->progress);
         $this->getSession()->save();
     }
 }
