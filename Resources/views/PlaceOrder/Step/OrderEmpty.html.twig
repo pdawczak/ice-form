@@ -1,0 +1,10 @@
+{% extends "PlaceOrder/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>You have not selected anything to order.</p>
+    {{ form_rest(form) }}
+{% endblock %}
+
+{% block buttons %}
+    <input type="submit" class="btn" name="process-navigation-back" value="Back" />
+{% endblock %}

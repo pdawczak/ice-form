@@ -10,7 +10,12 @@ class ConfirmType extends AbstractType
     private $order;
 
     public function getTemplate(){
-        return 'Confirm.html.twig';
+        if(count($this->order->getSuborders())>0) {
+            return 'Confirm.html.twig';
+        }
+        else{
+            return 'OrderEmpty.html.twig';
+        }
     }
 
     public function getTitle(){
