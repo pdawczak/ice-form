@@ -2,10 +2,12 @@
 namespace Ice\FormBundle\Process\PlaceOrder\Step\ChoosePlans;
 
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
+use Ice\MinervaClientBundle\Response\FormError;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 use Ice\MinervaClientBundle\Entity\Booking;
 use Ice\VeritasClientBundle\Entity\PaymentPlan;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ChoosePlansType extends AbstractType
 {
@@ -31,9 +33,16 @@ class ChoosePlansType extends AbstractType
             /** @var $plans PaymentPlan[] */
             $plans = $line['plans'];
 
-            $plansPlain = array();
+            $plansPlain = array(
+
+            );
             foreach($plans as $k=>$v){
                 $plansPlain[$k] = $v['description'];
+            }
+
+
+            if(count($this->lines) > 1){
+                $plansPlain['later'] = 'Arrange to pay for this booking later';
             }
 
             $data = null;
@@ -41,13 +50,20 @@ class ChoosePlansType extends AbstractType
                 $data = $existingChoice->getCode();
             }
 
+
             $builder->add('plan-choice-booking-'.$booking->getId(), 'choice', array(
                 'label'=>'Your choice of payment plan',
                 'expanded'=>false,
                 'multiple'=>false,
                 'data'=>$data,
                 'empty_value' => 'Choose a plan...',
-                'choices'=>$plansPlain
+                'choices'=>$plansPlain,
+                'required'=>true,
+                'constraints'=>array(
+                    new NotBlank(array(
+                        'message'=>'Please choose a payment plan.'
+                    ))
+                )
             ));
         }
 
@@ -73,6 +89,7 @@ class ChoosePlansType extends AbstractType
                     $planChoices[] = $planChoice;
                 }
             }
+
             $this->getStepProgress()->setComplete();
             $this->getParentProcess()->getProgress()->setPlanChoices($planChoices);
             $this->getParentProcess()->saveProgress();
