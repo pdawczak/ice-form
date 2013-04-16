@@ -3,7 +3,6 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\PersonalDetails;
 
 use Ice\JanusClientBundle\Exception\ValidationException;
-use JMS\Serializer\Tests\Fixtures\Person;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -212,10 +211,16 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     )
                     as $order=>$fieldName){
                 $getter = 'get'.ucfirst($fieldName);
+                try{
+                    $label = $this->getForm()->get($fieldName)->getConfig()->getOption('label');
+                }
+                catch(\Exception $e){
+                    $label = $fieldName;
+                }
                 $this->getStepProgress()->setFieldValue(
                     $fieldName,
                     $order,
-                    $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
+                    $label,
                     $data->$getter()
                 );
             }
