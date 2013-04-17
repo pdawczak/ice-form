@@ -2,16 +2,35 @@
 
 {% block form_content %}
     <fieldset id="customerInformation"><legend>Customer</legend>
-        {{ order.customerFirstNames }}
+        {{ order.customerLastNames }}, {{ order.customerTitle }} {{ order.customerFirstNames }}<br/>
+        {% if order.customerAddress1 %} {{ order.customerAddress1 }} <br/> {% endif %}
+        {% if order.customerAddress2 %} {{ order.customerAddress2 }} <br/> {% endif %}
+        {% if order.customerAddress3 %} {{ order.customerAddress3 }} <br/> {% endif %}
+        {% if order.customerAddress4 %} {{ order.customerAddress4 }} <br/> {% endif %}
+        {% if order.customerPostcode %} {{ order.customerPostcode }} <br/> {% endif %}
     </fieldset>
 
-    {% for suborder in order.suborders %}
-        <fieldset><legend>{{ suborder.description }}</legend>
+    <fieldset style="margin-top:20px"><legend>Bookings</legend>
+    <table style="width: 100%">
+        {% for suborder in order.suborders %}
+            <tr><th style="border-bottom: 1px solid #CCC; text-align: left" colspan="2">{{ suborder.description }}</th></tr>
             {% for line in suborder.lineItems %}
-                {{ line.description }} {{ line.amount }}
+                <tr><td>{{ line.description }}</td><td style="text-align: right">&pound;{{ (line.amount/100) |number_format(2, '.') }}</td></tr>
             {% endfor %}
-        </fieldset>
-    {% endfor %}
+            <tr><th style="text-align: left">Total</th><th  style="text-align: right">{{ suborder.totalAmount }}</th></tr>
+        {% endfor %}
+    </table>
+    </fieldset>
+    <fieldset style="margin-top:20px"><legend>Payment plan</legend>
+        <table>
+        {% for suborder in order.suborders %}
+            <tr><th>{{ suborder.description }}</th></tr>
+            {% for receivable in suborder.paymentGroup.receivables %}
+                <tr><td>{{ receivable.dueDate < date('2013-04-18') ? 'Due now' : 'Due ' ~ (receivable.dueDate | date('d/m/Y')) }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
+            {% endfor %}
+        {% endfor %}
+        </table>
+    </fieldset>
     {{ form_rest(form) }}
 {% endblock %}
 
