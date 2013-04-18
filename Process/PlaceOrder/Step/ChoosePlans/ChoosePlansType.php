@@ -81,12 +81,14 @@ class ChoosePlansType extends AbstractType
                 $booking = $line['booking'];
                 $rawChoice = $data['plan-choice-booking-'.$booking->getId()];
                 if($rawChoice!=='later'){
-                    $planChoice = new PlanChoice();
-                    $planChoice->setCode($rawChoice);
-                    $planChoice->setBookingId($booking->getId());
-                    //TODO: Change this before version 2!
-                    $planChoice->setVersion(1);
-                    $planChoices[] = $planChoice;
+                    $matches = array();
+                    if(preg_match("/^([^:]+):(.*)$/", $rawChoice, $matches) === 1){
+                        $planChoice = new PlanChoice();
+                        $planChoice->setCode($matches[1]);
+                        $planChoice->setBookingId($booking->getId());
+                        $planChoice->setVersion($matches[2]);
+                        $planChoices[] = $planChoice;
+                    }
                 }
             }
 
@@ -110,14 +112,12 @@ class ChoosePlansType extends AbstractType
         $lines = array();
         $paymentPlanService = $this->getParentProcess()->getPaymentPlanService();
 
-        $choices = $this->getParentProcess()->getProgress()->getPlanChoices();
-
         foreach($this->getParentProcess()->getBookingsAvailableToOrder() as $booking){
             $course = $this->getParentProcess()->getVeritasClient()->getCourse(
                 $booking->getAcademicInformation()->getCourseId());
             $plans = array();
             foreach($course->getPaymentPlans() as $plan){
-                $plans[$plan->getCode()] = array(
+                $plans[sprintf("%s:%s", $plan->getCode(), $plan->getVersion())] = array(
                     'code'=>$plan->getCode(),
                     'description'=>$paymentPlanService->getPaymentPlan($plan->getCode(), $plan->getVersion())->getShortDescription(),
                     'receivables'=>$paymentPlanService->getReceivables(
