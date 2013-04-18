@@ -17,7 +17,7 @@
             {% for line in suborder.lineItems %}
                 <tr><td>{{ line.description }}</td><td style="text-align: right">&pound;{{ (line.amount/100) |number_format(2, '.') }}</td></tr>
             {% endfor %}
-            <tr><th style="text-align: left">Total</th><th  style="text-align: right">{{ suborder.totalAmount }}</th></tr>
+            <tr><th style="text-align: left">Total</th><th  style="text-align: right">&pound;{{ (suborder.totalAmount/100) |number_format(2, '.') }}</th></tr>
         {% endfor %}
     </table>
     </fieldset>
@@ -26,7 +26,7 @@
         {% for suborder in order.suborders %}
             <tr><th>{{ suborder.description }}</th></tr>
             {% for receivable in suborder.paymentGroup.receivables %}
-                <tr><td>{{ receivable.dueDate < date('2013-04-18') ? 'Due now' : 'Due ' ~ (receivable.dueDate | date('d/m/Y')) }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
+                <tr><td>{{ (receivable.dueDate is null || receivable.dueDate < date()) ? 'Due now' : 'Due ' ~ (receivable.dueDate | date('d/m/Y')) }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
             {% endfor %}
         {% endfor %}
         </table>

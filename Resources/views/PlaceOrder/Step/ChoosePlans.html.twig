@@ -54,7 +54,7 @@
                             <span class="bookingItemDescription">{{ item.description }}</span>
                         </td>
                         <td>
-                            <span class="bookingItemPrice">{{ item.price }}</span>
+                            <span class="bookingItemPrice">&pound;{{ (item.price/100) |number_format(2, '.') }}</span>
                         </td>
                     </tr>
                 {% endfor %}
@@ -63,7 +63,7 @@
                         <span class="totalDescription">Total</span>
                     </td>
                     <td style="border-top: 1px solid black">
-                        <span class="totalPrice">{{ total }}</span>
+                        <span class="totalPrice">&pound;{{ (total/100) |number_format(2, '.') }}</span>
                     </td>
                 </tr>
             </table>
