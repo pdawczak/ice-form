@@ -10,10 +10,10 @@
         }
     ],
     "require": {
-        "ice/minervaclient-bundle": "dev-trunk",
-        "ice/janusclient-bundle": "dev-trunk",
-        "ice/mercuryclient-bundle": "dev-trunk",
-        "ice/veritasclient-bundle": "dev-trunk",
+        "ice/minervaclient-bundle": "@dev",
+        "ice/janusclient-bundle": "@dev",
+        "ice/mercuryclient-bundle": "@dev",
+        "ice/veritasclient-bundle": "@dev",
         "misd/guzzle-bundle": "@stable"
     },
     "autoload": {
