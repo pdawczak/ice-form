@@ -64,4 +64,9 @@ class HesaInformationType extends AbstractRegistrationStep{
         $this->setEntity(new HesaInformation());
         $this->setPrepared();
     }
+
+    public function getTitle()
+    {
+        return 'HESA information';
+    }
 }
