@@ -34,6 +34,13 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /** @var bool */
     private $prepared = false;
 
+    /**
+     * Maps a child form to a specific step order
+     *
+     * @var array
+     */
+    protected $childFormOrder = array();
+
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder->add('stepReference', 'hidden', array(
             'data'=>$this->getReference(),
@@ -112,7 +119,41 @@ abstract class AbstractRegistrationStep extends AbstractType{
         return $this->parentProcess;
     }
 
-    public function processRequest(Request $request){}
+    /**
+     * Default and naive implementation to process a request.
+     *
+     * Relies on a mapping being specified in $this->childFormOrder and only persists the
+     * values to Minerva.
+     *
+     * Should be enough for very simple registration steps.
+     *
+     * @param Request $request
+     */
+    public function processRequest(Request $request)
+    {
+        $this->getForm()->bind($request);
+        $entity = $this->getEntity();
+
+        foreach($this->childFormOrder as $order => $fieldName) {
+            $getter = 'get'.ucfirst($fieldName);
+
+            $this->getStepProgress()->setFieldValue(
+                $fieldName,
+                $order,
+                $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
+                $entity->$getter
+            );
+        }
+
+        if ($this->getForm()->isValid()) {
+            $this->setComplete();
+        } else {
+            $this->setComplete(false);
+        }
+
+        $this->setUpdated();
+        $this->save();
+    }
 
     public function getName(){
         return '';
