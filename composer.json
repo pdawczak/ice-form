@@ -27,6 +27,10 @@
         "misd/guzzle-bundle": "@stable",
         "jms/serializer-bundle": "0.12.*@dev"
     },
+    "require-dev": {
+        "symfony/form": "2.2.*",
+        "symfony/validator": "2.2.*"
+    },
     "autoload": {
         "psr-0": {
             "Ice\\FormBundle": ""
