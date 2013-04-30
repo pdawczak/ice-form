@@ -4,13 +4,12 @@ namespace Ice\FormBundle\Service;
 
 use Ice\FormBundle\Process\CourseRegistration;
 use Ice\FormBundle\Process\PlaceOrder;
-use Minerva\NotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader as TwigLoader;
 use Ice\VeritasClientBundle\Service\VeritasClient;
 use Ice\MinervaClientBundle\Service\MinervaClient;
-use Ice\MinervaClientBundle\Service\JanusClient;
+use Ice\JanusClientBundle\Service\JanusClient;
 use Ice\MercuryClientBundle\Service\MercuryClient;
 use Symfony\Component\DependencyInjection\Container;
 
