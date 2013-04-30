@@ -37,6 +37,13 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /**
      * Maps a child form to a specific step order
      *
+     * E.g.
+     * array(
+     *  1 => 'Foo',
+     *  3 => 'Bar',
+     *  4 => 'FooBar',
+     * )
+     *
      * @var array
      */
     protected $childFormOrder = array();
