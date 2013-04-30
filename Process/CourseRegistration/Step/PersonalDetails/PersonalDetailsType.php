@@ -230,7 +230,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 // Set DOB and/or email address if this has not been set before
                 $existingUser = $this->getParentProcess()->getRegistrant();
                 if (!$existingUser->getDob() || !$existingUser->getEmail()) {
-                    var_dump($data->getDob());
+                    // FIXME: Add try/catch in case the email address is already in use, for example
                     $this->getParentProcess()->getJanusClient()->updateUser($existingUser->getUsername(), array(
                         'title'         => $data->getTitle(),
                         'firstNames'    => $data->getFirstNames(),
