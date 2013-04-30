@@ -33,7 +33,16 @@ class PersonalDetailsType extends AbstractRegistrationStep{
 
             if(null === ($dob = $this->getParentProcess()->getRegistrant()->getDob())){
                 $builder->add('dob', 'birthday', array(
-                    'label'=>'Date of birth'
+                    'description' => 'Date of birth.',
+                    'label' => 'Date of birth',
+                    'input' => "string",
+                    'widget' => "choice",
+                    'format' => 'd MMM yyyy',
+                    'empty_value' => array(
+                        'day' => 'Day',
+                        'month' => 'Month',
+                        'year' => 'Year',
+                    ),
                 ));
             }
             else{
@@ -76,7 +85,16 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     'label'=>'Email address'
                 ))
                 ->add('dob', 'birthday', array(
-                    'label'=>'Date of birth'
+                    'description' => 'Date of birth.',
+                    'label' => 'Date of birth',
+                    'input' => "string",
+                    'widget' => "choice",
+                    'format' => 'd MMM yyyy',
+                    'empty_value' => array(
+                        'day' => 'Day',
+                        'month' => 'Month',
+                        'year' => 'Year',
+                    ),
                 ))
                 ->add('plainPassword', 'repeated', array(
                     'type'=>'password',
