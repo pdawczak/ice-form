@@ -28,8 +28,19 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 ->add('fullName', 'display', array('label'=>'Name',
                     'data'=>$this->getEntity()->getFullName(), 'mapped'=>false)
                 )
-                ->add('email', 'display', array('label'=>'Email address'))
             ;
+
+            if (!$email = $this->getParentProcess()->getRegistrant()->getEmail()) {
+                $builder->add('email', 'email', array(
+                    'label' => 'Email address'
+                ));
+            } else {
+                $builder->add('email', 'display', array(
+                    'label'  => 'Email address',
+                    'data'   => $email,
+                    'mapped' => false,
+                ));
+            }
 
             if(null === ($dob = $this->getParentProcess()->getRegistrant()->getDob())){
                 $builder->add('dob', 'birthday', array(
