@@ -7,6 +7,16 @@
         {
             "name": "Rob Hogan",
             "email": "rob.hogan@admin.cam.ac.uk"
+        },
+        {
+            "name": "Stuart Chapman",
+            "email": "stuart.chapman@admin.cam.ac.uk"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://satis.internal.admin.cam.ac.uk"
         }
     ],
     "require": {
@@ -14,7 +24,8 @@
         "ice/janusclient-bundle": "@dev",
         "ice/mercuryclient-bundle": "@dev",
         "ice/veritasclient-bundle": "@dev",
-        "misd/guzzle-bundle": "@stable"
+        "misd/guzzle-bundle": "@stable",
+        "jms/serializer-bundle": "0.12.*@dev"
     },
     "autoload": {
         "psr-0": {
