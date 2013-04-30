@@ -46,7 +46,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 $builder->add('dob', 'birthday', array(
                     'description' => 'Date of birth.',
                     'label' => 'Date of birth',
-                    'input' => "string",
+                    'input' => "datetime",
                     'widget' => "choice",
                     'format' => 'd MMM yyyy',
                     'empty_value' => array(
@@ -98,7 +98,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 ->add('dob', 'birthday', array(
                     'description' => 'Date of birth.',
                     'label' => 'Date of birth',
-                    'input' => "string",
+                    'input' => "datetime",
                     'widget' => "choice",
                     'format' => 'd MMM yyyy',
                     'empty_value' => array(
@@ -225,7 +225,24 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     }
                     $this->getForm()->isValid();
                 }
+            } else {
+                // Existing user
+                // Set DOB and/or email address if this has not been set before
+                $existingUser = $this->getParentProcess()->getRegistrant();
+                if (!$existingUser->getDob() || !$existingUser->getEmail()) {
+                    var_dump($data->getDob());
+                    $this->getParentProcess()->getJanusClient()->updateUser($existingUser->getUsername(), array(
+                        'title'         => $data->getTitle(),
+                        'firstNames'    => $data->getFirstNames(),
+                        'middleNames'   => $data->getMiddleNames(),
+                        'lastNames'     => $data->getLastNames(),
+                        'email'         => $data->getEmail(),
+                        'dob'           => $data->getDob() ? $data->getDob()->format('Y-m-d') : null,
+                    ));
+                }
             }
+
+
         }
 
         //If still valid after any Janus side validation
@@ -268,12 +285,12 @@ class PersonalDetailsType extends AbstractRegistrationStep{
      * Sets the entity
      */
     public function prepare(){
-        if($user = $this->getParentProcess()->getRegistrant()){
-            $entity = PersonalDetails::fromUser($user);
+        if (!$user = $this->getParentProcess()->getRegistrant()) {
+            $user = new User;
         }
-        else{
-            $entity = new PersonalDetails();
-        }
+
+        $entity = PersonalDetails::fromUserAndStepProgress($user, $this->getStepProgress());
+
         $this->setEntity($entity);
         $this->setPrepared();
     }

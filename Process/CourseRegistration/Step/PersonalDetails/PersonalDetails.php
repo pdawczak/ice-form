@@ -1,6 +1,7 @@
 <?php
 namespace Ice\FormBundle\Process\CourseRegistration\Step\PersonalDetails;
 
+use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\JanusClientBundle\Entity\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -221,18 +222,37 @@ class PersonalDetails{
     }
 
     /**
-     * @param User $user
+     * @param User         $user
+     * @param StepProgress $step
+     *
      * @return PersonalDetails
      */
-    public static function fromUser(User $user){
+    public static function fromUserAndStepProgress(User $user, StepProgress $step){
+        // Set based on User first
         $instance = new self();
-        $instance->setRegistrantId($user->getUsername());
-        $instance->setTitle($user->getTitle());
-        $instance->setFirstNames($user->getFirstNames());
-        $instance->setMiddleNames($user->getMiddleNames());
-        $instance->setLastNames($user->getLastNames());
-        $instance->setEmail($user->getEmail());
-        $instance->setDob($user->getDob());
+        $instance
+            ->setRegistrantId($user->getUsername())
+            ->setTitle($user->getTitle())
+            ->setFirstNames($user->getFirstNames())
+            ->setMiddleNames($user->getMiddleNames())
+            ->setLastNames($user->getLastNames())
+            ->setEmail($user->getEmail())
+            ->setDob($user->getDob())
+        ;
+
+        // Add or overwrite based on set StepProgress FieldValues.
+        //
+        // The values are keyed the same as the property values
+        //
+        // I think there's a possibility that an end-user could add HTML inputs into the page to set values
+        // that we don't want them to, but tests haven't been able to confirm this is the case.
+        foreach($step->getFieldValues() as $field) {
+            if (property_exists($instance, $field->getFieldName())) {
+                $name = $field->getFieldName();
+                $instance->$name = $field->getValue();
+            }
+        }
+
         return $instance;
     }
 }
