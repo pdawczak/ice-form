@@ -134,11 +134,13 @@ abstract class AbstractRegistrationStep extends AbstractType{
      *
      * Should be enough for very simple registration steps.
      *
-     * @param Request $request
+     * @param Request|null $request The request will be bound to the form if it is present. If not, it is assumed that it was bound earlier.
      */
-    public function processRequest(Request $request)
+    public function processRequest(Request $request = null)
     {
-        $this->getForm()->bind($request);
+        if ($request) {
+            $this->getForm()->bind($request);
+        }
         $entity = $this->getEntity();
 
         foreach($this->childFormOrder as $order => $fieldName) {
@@ -148,7 +150,7 @@ abstract class AbstractRegistrationStep extends AbstractType{
                 $fieldName,
                 $order,
                 $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
-                $entity->$getter
+                $entity->$getter()
             );
         }
 

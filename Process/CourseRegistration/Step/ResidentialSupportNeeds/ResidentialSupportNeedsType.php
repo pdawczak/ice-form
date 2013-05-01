@@ -73,7 +73,7 @@ class ResidentialSupportNeedsType extends AbstractRegistrationStep{
     /**
      * @param Request $request
      */
-    public function processRequest(Request $request){
+    public function processRequest(Request $request = null){
         $this->getForm()->bind($request);
         /** @var $entity ResidentialSupportNeeds */
         $entity = $this->getEntity();
