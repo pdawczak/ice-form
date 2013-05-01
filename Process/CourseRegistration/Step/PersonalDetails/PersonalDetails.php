@@ -35,10 +35,40 @@ class PersonalDetails{
     private $middleNames;
 
     /** @var string */
-    private $gender;
+    private $sex;
 
     /** @var \DateTime */
     private $dob;
+
+    /**
+     * @var string 'Y' or 'N'
+     */
+    private $previousContact;
+
+    /**
+     * @var string
+     */
+    private $previousTitle;
+
+    /**
+     * @var string
+     */
+    private $previousFirstName;
+
+    /**
+     * @var string
+     */
+    private $previousMiddleName;
+
+    /**
+     * @var string
+     */
+    private $previousLastName;
+
+    /**
+     * @var string
+     */
+    private $crsId;
 
     /**
      * @var string
@@ -178,21 +208,21 @@ class PersonalDetails{
     }
 
     /**
-     * @param string $gender
+     * @param string $sex
      * @return PersonalDetails
      */
-    public function setGender($gender)
+    public function setSex($sex)
     {
-        $this->gender = $gender;
+        $this->sex = $sex;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getGender()
+    public function getSex()
     {
-        return $this->gender;
+        return $this->sex;
     }
 
     /**
@@ -255,4 +285,119 @@ class PersonalDetails{
 
         return $instance;
     }
+
+    /**
+     * @param string $previousContact
+     *
+     * @return PersonalDetails
+     */
+    public function setPreviousContact($previousContact)
+    {
+        $this->previousContact = $previousContact;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousContact()
+    {
+        return $this->previousContact;
+    }
+
+    /**
+     * @param string $crsId
+     *
+     * @return PersonalDetails
+     */
+    public function setCrsId($crsId)
+    {
+        $this->crsId = $crsId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCrsId()
+    {
+        return $this->crsId;
+    }
+
+    /**
+     * @param string $previousFirstName
+     *
+     * @return PersonalDetails
+     */
+    public function setPreviousFirstName($previousFirstName)
+    {
+        $this->previousFirstName = $previousFirstName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousFirstName()
+    {
+        return $this->previousFirstName;
+    }
+
+    /**
+     * @param string $previousLastName
+     *
+     * @return PersonalDetails
+     */
+    public function setPreviousLastName($previousLastName)
+    {
+        $this->previousLastName = $previousLastName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousLastName()
+    {
+        return $this->previousLastName;
+    }
+
+    /**
+     * @param string $previousMiddleName
+     *
+     * @return PersonalDetails
+     */
+    public function setPreviousMiddleName($previousMiddleName)
+    {
+        $this->previousMiddleName = $previousMiddleName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousMiddleName()
+    {
+        return $this->previousMiddleName;
+    }
+
+    /**
+     * @param string $previousTitle
+     *
+     * @return PersonalDetails
+     */
+    public function setPreviousTitle($previousTitle)
+    {
+        $this->previousTitle = $previousTitle;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousTitle()
+    {
+        return $this->previousTitle;
+    }
+
 }

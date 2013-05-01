@@ -16,6 +16,20 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class PersonalDetailsType extends AbstractRegistrationStep{
     /**
+     * {@inheritDoc}
+     */
+    protected $childFormOrder = array(
+        1 => 'dob',
+        2 => 'sex', 
+        3 => 'previousContact', 
+        5 => 'previousTitle',
+        6 => 'previousFirstName', 
+        7 => 'previousMiddleName', 
+        8 => 'previousLastName', 
+        9 => 'crsId', 
+    );
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -112,20 +126,65 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     'invalid_message' => 'The password fields must match',
                     'first_options'  => array('label' => 'Password'),
                     'second_options' => array('label' => 'Repeat Password')
-                ));
+                ))
             ;
         }
 
 
-        $builder->add('gender', 'choice', array(
-            'label'=>'Sex',
-            'multiple'=>false,
-            'expanded'=>true,
-            'choices'=>array(
-                'm'=>'Male',
-                'f'=>'Female'
-            )
-        ));
+        $builder
+            ->add('sex', 'choice', array(
+                'label'=>'Sex',
+                'multiple'=>false,
+                'expanded'=>true,
+                'choices'=>array(
+                    'm'=>'Male',
+                    'f'=>'Female'
+                ),
+            ))
+            ->add('previousContact', 'choice', array(
+                'label' => 'Have you previously contacted (even for an enquiry), applied or studied with the University of Cambridge and/or the Institute of Continuing Education (ICE)?',
+                'choices' => array(
+                    'Y' => 'Yes',
+                    'N' => 'No',
+                ),
+                'data' => 'N',
+                'expanded' => true,
+                'multiple' => false,
+            ))
+            ->add('previousTitle', 'choice', array(
+                'label'    => 'Previous title',
+                'multiple' => false,
+                'expanded' => false,
+                'choices'  => array(
+                    'Mr'   => 'Mr',
+                    'Mrs'  => 'Mrs',
+                    'Miss' => 'Miss',
+                    'Ms'   => 'Ms',
+                    'Dr'   => 'Dr',
+                    'Prof' => 'Prof',
+                    'Revd' => 'Revd',
+                    'Misc' => 'Misc',
+                    'Mx'   => 'Mx',
+                ),
+                'required' => false,
+            ))
+            ->add('previousFirstName', 'text', array(
+                'label' => 'Previous first name',
+                'required' => false,
+            ))
+            ->add('previousMiddleName', 'text', array(
+                'label'    => 'Previous middle name',
+                'required' => false
+            ))
+            ->add('previousLastName', 'text', array(
+                'label' => 'Previous last name',
+                'required' => false,
+            ))
+            ->add('crsId', 'text', array(
+                'label' => 'If you have an existing CRSid (student identifier comprising your initials and numbers, e.g. jb101) please enter it here',
+                'required' => false,
+            ))
+        ;
         parent::buildForm($builder, $options);
     }
 
@@ -178,9 +237,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
     /**
      * @param Request $request
      */
-    public function processRequest(Request $request){
-
-
+    public function processRequest(Request $request = null){
         $this->getForm()->bind($request);
 
         /** @var $data PersonalDetails */
@@ -242,35 +299,11 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 }
             }
 
-
         }
 
         //If still valid after any Janus side validation
         if($this->getForm()->isValid()) {
-            foreach(array(
-                1=>'title',
-                2=>'firstNames',
-                3=>'middleNames',
-                4=>'lastNames',
-                5=>'email',
-                6=>'dob'
-                    )
-                    as $order=>$fieldName){
-                $getter = 'get'.ucfirst($fieldName);
-                try{
-                    $label = $this->getForm()->get($fieldName)->getConfig()->getOption('label');
-                }
-                catch(\Exception $e){
-                    $label = $fieldName;
-                }
-                $this->getStepProgress()->setFieldValue(
-                    $fieldName,
-                    $order,
-                    $label,
-                    $data->$getter()
-                );
-            }
-
+            parent::processRequest();
             $this->setComplete();
             $this->save();
         }
