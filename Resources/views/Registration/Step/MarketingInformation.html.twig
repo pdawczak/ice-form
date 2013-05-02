@@ -1,20 +1,5 @@
 {% extends "Registration/Step/default.html.twig" %}
 
-{% block javascript %}
-    {{ parent() }}
-    <script type="text/javascript">
-        function onChangeHowHeardOther(){
-            if(this.checked) {
-                $('#whenHowHeardOther').show();
-            }
-            else {
-                $('#whenHowHeardOther').hide();
-            }
-        }
-        $("input:checkbox[value=Other]").change(onChangeHowHeardOther).trigger("change");
-    </script>
-{% endblock %}
-
 {% block form_content %}
     {{ form_row(form.marketingHowHeard, {'form_type':'horizontal'}) }}
     <div id="whenHowHeardOther">{{ form_row(form.marketingDetail, {'form_type':'horizontal'}) }}</div>

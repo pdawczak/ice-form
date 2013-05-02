@@ -16,6 +16,7 @@ use Ice\MinervaClientBundle\Entity\AcademicInformation;
 
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseRegistration extends AbstractProcess
 {
@@ -151,7 +152,6 @@ class CourseRegistration extends AbstractProcess
      * @param Request $request
      */
     public function processRequest(Request $request){
-
         if($request->getMethod()==='POST'){
             if(null !== ($stepReference = $request->get('stepReference', null))){
                 $submittedStep = $this->getStepByReference($stepReference);
@@ -256,10 +256,49 @@ class CourseRegistration extends AbstractProcess
      * @param array $vars Vars to be passed to the template
      * @return string HTML output
      */
-    public function renderStep(array $vars = array()){
+    public function renderStepHtml(array $vars = array()){
         $currentStep = $this->getCurrentStep();
         if(!$currentStep->isPrepared()) $currentStep->prepare();
-        return $currentStep->render($vars);
+        return $currentStep->renderHtml($vars);
+    }
+
+    /**
+     * Returns any JavaScript that is required for the current step.
+     *
+     * @param array $vars
+     *
+     * @return string
+     */
+    public function renderStepJavaScript(array $vars = array()){
+        $currentStep = $this->getCurrentStep();
+        if(!$currentStep->isPrepared()) $currentStep->prepare();
+        return $currentStep->renderJavaScript($vars);
+    }
+
+    /**
+     * Returns a partial representation of the current step.
+     *
+     * Not all steps will require have an Ajax Response.
+     *
+     * @param array $vars
+     *
+     * @return Response
+     */
+    public function getStepAjaxResponse(array $vars = array())
+    {
+        $currentStep = $this->getCurrentStep();
+        if(!$currentStep->isPrepared()) $currentStep->prepare();
+        return $currentStep->getAjaxResponse($vars);
+    }
+
+    /**
+     * Whether the current step has an Ajax response.
+     *
+     * @return bool
+     */
+    public function stepSupportsAjaxResponse()
+    {
+        return $this->getCurrentStep()->supportsAjaxResponse();
     }
 
     /**

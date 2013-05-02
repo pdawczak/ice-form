@@ -50,8 +50,12 @@ class SupportNeedsType extends AbstractRegistrationStep{
         parent::buildForm($builder, $options);
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'SupportNeeds.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'SupportNeeds.js.twig';
     }
 
     public function prepare(){

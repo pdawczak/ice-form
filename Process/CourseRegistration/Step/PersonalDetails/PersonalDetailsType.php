@@ -309,7 +309,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
         }
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'PersonalDetails.html.twig';
     }
 

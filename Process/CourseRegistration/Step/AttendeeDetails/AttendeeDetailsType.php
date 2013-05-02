@@ -87,7 +87,7 @@ class AttendeeDetailsType extends AbstractRegistrationStep{
         $this->setPrepared();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'AttendeeDetails.html.twig';
     }
 }

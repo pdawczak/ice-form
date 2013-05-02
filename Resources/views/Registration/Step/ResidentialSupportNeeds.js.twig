@@ -1,0 +1,21 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeAdditionalNeeds(){
+            if($('input:radio[name=additionalNeeds]:checked').val() === '1'){
+                $('#whenAdditionalNeedsYes').show();
+            }
+            else {
+                $('#whenAdditionalNeedsYes').hide();
+            }
+        }
+
+        $('input:radio[name=additionalNeeds]').each(function(index, domElement){
+            $(domElement).change(onChangeAdditionalNeeds);
+        });
+
+        onChangeAdditionalNeeds();
+    </script>
+{% endblock %}

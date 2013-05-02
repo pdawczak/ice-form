@@ -56,7 +56,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep{
         $this->save();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'AccommodationRequirements.html.twig';
     }
 

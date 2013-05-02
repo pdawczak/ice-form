@@ -78,8 +78,12 @@ class MarketingInformationType extends AbstractRegistrationStep{
         $this->save();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'MarketingInformation.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'MarketingInformation.js.twig';
     }
 
     public function prepare(){

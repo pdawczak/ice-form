@@ -1,6 +1,6 @@
 {% form_theme form 'fields.html.twig' %}
 
-<form action="{{ url|e }}" method="post" class="form-horizontal">
+<form action="{{ url|e }}" method="post" class="form-horizontal" id="registration_step_form">
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}
     {% endblock %}
@@ -8,6 +8,3 @@
         <input type="submit" class="btn btn-primary" value="Continue" />
     </div>
 </form>
-
-{% block javascript %}
-{% endblock %}

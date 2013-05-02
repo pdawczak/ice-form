@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -69,14 +70,39 @@ abstract class AbstractRegistrationStep extends AbstractType{
         return ucfirst(strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $this->getReference())));
     }
 
-    public function render(array $vars = array()){
+    public function renderHtml(array $vars = array()){
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
         if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
             $this->getStepProgress()->setBegan(new \DateTime);
             $this->save();
         }
-        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getTemplate(), $vars);
+        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getHtmlTemplate(), $vars);
+    }
+
+    public function renderJavaScript(array $vars = array()){
+        $vars['form'] = $this->getForm()->createView();
+        $vars['url'] = $this->getParentProcess()->getUrl();
+        if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
+            $this->getStepProgress()->setBegan(new \DateTime);
+            $this->save();
+        }
+        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getJavaScriptTemplate(), $vars);
+    }
+
+    public function getAjaxResponse(array $vars = array())
+    {
+        return new Response('AJAX response not valid for this step type.', 412);
+    }
+
+    /**
+     * Whether the current step has an Ajax response.
+     *
+     * @return bool
+     */
+    public function supportsAjaxResponse()
+    {
+        return false;
     }
 
     /**
@@ -104,8 +130,15 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /**
      * @return string
      */
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'default.html.twig';
+    }
+
+    /**
+     * @return string
+     */
+    public function getJavaScriptTemplate(){
+        return 'default.js.twig';
     }
 
     /**

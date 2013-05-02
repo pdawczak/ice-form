@@ -1,0 +1,16 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeOtherSelected(){
+            if(this.checked) {
+                $('#whenOtherSelected').show();
+            }
+            else {
+                $('#whenOtherSelected').hide();
+            }
+        }
+        $("input:checkbox[value=Other]").change(onChangeOtherSelected).trigger("change");
+    </script>
+{% endblock %}

@@ -77,8 +77,12 @@ class DietaryRequirementsType extends AbstractRegistrationStep{
         $this->save();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'DietaryRequirements.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'DietaryRequirements.js.twig';
     }
 
     public function prepare(){
