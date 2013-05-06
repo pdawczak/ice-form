@@ -26,7 +26,7 @@
         {% for suborder in order.suborders %}
             <tr><th>{{ suborder.description }}</th></tr>
             {% for receivable in suborder.paymentGroup.receivables %}
-                <tr><td>{{ (receivable.dueDate is null || receivable.dueDate < date()) ? 'Due now' : 'Due ' ~ (receivable.dueDate | date('d/m/Y')) }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
+                <tr><td>{{ (receivable.dueDate is null or receivable.dueDate < date()) ? 'Due now' : 'Due ' ~ (receivable.dueDate | date('d/m/Y')) }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
             {% endfor %}
         {% endfor %}
         </table>
