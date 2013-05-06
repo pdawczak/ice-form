@@ -47,7 +47,7 @@ class ConfirmType extends AbstractType
     public function prepare()
     {
         $builder = $this->getParentProcess()->getMercuryClient()->getNewOrderBuilder();
-        $builder->setCustomerByUser($this->getParentProcess()->getCustomer());
+        $builder->setCustomerByAccount($this->getParentProcess()->getCustomer());
         $progress = $this->getParentProcess()->getProgress();
         foreach($this->getParentProcess()->getBookingsAvailableToOrder() as $booking){
             if($planChoice = $progress->getPlanChoiceByBookingId($booking->getId())){
