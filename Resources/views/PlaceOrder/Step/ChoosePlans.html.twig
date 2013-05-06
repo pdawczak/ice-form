@@ -71,7 +71,8 @@
         <div class="schedule">
             {{ form_row(form['plan-choice-booking-'~booking.id], {attr:{'class':'planChoice'}}) }}
             {% for plan in plans %}
-                <div class="scheduleDetail" id="{{ 'plan-choice-booking-'~booking.id~'-detail-'~plan.code }}">
+                <div class="scheduleDetail"
+                     id="{{ 'plan-choice-booking-' ~ booking.id ~ '-detail-' ~ plan.code ~ ':' ~ plan.version }}">
                     <table>
                         <tr>
                             <th>Date due</th>
@@ -96,7 +97,7 @@
             $('.scheduleDetail').hide();
             $('.planChoice').each(function(index, element){
                 if(element.name && element.value){
-                    var id = '#'+element.name+'-detail-'+element.value;
+                    var id = '#'+element.name+'-detail-'+element.value.replace(':','\\:');
                     $(id).show();
                 }
             });
