@@ -1,0 +1,38 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Perform AJAX request when a change is made in a select element
+            $(document).on("change", "#registration_step_form select", function(event) {
+                var form = $("#registration_step_form");
+                var url = form.attr("action");
+                var parent_div = form.parent("div");
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    success: function(data) {
+                        parent_div.html(data);
+                    }
+                });
+
+                return event.preventDefault();
+            });
+
+            // Show/hide other dietary requirements textarea if "other" is selected
+//            $("#whenOtherSelected").hide(); // FIXME: This isn't firing when this part of the form is first loaded
+//            $(document).on("change", "input:checkbox[value=Other]", function(event) {
+//                var input = $("#whenOtherSelected");
+//                if (this.checked) {
+//                    input.show();
+//                } else {
+//                    input.hide();
+//                }
+//            });
+        });
+    </script>
+{% endblock %}

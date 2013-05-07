@@ -2,102 +2,86 @@
 
 namespace Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation;
 
-use Ice\JanusClientBundle\Exception\ValidationException;
-use JMS\Serializer\Tests\Fixtures\Person;
-use Symfony\Component\Form\FormError;
+use Ice\FormBundle\Process\CourseRegistration\EventSubscriber\WeekendAccommodationSubscriber;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
 use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\MinLength;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Ice\JanusClientBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WeekendAccommodationType extends AbstractRegistrationStep{
+    protected $childFormOrder = array(
+        1 => 'accommodation',
+        2 => 'accommodationSharingWith',
+        4 => 'adaptedBedroomRequired',
+        5 => 'accommodationRequirements',
+        6 => 'bedAndBreakfastAccommodation',
+        7 => 'platter',
+        8 => 'platterOption',
+    );
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $builder->add('accommodationChoice', 'choice', array(
-            'multiple'=>false,
-            'expanded'=>true,
-            'required'=>false,
-            'label'=>'Your accommodation selection',
-            'choices'=>array(
-                'none'=>'No accommodation',
-                'single'=>'Accommodation at Madingley Hall - single',
-                'double'=>'Accommodation at Madingley Hall - double',
-                'twin'=>'Accommodation at Madingley Hall - twin',
-            )
-
-        ))
-
+        $builder
+            ->addEventSubscriber(new WeekendAccommodationSubscriber($builder->getFormFactory(), $this->getParentProcess()->getCourse()))
         ;
+
         parent::buildForm($builder, $options);
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'cascade_validation' => true,
+        ));
+
+        parent::setDefaultOptions($resolver);
     }
 
     /**
      * @return string
      */
     public function getTitle(){
-        return 'Accommodation';
+        return 'Weekend accommodation';
     }
 
-    /**
-     * @param Request $request
-     */
-    public function processRequest(Request $request){
-        $this->getForm()->bind($request);
-        /** @var $entity WeekendAccommodation */
-        $entity = $this->getEntity();
-
-        foreach(array(
-                )
-                as $order=>$fieldName){
-            $getter = 'get'.ucfirst($fieldName);
-            $this->getStepProgress()->setFieldValue(
-                $fieldName,
-                $order,
-                $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
-                $entity->$getter()
-            );
-        }
-
-        if($this->getForm()->isValid()){
-            $this->setComplete();
-        }
-        else{
-            $this->setComplete(false);
-        }
-        $this->setUpdated();
-        $this->save();
-    }
-
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'WeekendAccommodation.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'WeekendAccommodation.js.twig';
     }
 
     public function prepare(){
         $this->setEntity(new WeekendAccommodation());
+        $request = Request::createFromGlobals(); // FIXME: Passed as arg from processRequest
+        // Terrible hack to deal with issue of binding making the stepReference hidden field null
+        $request->query->set('stepReference', $this->getReference());
+        $this->getForm()->bind($request);
         $this->setPrepared();
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function processRequest(Request $request = null)
     {
-        parent::setDefaultOptions($resolver);
-        $resolver->setDefaults(array(
-            'validation_groups' => function(FormInterface $form) {
-                /** @var $data WeekendAccommodation */
-                $data = $form->getData();
-                $groups = array('default');
-                return $groups;
-            }
-        ));
+        // Request already bound in self::prepare
+        parent::processRequest(null);
+
+        $this->setComplete(false);
     }
+
+    public function getAjaxResponse(array $array = array())
+    {
+        return new Response($this->renderHtml($array));
+    }
+
+    public function supportsAjaxResponse()
+    {
+        return true;
+    }
+
 }
