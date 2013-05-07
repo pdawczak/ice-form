@@ -18,6 +18,11 @@ class Progress{
     private $planChoices = array();
 
     /**
+     * @var int
+     */
+    private $transactionRequestId = null;
+
+    /**
      * @var Order
      */
     private $confirmedOrder;
@@ -100,5 +105,23 @@ class Progress{
     public function getConfirmedOrder()
     {
         return $this->confirmedOrder;
+    }
+
+    /**
+     * @param int $transactionRequest
+     * @return Progress
+     */
+    public function setTransactionRequestId($transactionRequestId)
+    {
+        $this->transactionRequestId = $transactionRequestId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransactionRequestId()
+    {
+        return $this->transactionRequestId;
     }
 }
