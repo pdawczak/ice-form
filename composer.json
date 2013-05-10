@@ -20,10 +20,10 @@
         }
     ],
     "require": {
-        "ice/minervaclient-bundle": "@dev",
-        "ice/janusclient-bundle": "@dev",
-        "ice/mercuryclient-bundle": "@dev",
-        "ice/veritasclient-bundle": "@dev",
+        "ice/minervaclient-bundle": "0.1.*",
+        "ice/janusclient-bundle": "0.2.*",
+        "ice/mercuryclient-bundle": "0.2.*",
+        "ice/veritasclient-bundle": "0.1.*",
         "misd/guzzle-bundle": "@stable",
         "jms/serializer-bundle": "0.12.*@dev"
     },
