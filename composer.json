@@ -2,7 +2,7 @@
     "name": "ice/form-bundle",
     "type": "symfony-bundle",
     "description": "Bundle providing forms and business logic for course registrations.",
-    "licence": "MIT",
+    "license": "MIT",
     "authors": [
         {
             "name": "Rob Hogan",
