@@ -1,6 +1,12 @@
 {% form_theme form 'fields.html.twig' %}
 
-<form action="{{ url|e }}" method="post" class="form-horizontal">
+{% block css %}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+<form action="{{ url|e }}" method="post" class="form-horizontal" id="placeorder-process">
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}
     {% endblock %}
@@ -12,6 +18,3 @@
     {% endblock %}
     </div>
 </form>
-
-{% block javascript %}
-{% endblock %}

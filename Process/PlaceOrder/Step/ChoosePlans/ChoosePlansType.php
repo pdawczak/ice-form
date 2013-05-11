@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Ice\MinervaClientBundle\Entity\Booking;
 use Ice\VeritasClientBundle\Entity\PaymentPlan;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\HttpFoundation\Request;
 
 class ChoosePlansType extends AbstractType
 {
@@ -72,7 +73,7 @@ class ChoosePlansType extends AbstractType
         parent::buildForm($builder, $options);
     }
 
-    public function processRequest($request)
+    public function processRequest(Request $request)
     {
         $this->getForm()->bind($request);
         $data = $this->getForm()->getData();

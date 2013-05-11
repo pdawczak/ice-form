@@ -1,0 +1,49 @@
+$(document).ready(function () {
+    var intervalId;
+
+    var pollTransactionStatus = function() {
+        var form = $('#placeorder-process'),
+            iframe = $('#stiframe');
+
+        $.ajax({
+            type: "POST",
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                if (data.transaction_status !== 'PENDING') {
+                    window.clearInterval(intervalId);
+                    $('#receipt-placeholder').html(data.html);
+                    iframe.hide();
+                }
+            }
+        });
+    };
+
+    var handleFrameEvent = function (event) {
+        var iframe = $('#stiframe');
+            message = event.data;
+
+        if (!iframe) {
+            return;
+        }
+
+        //HEIGHT EVENT
+        if (message.substring(0, 7) === "height=") {
+            iframe.height(parseInt(message.substring(7)) + 30);
+        }
+
+        //SUCCESS EVENT
+        else if (message === "success") {
+            //iframe.hide();
+        }
+    };
+
+    if (window.addEventListener) {
+        window.addEventListener('message', handleFrameEvent, false);
+    }
+    else if (window.attachEvent) {
+        window.attachEvent('message', handleFrameEvent);
+    }
+
+    intervalId = window.setInterval(pollTransactionStatus, 1000);
+});

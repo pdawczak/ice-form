@@ -3,6 +3,7 @@ namespace Ice\FormBundle\Process\PlaceOrder\Step\Confirm;
 
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
 use Ice\MercuryClientBundle\Entity\Order;
+use Symfony\Component\HttpFoundation\Request;
 
 class ConfirmType extends AbstractType
 {
@@ -37,7 +38,7 @@ class ConfirmType extends AbstractType
         return $this->getStepProgress()->isComplete();
     }
 
-    public function processRequest($request){
+    public function processRequest(Request $request){
         $newOrder = $this->getParentProcess()->getMercuryClient()->createOrder($this->order);
         $this->getParentProcess()->getProgress()->setConfirmedOrder($newOrder);
         $this->getStepProgress()->setComplete();

@@ -197,8 +197,10 @@ class PlaceOrder extends AbstractProcess
         return $this;
     }
 
+
+
     /**
-     * @return \Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep
+     * @return \Ice\FormBundle\Process\PlaceOrder\Step\AbstractType
      */
     public function getCurrentStep()
     {

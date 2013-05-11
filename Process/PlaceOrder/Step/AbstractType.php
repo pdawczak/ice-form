@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Ice\FormBundle\Process\PlaceOrder;
 
@@ -161,9 +162,28 @@ abstract class AbstractType extends BaseAbstractType{
     abstract public function getReference();
 
     /**
+     * @param Request $request
+     * @return mixed
+     */
+    abstract public function processRequest(Request $request);
+
+    /**
      * @return PlaceOrder\StepProgress
      */
     public function getStepProgress(){
         return $this->getParentProcess()->getProgress()->getStepProgress($this->getReference());
+    }
+
+    /**
+     * @return bool
+     */
+    abstract public function isComplete();
+
+    /**
+     * @return Response
+     */
+    public function getAjaxResponse()
+    {
+        return new Response('No AJAX response is available for this step');
     }
 }
