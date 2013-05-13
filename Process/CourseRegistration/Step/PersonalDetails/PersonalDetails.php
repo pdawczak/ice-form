@@ -252,12 +252,12 @@ class PersonalDetails{
     }
 
     /**
-     * @param User         $user
-     * @param StepProgress $step
+     * @param User              $user
+     * @param StepProgress|null $step
      *
      * @return PersonalDetails
      */
-    public static function fromUserAndStepProgress(User $user, StepProgress $step){
+    public static function fromUserAndStepProgress(User $user, $step = null){
         // Set based on User first
         $instance = new self();
         $instance
@@ -270,16 +270,18 @@ class PersonalDetails{
             ->setDob($user->getDob())
         ;
 
-        // Add or overwrite based on set StepProgress FieldValues.
-        //
-        // The values are keyed the same as the property values
-        //
-        // I think there's a possibility that an end-user could add HTML inputs into the page to set values
-        // that we don't want them to, but tests haven't been able to confirm this is the case.
-        foreach($step->getFieldValues() as $field) {
-            if (property_exists($instance, $field->getFieldName())) {
-                $name = $field->getFieldName();
-                $instance->$name = $field->getValue();
+        if(null !== $step) {
+            // Add or overwrite based on set StepProgress FieldValues.
+            //
+            // The values are keyed the same as the property values
+            //
+            // I think there's a possibility that an end-user could add HTML inputs into the page to set values
+            // that we don't want them to, but tests haven't been able to confirm this is the case.
+            foreach($step->getFieldValues() as $field) {
+                if (property_exists($instance, $field->getFieldName())) {
+                    $name = $field->getFieldName();
+                    $instance->$name = $field->getValue();
+                }
             }
         }
 
