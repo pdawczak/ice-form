@@ -1,0 +1,24 @@
+{% block form_content %}
+    {% if form.vars.errors|length %}
+        <div class="alert alert-error">{{ form_errors(form) }}</div>
+    {% endif %}
+    <div id="accommodation_choices">
+        {{ form_row(form.accommodation, {'form_type': 'horizontal'}) }}
+        {% if form.accommodationSharingWith is defined %}
+            {{ form_row(form.accommodationSharingWith, {'form_type': 'horizontal'}) }}
+        {% endif %}
+        {% if form.bedAndBreakfastAccommodation is defined %}
+            <p>While every effort is made to meet the needs of students with support needs, it is not otherwise possible to accommodate requests for particular rooms or facilities.</p>
+            {{ form_row(form.accommodationRequirementsGroup.adaptedBedroomRequired, {'form_type': 'horizontal'}) }}
+            {{ form_row(form.accommodationRequirementsGroup.accommodationRequirements, {'form_type': 'horizontal'}) }}
+            {{ form_row(form.bedAndBreakfastAccommodation, {'form_type': 'horizontal'}) }}
+        {% endif %}
+        {% if form.platter is defined %}
+            {{ form_row(form.platter, {'form_type': 'horizontal'}) }}
+        {% endif %}
+        {% if form.platterOption is defined %}
+            {{ form_row(form.platterOption, {'form_type': 'horizontal'}) }}
+        {% endif %}
+        {{ form_rest(form) }}
+    </div>
+{% endblock %}

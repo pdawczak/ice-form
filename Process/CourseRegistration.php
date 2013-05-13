@@ -16,6 +16,7 @@ use Ice\MinervaClientBundle\Entity\AcademicInformation;
 
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseRegistration extends AbstractProcess
 {
@@ -45,6 +46,9 @@ class CourseRegistration extends AbstractProcess
 
     /** @var \Ice\MinervaClientBundle\Entity\RegistrationProgress */
     private $progress;
+
+    /** @var Response */
+    private $ajaxResponse = null;
 
     /**
      * @param string $reference
@@ -151,8 +155,10 @@ class CourseRegistration extends AbstractProcess
      * @param Request $request
      */
     public function processRequest(Request $request){
-
-        if($request->getMethod()==='POST'){
+        if ($request->isXmlHttpRequest()) {
+            $this->processAjaxRequest($request);
+        }
+        else if($request->getMethod()==='POST'){
             if(null !== ($stepReference = $request->get('stepReference', null))){
                 $submittedStep = $this->getStepByReference($stepReference);
                 $request->attributes->remove('stepReference');
@@ -190,6 +196,17 @@ class CourseRegistration extends AbstractProcess
         }
         else{
             $this->getCurrentStep()->prepare();
+        }
+    }
+
+    protected function processAjaxRequest(Request $request)
+    {
+        if(null !== ($stepReference = $request->get('stepReference', null))){
+            $submittedStep = $this->createStepByReference($stepReference);
+            $submittedStep->processAjaxRequest($request);
+        }
+        else {
+            return new Response('AJAX response not supported when no step reference is supplied.', 412);
         }
     }
 
@@ -256,10 +273,46 @@ class CourseRegistration extends AbstractProcess
      * @param array $vars Vars to be passed to the template
      * @return string HTML output
      */
-    public function renderStep(array $vars = array()){
+    public function renderStepHtml(array $vars = array()){
         $currentStep = $this->getCurrentStep();
         if(!$currentStep->isPrepared()) $currentStep->prepare();
-        return $currentStep->render($vars);
+        return $currentStep->renderHtml($vars);
+    }
+
+    /**
+     * Returns any JavaScript that is required for the current step.
+     *
+     * @param array $vars
+     *
+     * @return string
+     */
+    public function renderStepJavaScript(array $vars = array()){
+        $currentStep = $this->getCurrentStep();
+        if(!$currentStep->isPrepared()) $currentStep->prepare();
+        return $currentStep->renderJavaScript($vars);
+    }
+
+    /**
+     * Returns a partial representation of the current step.
+     *
+     * Not all steps will require have an Ajax Response.
+     *
+     * @return Response
+     */
+    public function getStepAjaxResponse()
+    {
+        return $this->getAjaxResponse();
+    }
+
+    /**
+     * Whether the current step has an Ajax response.
+     *
+     * @return bool
+     */
+    public function stepSupportsAjaxResponse()
+    {
+        return true;
+        return $this->getCurrentStep()->supportsAjaxResponse();
     }
 
     /**
@@ -493,5 +546,23 @@ class CourseRegistration extends AbstractProcess
             $bookingItemsArray
         ));
         return $booking;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Response $ajaxResponse
+     * @return CourseRegistration
+     */
+    public function setAjaxResponse($ajaxResponse)
+    {
+        $this->ajaxResponse = $ajaxResponse;
+        return $this;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getAjaxResponse()
+    {
+        return $this->ajaxResponse;
     }
 }

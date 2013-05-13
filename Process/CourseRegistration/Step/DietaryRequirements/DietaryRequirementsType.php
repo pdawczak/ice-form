@@ -48,7 +48,7 @@ class DietaryRequirementsType extends AbstractRegistrationStep{
     /**
      * @param Request $request
      */
-    public function processRequest(Request $request){
+    public function processRequest(Request $request = null){
         $this->getForm()->bind($request);
         /** @var $entity DietaryRequirements */
         $entity = $this->getEntity();
@@ -77,8 +77,12 @@ class DietaryRequirementsType extends AbstractRegistrationStep{
         $this->save();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'DietaryRequirements.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'DietaryRequirements.js.twig';
     }
 
     public function prepare(){

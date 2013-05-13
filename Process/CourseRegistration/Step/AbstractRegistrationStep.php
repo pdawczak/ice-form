@@ -3,12 +3,17 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
+use Ice\MinervaClientBundle\Entity\StepProgress;
 
 abstract class AbstractRegistrationStep extends AbstractType{
     protected $title;
@@ -34,11 +39,37 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /** @var bool */
     private $prepared = false;
 
+    /** @var bool */
+    private $continueClicked = false;
+
+    /**
+     * Maps a child form to a specific step order
+     *
+     * E.g.
+     * array(
+     *  1 => 'Foo',
+     *  3 => 'Bar',
+     *  4 => 'FooBar',
+     * )
+     *
+     * @var array
+     */
+    protected $childFormOrder = array();
+
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder->add('stepReference', 'hidden', array(
-            'data'=>$this->getReference(),
-            'mapped'=>false
-        ));
+                'data'=>$this->getReference(),
+                'mapped'=>false
+            ))
+            ->addEventListener(FormEvents::PRE_BIND, function(FormEvent $e) {
+                $data = $e->getData();
+                $data['stepReference'] = $this->getReference();
+                if (isset($data['continue'])) {
+                    unset($data['continue']);
+                    $this->continueClicked = true;
+                    $e->setData($data);
+                }
+            }, 1);
     }
 
     /**
@@ -55,14 +86,39 @@ abstract class AbstractRegistrationStep extends AbstractType{
         return ucfirst(strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $this->getReference())));
     }
 
-    public function render(array $vars = array()){
+    public function renderHtml(array $vars = array()){
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
         if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
             $this->getStepProgress()->setBegan(new \DateTime);
             $this->save();
         }
-        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getTemplate(), $vars);
+        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getHtmlTemplate(), $vars);
+    }
+
+    public function renderJavaScript(array $vars = array()){
+        $vars['form'] = $this->getForm()->createView();
+        $vars['url'] = $this->getParentProcess()->getUrl();
+        if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
+            $this->getStepProgress()->setBegan(new \DateTime);
+            $this->save();
+        }
+        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getJavaScriptTemplate(), $vars);
+    }
+
+    public function processAjaxRequest(Request $request)
+    {
+        $this->getParentProcess()->setAjaxResponse(new Response('Not supported'));
+    }
+
+    /**
+     * Whether the current step has an Ajax response.
+     *
+     * @return bool
+     */
+    public function supportsAjaxResponse()
+    {
+        return false;
     }
 
     /**
@@ -90,8 +146,15 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /**
      * @return string
      */
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'default.html.twig';
+    }
+
+    /**
+     * @return string
+     */
+    public function getJavaScriptTemplate(){
+        return 'default.js.twig';
     }
 
     /**
@@ -112,10 +175,78 @@ abstract class AbstractRegistrationStep extends AbstractType{
         return $this->parentProcess;
     }
 
-    public function processRequest(Request $request){}
+    /**
+     * Default and naive implementation to process a request.
+     *
+     * Relies on a mapping being specified in $this->childFormOrder and only persists the
+     * values to Minerva.
+     *
+     * Should be enough for very simple registration steps.
+     *
+     * @param Request|null $request The request will be bound to the form if it is present. If not, it is assumed that it was bound earlier.
+     */
+    public function processRequest(Request $request = null)
+    {
+        if ($request) {
+            $this->getForm()->bind($request);
+        }
+
+        $this->setStepProgressValues(
+            $this->getEntity(),
+            $this->childFormOrder,
+            $this->getForm(),
+            $this->getStepProgress()
+        );
+
+        if ($this->isContinueClicked() && $this->getForm()->isValid()) {
+            $this->setComplete();
+        } else {
+            $this->setComplete(false);
+        }
+
+        $this->setUpdated();
+        $this->save();
+    }
 
     public function getName(){
         return '';
+    }
+
+    /**
+     * Persists answers to StepProgress
+     *
+     * @param $entity
+     * @param array $formOrder
+     * @param FormInterface $form
+     * @param StepProgress $progress
+     */
+    protected function setStepProgressValues($entity, array $formOrder, FormInterface $form, StepProgress $progress)
+    {
+        foreach($formOrder as $order => $fieldName) {
+            $getter = 'get'.ucfirst($fieldName);
+            $progress->setFieldValue(
+                $fieldName,
+                $order,
+                $this->getFieldDescription($fieldName),
+                $entity->$getter()
+            );
+        }
+    }
+
+    /**
+     * Gets the description for a given field.
+     *
+     * @param $fieldName
+     * @return string
+     */
+    protected function getFieldDescription($fieldName)
+    {
+        try {
+            return $this->getForm()->get($fieldName)->getConfig()->getOption('label');
+        }
+        catch(\OutOfBoundsException $e) {
+            return $fieldName;
+        }
     }
 
     public function getReference()
@@ -255,5 +386,23 @@ abstract class AbstractRegistrationStep extends AbstractType{
      */
     public function isAvailable(){
         return $this->getParentProcess()->getRegistrantId() && $this->getParentProcess()->getCourseId();
+    }
+
+    /**
+     * @param $continueClicked
+     * @return $this
+     */
+    public function setContinueClicked($continueClicked)
+    {
+        $this->continueClicked = $continueClicked;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isContinueClicked()
+    {
+        return $this->continueClicked;
     }
 }

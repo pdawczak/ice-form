@@ -43,7 +43,7 @@ class AttendeeDetailsType extends AbstractRegistrationStep{
     /**
      * @param Request $request
      */
-    public function processRequest(Request $request){
+    public function processRequest(Request $request = null){
         $this->getForm()->bind($request);
         /** @var $entity AttendeeDetails */
         $entity = $this->getEntity();
@@ -87,7 +87,7 @@ class AttendeeDetailsType extends AbstractRegistrationStep{
         $this->setPrepared();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'AttendeeDetails.html.twig';
     }
 }

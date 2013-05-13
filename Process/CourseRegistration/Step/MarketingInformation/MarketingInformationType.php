@@ -48,7 +48,7 @@ class MarketingInformationType extends AbstractRegistrationStep{
     /**
      * @param Request $request
      */
-    public function processRequest(Request $request){
+    public function processRequest(Request $request = null){
         $this->getForm()->bind($request);
         /** @var $entity MarketingInformation */
         $entity = $this->getEntity();
@@ -78,8 +78,12 @@ class MarketingInformationType extends AbstractRegistrationStep{
         $this->save();
     }
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'MarketingInformation.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'MarketingInformation.js.twig';
     }
 
     public function prepare(){

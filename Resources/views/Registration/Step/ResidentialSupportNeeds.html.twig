@@ -1,25 +1,5 @@
 {% extends "Registration/Step/default.html.twig" %}
 
-{% block javascript %}
-    {{ parent() }}
-    <script type="text/javascript">
-        function onChangeAdditionalNeeds(){
-            if($('input:radio[name=additionalNeeds]:checked').val() === '1'){
-                $('#whenAdditionalNeedsYes').show();
-            }
-            else {
-                $('#whenAdditionalNeedsYes').hide();
-            }
-        }
-
-        $('input:radio[name=additionalNeeds]').each(function(index, domElement){
-            $(domElement).change(onChangeAdditionalNeeds);
-        });
-
-        onChangeAdditionalNeeds();
-    </script>
-{% endblock %}
-
 {% block form_content %}
     <p>We invite disclosure from anyone who feels they may have a disability or other condition which is likely to
         require additional support during their selected course(s).</p>
