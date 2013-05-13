@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 abstract class AbstractRegistrationStep extends AbstractType{
     protected $title;
@@ -35,6 +37,9 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /** @var bool */
     private $prepared = false;
 
+    /** @var bool */
+    private $continueClicked = false;
+
     /**
      * Maps a child form to a specific step order
      *
@@ -51,9 +56,18 @@ abstract class AbstractRegistrationStep extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder->add('stepReference', 'hidden', array(
-            'data'=>$this->getReference(),
-            'mapped'=>false
-        ));
+                'data'=>$this->getReference(),
+                'mapped'=>false
+            ))
+            ->addEventListener(FormEvents::PRE_BIND, function(FormEvent $e) {
+                $data = $e->getData();
+                $data['stepReference'] = $this->getReference();
+                if (isset($data['continue'])) {
+                    unset($data['continue']);
+                    $this->continueClicked = true;
+                    $e->setData($data);
+                }
+            });
     }
 
     /**
@@ -179,15 +193,22 @@ abstract class AbstractRegistrationStep extends AbstractType{
         foreach($this->childFormOrder as $order => $fieldName) {
             $getter = 'get'.ucfirst($fieldName);
 
-            $this->getStepProgress()->setFieldValue(
-                $fieldName,
-                $order,
-                $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
-                $entity->$getter()
-            );
+            try {
+                $field = $this->getForm()->get($fieldName);
+                $this->getStepProgress()->setFieldValue(
+                    $fieldName,
+                    $order,
+                    $field->getConfig()->getOption('label'),
+                    $entity->$getter()
+                );
+            }
+            catch(\Exception $e) {
+                //Field not found
+                $e->getMessage();
+            }
         }
 
-        if ($this->getForm()->isValid()) {
+        if ($this->isContinueClicked() && $this->getForm()->isValid()) {
             $this->setComplete();
         } else {
             $this->setComplete(false);
@@ -338,5 +359,23 @@ abstract class AbstractRegistrationStep extends AbstractType{
      */
     public function isAvailable(){
         return $this->getParentProcess()->getRegistrantId() && $this->getParentProcess()->getCourseId();
+    }
+
+    /**
+     * @param $continueClicked
+     * @return $this
+     */
+    public function setContinueClicked($continueClicked)
+    {
+        $this->continueClicked = $continueClicked;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isContinueClicked()
+    {
+        return $this->continueClicked;
     }
 }
