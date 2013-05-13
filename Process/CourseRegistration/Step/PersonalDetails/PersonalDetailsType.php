@@ -207,7 +207,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
         }
         catch(\OutOfBoundsException $e2){
             //Field doesn't exist. Add this error to the root so the user can see the message
-            $target = $target = $this->getForm();
+            $target = $this->getForm();
         }
         return $target;
     }
