@@ -1,15 +1,25 @@
 <?php
 namespace Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation;
 
+use Ice\MinervaClientBundle\Entity\StepProgress;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class WeekendAccommodation{
+class WeekendAccommodation
+{
     /**
      * @var string
      */
     private $accommodation;
 
-    private $accommodationRequirementsGroup;
+    /**
+     * @var bool
+     */
+    private $adaptedBedroomRequired;
+
+    /**
+     * @var string
+     */
+    private $accommodationRequirements;
 
     /**
      * @var string
@@ -85,15 +95,66 @@ class WeekendAccommodation{
         return $this->platter;
     }
 
-    public function setAccommodationRequirementsGroup($accommodationRequirementsGroup)
+    /**
+     * @param string $accommodationRequirements
+     * @return WeekendAccommodation
+     */
+    public function setAccommodationRequirements($accommodationRequirements)
     {
-        $this->accommodationRequirementsGroup = $accommodationRequirementsGroup;
+        $this->accommodationRequirements = $accommodationRequirements;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getAccommodationRequirements()
+    {
+        return $this->accommodationRequirements;
+    }
+
+    /**
+     * @param boolean $adaptedBedroomRequired
+     * @return WeekendAccommodation
+     */
+    public function setAdaptedBedroomRequired($adaptedBedroomRequired)
+    {
+        $this->adaptedBedroomRequired = $adaptedBedroomRequired;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAdaptedBedroomRequired()
+    {
+        return $this->adaptedBedroomRequired;
+    }
+
+    /**
+     * @param array $accommodationRequirementsGroup
+     * @return $this
+     */
+    public function setAccommodationRequirementsGroup($accommodationRequirementsGroup)
+    {
+        if (isset($accommodationRequirementsGroup['adaptedBedroomRequired'])) {
+            $this->setAdaptedBedroomRequired($accommodationRequirementsGroup['adaptedBedroomRequired']?true:false);
+        }
+        if (isset($accommodationRequirementsGroup['accommodationRequirements'])) {
+            $this->setAccommodationRequirements($accommodationRequirementsGroup['accommodationRequirements']);
+        }
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
     public function getAccommodationRequirementsGroup()
     {
-        return $this->accommodationRequirementsGroup;
+        return [
+            'adaptedBedroomRequired' => $this->getAdaptedBedroomRequired()?1:0,
+            'accommodationRequirements' => $this->getAccommodationRequirements()
+        ];
     }
 
     /**
@@ -153,6 +214,33 @@ class WeekendAccommodation{
         return $this->platterOption;
     }
 
+    /**
+     * @param StepProgress $stepProgress
+     * @return WeekendAccommodation
+     */
+    public static function fromStepProgress(StepProgress $stepProgress)
+    {
+        $instance = new self();
+        foreach ($stepProgress->getFieldValues() as $fieldValue) {
+            $instance->{$fieldValue->getFieldName()} = $fieldValue->getValue();
+        }
+        return $instance;
+    }
 
-
+    /**
+     * @return array
+     */
+    public function toDataArray()
+    {
+        $data = [];
+        $data['accommodation'] = $this->accommodation;
+        $data['adaptedBedroomRequired'] = $this->adaptedBedroomRequired?1:0;
+        $data['accommodationRequirements'] = $this->accommodationRequirements;
+        $data['accommodationSharingWith'] = $this->accommodationSharingWith;
+        $data['bedAndBreakfastAccommodation'] = $this->bedAndBreakfastAccommodation;
+        $data['dietaryRequirements'] = $this->dietaryRequirements;
+        $data['platterOption'] = $this->platterOption;
+        $data['platter'] = $this->platter;
+        return $data;
+    }
 }
