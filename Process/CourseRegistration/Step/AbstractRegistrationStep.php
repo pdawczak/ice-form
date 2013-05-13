@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
+use Ice\MinervaClientBundle\Entity\StepProgress;
 
 abstract class AbstractRegistrationStep extends AbstractType{
     protected $title;
@@ -67,7 +69,7 @@ abstract class AbstractRegistrationStep extends AbstractType{
                     $this->continueClicked = true;
                     $e->setData($data);
                 }
-            });
+            }, 1);
     }
 
     /**
@@ -104,9 +106,9 @@ abstract class AbstractRegistrationStep extends AbstractType{
         return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getJavaScriptTemplate(), $vars);
     }
 
-    public function getAjaxResponse(array $vars = array())
+    public function processAjaxRequest(Request $request)
     {
-        return new Response('AJAX response not valid for this step type.', 412);
+        $this->getParentProcess()->setAjaxResponse(new Response('Not supported'));
     }
 
     /**
@@ -188,25 +190,13 @@ abstract class AbstractRegistrationStep extends AbstractType{
         if ($request) {
             $this->getForm()->bind($request);
         }
-        $entity = $this->getEntity();
 
-        foreach($this->childFormOrder as $order => $fieldName) {
-            $getter = 'get'.ucfirst($fieldName);
-
-            try {
-                $field = $this->getForm()->get($fieldName);
-                $this->getStepProgress()->setFieldValue(
-                    $fieldName,
-                    $order,
-                    $field->getConfig()->getOption('label'),
-                    $entity->$getter()
-                );
-            }
-            catch(\Exception $e) {
-                //Field not found
-                $e->getMessage();
-            }
-        }
+        $this->setStepProgressValues(
+            $this->getEntity(),
+            $this->childFormOrder,
+            $this->getForm(),
+            $this->getStepProgress()
+        );
 
         if ($this->isContinueClicked() && $this->getForm()->isValid()) {
             $this->setComplete();
@@ -220,6 +210,43 @@ abstract class AbstractRegistrationStep extends AbstractType{
 
     public function getName(){
         return '';
+    }
+
+    /**
+     * Persists answers to StepProgress
+     *
+     * @param $entity
+     * @param array $formOrder
+     * @param FormInterface $form
+     * @param StepProgress $progress
+     */
+    protected function setStepProgressValues($entity, array $formOrder, FormInterface $form, StepProgress $progress)
+    {
+        foreach($formOrder as $order => $fieldName) {
+            $getter = 'get'.ucfirst($fieldName);
+            $progress->setFieldValue(
+                $fieldName,
+                $order,
+                $this->getFieldDescription($fieldName),
+                $entity->$getter()
+            );
+        }
+    }
+
+    /**
+     * Gets the description for a given field.
+     *
+     * @param $fieldName
+     * @return string
+     */
+    protected function getFieldDescription($fieldName)
+    {
+        try {
+            return $this->getForm()->get($fieldName)->getConfig()->getOption('label');
+        }
+        catch(\OutOfBoundsException $e) {
+            return $fieldName;
+        }
     }
 
     public function getReference()

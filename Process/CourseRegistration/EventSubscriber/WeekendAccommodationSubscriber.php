@@ -48,6 +48,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
     {
         return array(
             FormEvents::PRE_BIND => 'preBind',
+            FormEvents::PRE_SET_DATA => 'preSetData'
         );
     }
 
@@ -66,11 +67,58 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
         $form = $event->getForm();
+        $this->resetForm($form);
         $this->buildCustomForm($data, $form);
+        foreach ($data as $key => $value) {
+            if (!$form->has($key)) {
+                unset($data[$key]);
+            }
+        }
+        $event->setData($data);
     }
 
+    /**
+     * Event triggered on PRE_SET_DATA.
+     *
+     * It adds a new widget to show additional widgets, based on earlier selections:
+     * * Available bed and breakfast accommodation displayed if standard accommodation chosen
+     * * Platter displayed if bed and breakfast is chosen
+     *
+     * Validation is added to ensure that only acceptable combinations can be chosen.
+     *
+     * @param FormEvent $event
+     */
+    public function preSetData(FormEvent $event)
+    {
+        /** @var WeekendAccommodation $data */
+        $data = $event->getData();
+        $form = $event->getForm();
+        $this->buildCustomForm($data->toDataArray(), $form);
+    }
+
+    /**
+     * Reset the form prior to calling buildCustomForm. (NB: Removing all fields would be a bad thing, eg stepReference)
+     *
+     * @param FormInterface $form
+     */
+    protected function resetForm(FormInterface $form)
+    {
+        $form->remove('accommodation');
+        $form->remove('bedAndBreakfastAccommodation');
+        $form->remove('accommodationSharingWith');
+        $form->remove('platter');
+        $form->remove('platterOption');
+    }
+
+    /**
+     * Add fields to the form based on the values in $data, which may or may not be from a request.
+     *
+     * @param array $data
+     * @param FormInterface $form
+     */
     protected function buildCustomForm(array $data, FormInterface $form)
     {
+
         $choices = $this->getChoicesForCategory(self::CATEGORY_ACCOMMODATION);
         $form->add(
             $this->createFormForItemType(
@@ -101,7 +149,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             if (false !== strpos($accommodationChoice, 'DOUBLE') || false !== strpos($accommodationChoice, 'TWIN')) {
                 $form->add(
                     $this->factory->createNamed('accommodationSharingWith', 'textarea', null, array(
-                        'label'       => 'Please provide the name of the person with whom you will be sharing, and the course which they are attending.',
+                        'label' => 'Please provide the name of the person with whom you will be sharing, and the course which they are attending.',
                         'constraints' => array(
                             new NotBlank(array(
                                 'message' => 'Twin and double rooms must be shared with another attendee. Please provide this information.',
@@ -130,14 +178,14 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         if ($platterChoice && $bedAndBreakfastAccommodationChoice && $accommodationChoice) {
             $form->add(
                 $this->factory->createNamed('platterOption', 'choice', null, array(
-                    'label'       => 'Please indicate the option you would prefer.',
-                    'choices'     => array(
-                        'Meat'       => 'Meat',
-                        'Fish'       => 'Fish',
+                    'label' => 'Please indicate the option you would prefer.',
+                    'choices' => array(
+                        'Meat' => 'Meat',
+                        'Fish' => 'Fish',
                         'Vegetarian' => 'Vegetarian',
                     ),
-                    'expanded'    => false,
-                    'multiple'    => false,
+                    'expanded' => false,
+                    'multiple' => false,
                     'empty_value' => 'Please select',
                     'constraints' => array(
                         new NotBlank(array(
@@ -218,10 +266,10 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         );
 
         $options = array(
-            'label'           => $label,
-            'choices'         => $choices,
-            'constraints'     => isset($constraints) ? $constraints : array(),
-            'required'        => false,
+            'label' => $label,
+            'choices' => $choices,
+            'constraints' => isset($constraints) ? $constraints : array(),
+            'required' => false,
             'invalid_message' => 'Please choose a valid option. Some choices are only valid in combination with others so you may need to re-select multiple options.',
         );
 

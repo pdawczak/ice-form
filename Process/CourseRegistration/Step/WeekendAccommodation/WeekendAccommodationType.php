@@ -9,8 +9,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Ice\MinervaClientBundle\Entity\StepProgress;
 
-class WeekendAccommodationType extends AbstractRegistrationStep{
+class WeekendAccommodationType extends AbstractRegistrationStep
+{
     protected $childFormOrder = array(
         1 => 'accommodation',
         2 => 'accommodationSharingWith',
@@ -25,10 +27,10 @@ class WeekendAccommodationType extends AbstractRegistrationStep{
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options){
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
-            ->addEventSubscriber(new WeekendAccommodationSubscriber($builder->getFormFactory(), $this->getParentProcess()->getCourse()))
-        ;
+            ->addEventSubscriber(new WeekendAccommodationSubscriber($builder->getFormFactory(), $this->getParentProcess()->getCourse()));
 
         parent::buildForm($builder, $options);
     }
@@ -38,6 +40,17 @@ class WeekendAccommodationType extends AbstractRegistrationStep{
         $resolver->setDefaults(array(
             'cascade_validation' => true,
         ));
+        $resolver->setDefaults(array(
+            'validation_groups' => function (FormInterface $form) {
+                $groups = [];
+                if ($this->isContinueClicked()) {
+                    $groups[] = 'Default';
+                } else {
+                    $groups = 'no_validate';
+                }
+                return $groups;
+            }
+        ));
 
         parent::setDefaultOptions($resolver);
     }
@@ -45,43 +58,61 @@ class WeekendAccommodationType extends AbstractRegistrationStep{
     /**
      * @return string
      */
-    public function getTitle(){
+    public function getTitle()
+    {
         return 'Weekend accommodation';
     }
 
-    public function getHtmlTemplate(){
+    public function getHtmlTemplate()
+    {
         return 'WeekendAccommodation.html.twig';
     }
 
-    public function getJavaScriptTemplate(){
+    public function getJavaScriptTemplate()
+    {
         return 'WeekendAccommodation.js.twig';
     }
 
-    public function prepare(){
-        $this->setEntity(new WeekendAccommodation());
-        $request = Request::createFromGlobals(); // FIXME: Passed as arg from processRequest
-        // Terrible hack to deal with issue of binding making the stepReference hidden field null
-        $request->query->set('stepReference', $this->getReference());
-        $this->getForm()->bind($request);
+    public function prepare()
+    {
+        if ($this->getStepProgress()) {
+            $entity = WeekendAccommodation::fromStepProgress($this->getStepProgress());
+        }
+        else{
+            $entity = new WeekendAccommodation();
+        }
+        $this->setEntity($entity);
         $this->setPrepared();
     }
 
-    public function processRequest(Request $request = null)
+    public function processAjaxRequest(Request $request)
     {
-        // Request already bound in self::prepare
-        parent::processRequest(null);
-
-        $this->setComplete(false);
-    }
-
-    public function getAjaxResponse(array $array = array())
-    {
-        return new Response($this->renderHtml($array));
+        $this->prepare();
+        $this->getForm()->bind($request);
+        $this->getParentProcess()->setAjaxResponse(new Response($this->renderHtml()));
     }
 
     public function supportsAjaxResponse()
     {
         return true;
     }
+
+    /**
+     * Gets the description for a given field.
+     *
+     * @param $fieldName
+     * @return string
+     */
+    protected function getFieldDescription($fieldName)
+    {
+        switch ($fieldName) {
+            case 'adaptedBedroomRequired':
+                return 'Adapted bedroom required?';
+            case 'accommodationRequirements':
+                return 'Accommodation Requirements';
+        }
+        return parent::getFieldDescription($fieldName);
+    }
+
 
 }

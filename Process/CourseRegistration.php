@@ -47,6 +47,9 @@ class CourseRegistration extends AbstractProcess
     /** @var \Ice\MinervaClientBundle\Entity\RegistrationProgress */
     private $progress;
 
+    /** @var Response */
+    private $ajaxResponse = null;
+
     /**
      * @param string $reference
      * @return Step\AbstractRegistrationStep
@@ -152,7 +155,10 @@ class CourseRegistration extends AbstractProcess
      * @param Request $request
      */
     public function processRequest(Request $request){
-        if($request->getMethod()==='POST'){
+        if ($request->isXmlHttpRequest()) {
+            $this->processAjaxRequest($request);
+        }
+        else if($request->getMethod()==='POST'){
             if(null !== ($stepReference = $request->get('stepReference', null))){
                 $submittedStep = $this->getStepByReference($stepReference);
                 $request->attributes->remove('stepReference');
@@ -190,6 +196,17 @@ class CourseRegistration extends AbstractProcess
         }
         else{
             $this->getCurrentStep()->prepare();
+        }
+    }
+
+    protected function processAjaxRequest(Request $request)
+    {
+        if(null !== ($stepReference = $request->get('stepReference', null))){
+            $submittedStep = $this->createStepByReference($stepReference);
+            $submittedStep->processAjaxRequest($request);
+        }
+        else {
+            return new Response('AJAX response not supported when no step reference is supplied.', 412);
         }
     }
 
@@ -280,15 +297,11 @@ class CourseRegistration extends AbstractProcess
      *
      * Not all steps will require have an Ajax Response.
      *
-     * @param array $vars
-     *
      * @return Response
      */
-    public function getStepAjaxResponse(array $vars = array())
+    public function getStepAjaxResponse()
     {
-        $currentStep = $this->getCurrentStep();
-        if(!$currentStep->isPrepared()) $currentStep->prepare();
-        return $currentStep->getAjaxResponse($vars);
+        return $this->getAjaxResponse();
     }
 
     /**
@@ -298,6 +311,7 @@ class CourseRegistration extends AbstractProcess
      */
     public function stepSupportsAjaxResponse()
     {
+        return true;
         return $this->getCurrentStep()->supportsAjaxResponse();
     }
 
@@ -532,5 +546,23 @@ class CourseRegistration extends AbstractProcess
             $bookingItemsArray
         ));
         return $booking;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Response $ajaxResponse
+     * @return CourseRegistration
+     */
+    public function setAjaxResponse($ajaxResponse)
+    {
+        $this->ajaxResponse = $ajaxResponse;
+        return $this;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getAjaxResponse()
+    {
+        return $this->ajaxResponse;
     }
 }
