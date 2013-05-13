@@ -110,7 +110,6 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     'label'=>'Email address'
                 ))
                 ->add('dob', 'birthday', array(
-                    'description' => 'Date of birth.',
                     'label' => 'Date of birth',
                     'input' => "datetime",
                     'widget' => "choice",
