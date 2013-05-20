@@ -1,6 +1,19 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
-    This step is not implemented yet
+    {{ form_row(form.countryOfResidence, {form_type:'horizontal'}) }}
+    {{ form_row(form.countryOfBirth, {form_type:'horizontal'}) }}
+    {{ form_row(form.primaryNationality, {form_type:'horizontal'}) }}
+    {{ form_row(form.secondaryNationality, {form_type:'horizontal'}) }}
+    {{ form_row(form.ordinarilyResident, {form_type:'horizontal'}) }}
+    {{ form_row(form.eeaOrSwissNational, {form_type:'horizontal'}) }}
+    {{ form_row(form.familyMemberEuNational, {form_type:'horizontal'}) }}
+    {{ form_row(form.settledInUk, {form_type:'horizontal'}) }}
+    {{ form_row(form.grantedRefugeeStatus, {form_type:'horizontal'}) }}
+    {{ form_row(form.requireVisa, {form_type:'horizontal'}) }}
+    <p>
+        If yes, please see our <a target="_blank" href="http://www.ice.cam.ac.uk/studying-with-us/international-students">information for international students</a> for further information.
+    </p>
+    {{ form_row(form.visaStatus, {form_type:'horizontal'}) }}
     {{ form_rest(form) }}
 {% endblock %}
