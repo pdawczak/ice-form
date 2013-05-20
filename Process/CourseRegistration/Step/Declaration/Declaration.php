@@ -9,6 +9,7 @@ class Declaration
 {
     /**
      * @var bool
+     * @Assert\NotBlank()
      */
     private $qualificationDeclaration;
 
@@ -32,7 +33,7 @@ class Declaration
 
     /**
      * @param StepProgress $stepProgress
-     * @return DisabilityAndSupportNeeds
+     * @return Declaration
      */
     public static function fromStepProgress(StepProgress $stepProgress)
     {
