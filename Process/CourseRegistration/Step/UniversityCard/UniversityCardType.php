@@ -14,54 +14,46 @@ use Symfony\Component\Validator\Constraints\MinLength;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Ice\JanusClientBundle\Entity\User;
 
-class UniversityCardType extends AbstractRegistrationStep{
+class UniversityCardType extends AbstractRegistrationStep
+{
+    /**
+     * @var array
+     */
+    protected $childFormOrder = [
+        1 => 'photoMethod'
+    ];
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options){
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
-
-        ;
+            ->add('photoMethod', 'choice', array(
+                'label' => 'Please indicate how you intend to send your photo.',
+                'expanded' => false,
+                'multiple' => false,
+                'empty_value' => '',
+                'choices' => array(
+                    'Email' => 'I agree to email my photograph',
+                    'Post' => 'I agree to post my photograph',
+                ),
+                'constraints' => array(
+                    new NotBlank()
+                )
+            ));
         parent::buildForm($builder, $options);
     }
 
-    /**
-     * @param Request $request
-     */
-    public function processRequest(Request $request){
-        $this->getForm()->bind($request);
-        /** @var $entity AccommodationRequirements */
-        $entity = $this->getEntity();
-
-        foreach(array(
-                )
-                as $order=>$fieldName){
-            $getter = 'get'.ucfirst($fieldName);
-            $this->getStepProgress()->setFieldValue(
-                $fieldName,
-                $order,
-                $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
-                $entity->$getter()
-            );
-        }
-
-        if($this->getForm()->isValid()){
-            $this->setComplete();
-        }
-        else{
-            $this->setComplete(false);
-        }
-        $this->setUpdated();
-        $this->save();
+    public function getHtmlTemplate()
+    {
+        return 'UniversityCard.html.twig';
     }
 
-    public function getHtmlTemplate(){
-        return 'AccommodationRequirements.html.twig';
-    }
-
-    public function prepare(){
-        $this->setEntity(new UniversityCard());
+    public function prepare()
+    {
+        $this->setEntity(UniversityCard::fromStepProgress($this->getStepProgress()));
         $this->setPrepared();
     }
 }

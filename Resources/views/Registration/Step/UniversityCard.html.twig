@@ -1,23 +1,23 @@
-<script type="text/javascript" src="/includes/js/fileuploader.js"></script>
+{% extends "Registration/Step/default.html.twig" %}
 
+{% block form_content %}
+    <p>Students studying towards a qualification are eligible for a University card, as well as full access to the
+        resources of the University Library.</p>
 
+    <p>In order to issue your card we require a recent passport-sized photograph (height 5.5cm x width 4cm) for courses
+        commencing October 2013, which can either be sent by post or email to:</p>
+    <p>
+        Records Team<br/>
+        Registry<br/>
+        Institute of Continuing Education<br/>
+        Madingley Hall<br/>
+        Madingley<br/>
+        CB23 8AQ<br/>
+    </p>
+    <p>
+        <a href="mailto:icerecords@ice.cam.ac.uk">icerecords@ice.cam.ac.uk</a>
+    </p>
 
-<form action="{{ url|e }}" method="post" class="enrolStage">
-    <div id="file-uploader">
-        <noscript>
-            <p>Please enable JavaScript to use file uploader.</p>
-            <!-- or put a simple form for upload here -->
-        </noscript>
-    </div>
-    <input type="hidden" name="stepIndex" value="{{stepIndex|e}}" />
-    <input type="submit" name="submitStep" value="Submit" />
-</form>
-
-<script type="text/javascript">
-    var uploader = new qq.FileUploader({
-        // pass the dom node (ex. $(selector)[0] for jQuery users)
-        element: document.getElementById('file-uploader'),
-        // path to server-side upload script
-        action: '{{ url|e('js') }}&stepIndex={{stepIndex}}&submitStep=ajax'
-    });
-</script>
+    {{ form_row(form.photoMethod, {form_type:'horizontal'}) }}
+    {{ form_rest(form) }}
+{% endblock %}
