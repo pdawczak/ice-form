@@ -1,6 +1,23 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
-    This step is not implemented yet
+    <p>For our statutory and statistical returns to the Higher Education Statistics Agency (HESA) we are required to ask
+        the following questions. We are unable to process your application without this information. </p>
+
+    <p>Please note that we may need to contact you for further information in order to complete our statutory
+        returns.</p>
+
+    <p>Information will be used by the University for anonymised statistics, which will never be presented in a form
+        that allows individuals to be identified.</p>
+
+    {{ form_row(form.hesaEthnicOrigin, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaPreviouslyStudiedAtDegreeLevel, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaParentalQualifications, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaHighestQualification, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaMostRecentEducationInstitutionType, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaMostRecentEducationInstitutionName, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaFeeSource, {form_type:'horizontal'}) }}
+    {{ form_row(form.hesaFeesEmployerType, {form_type:'horizontal'}) }}
+
     {{ form_rest(form) }}
 {% endblock %}
