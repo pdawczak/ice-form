@@ -1,6 +1,7 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
-    This step is not implemented yet
+    I understand that by undertaking this qualification I will be expected to submit assignments for assessment and feedback.
+    {{ form_row(form.qualificationDeclaration, {form_type:'horizontal'}) }}
     {{ form_rest(form) }}
 {% endblock %}
