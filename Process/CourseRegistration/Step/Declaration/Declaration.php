@@ -9,7 +9,7 @@ class Declaration
 {
     /**
      * @var bool
-     * @Assert\NotBlank()
+     * @Assert\True()
      */
     private $qualificationDeclaration;
 
