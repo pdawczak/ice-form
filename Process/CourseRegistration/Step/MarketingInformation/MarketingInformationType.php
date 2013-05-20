@@ -68,6 +68,13 @@ class MarketingInformationType extends AbstractRegistrationStep{
             );
         }
 
+        $this->getStepProgress()->setFieldValue(
+            'frontEndBooking',
+            4,
+            'Is this a front end booking?',
+            $this->getParentProcess()->isAdministrator()?'No':'Yes'
+        );
+
         if($this->getForm()->isValid()){
             $this->setComplete();
         }
