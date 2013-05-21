@@ -139,7 +139,23 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
-                    'choices'=>array( //TODO
+                    'choices'=>array(
+                        'Academic Visitor Visa',
+                        'British Overseas Territories',
+                        'Business Visitor Visa',
+                        'General Visitor Visa',
+                        'Indefinite Leave to Enter',
+                        'Indefinite Leave to Remain',
+                        'No UK Visa',
+                        'Other',
+                        'Refugee Status',
+                        'Resident by Right',
+                        'Tier 1 Visa',
+                        'Tier 2 Visa',
+                        'Tier 3 Visa',
+                        'Tier 4 Visa (for Cambridge)',
+                        'Tier 4 Visa (not Cambridge)',
+                        'Tier 5 Visa',
                     )
                 )
             )
