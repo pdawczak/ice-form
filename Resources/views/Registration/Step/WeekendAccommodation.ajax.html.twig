@@ -5,6 +5,16 @@
     <div id="accommodation_choices">
         {{ form_row(form.accommodation, {'form_type': 'horizontal'}) }}
         {% if form.accommodationSharingWith is defined %}
+            <p>
+                We are unable to offer double or twin rooms for single occupancy. Double and twin rooms are shared
+                accommodation and must only be booked on the basis of sharing with another student (the cost shown is
+                per person). Each person sharing should book and pay for their own accommodation.
+            </p>
+
+            <p>
+                If your preferred accommodation choice is not available or you are sharing with someone not attending
+                one of our courses, please call our Admissions team on +44 (01)1223 746262.
+            </p>
             {{ form_row(form.accommodationSharingWith, {'form_type': 'horizontal'}) }}
         {% endif %}
         {% if form.bedAndBreakfastAccommodation is defined %}
