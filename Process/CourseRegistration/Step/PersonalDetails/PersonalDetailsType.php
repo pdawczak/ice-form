@@ -293,11 +293,6 @@ class PersonalDetailsType extends AbstractRegistrationStep
                     ));
                 }
             }
-            $this->getStepProgress()->setFieldValue('title', 1, 'Title', $data->getTitle());
-            $this->getStepProgress()->setFieldValue('firstNames', 2, 'First name(s)', $data->getFirstNames());
-            $this->getStepProgress()->setFieldValue('middleNames', 3, 'Middle name(s)', $data->getMiddleNames());
-            $this->getStepProgress()->setFieldValue('lastNames', 4, 'Last name(s)', $data->getLastNames());
-            $this->getStepProgress()->setFieldValue('email', 5, 'Email address', $data->getEmail());
         }
 
 
