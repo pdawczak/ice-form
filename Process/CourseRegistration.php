@@ -529,19 +529,23 @@ class CourseRegistration extends AbstractProcess
 
         $course = $this->getCourse();
         $bookingItemsArray = array();
-        $courseFees = new BookingItem();
-        $category = new Category();
-        $category
-            ->setCode(5)
-            ->setDescription('Tuition')
-        ;
-        $courseFees
-            ->setDescription('Course fees')
-            ->setPrice($course->getTuitionFee())
-            ->setCode('TUIT')
-            ->setCategory($category)
-        ;
-        $bookingItemsArray[] = $courseFees;
+        foreach ($course->getBookingItems() as $veritasBookingItem) {
+            if ($veritasBookingItem->getRequired()) {
+                $minervaBookingItem = new BookingItem();
+                $minervaBookingItem
+                    ->setBooking($booking)
+                    ->setCode($veritasBookingItem->getCode())
+                    ->setDescription($veritasBookingItem->getTitle())
+                    ->setPrice($veritasBookingItem->getPrice())
+                    ->setCategory(
+                        (new Category())
+                            ->setCode($veritasBookingItem->getCategory())
+                            ->setDescription('Does this overwrite stuff?')
+                    )
+                ;
+                $bookingItemsArray[] = $minervaBookingItem;
+            }
+        }
         $booking->setBookingItems(new ArrayCollection(
             $bookingItemsArray
         ));
