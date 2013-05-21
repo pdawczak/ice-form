@@ -14,7 +14,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Ice\JanusClientBundle\Entity\User;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class PersonalDetailsType extends AbstractRegistrationStep{
+class PersonalDetailsType extends AbstractRegistrationStep
+{
     /**
      * {@inheritDoc}
      */
@@ -33,16 +34,16 @@ class PersonalDetailsType extends AbstractRegistrationStep{
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options){
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $subscriber = new EventListener\PreviousStudyFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
 
-        if($this->getParentProcess()->getRegistrantId()){
+        if ($this->getParentProcess()->getRegistrantId()) {
             $builder
-                ->add('fullName', 'display', array('label'=>'Name',
-                    'data'=>$this->getEntity()->getFullName(), 'mapped'=>false)
-                )
-            ;
+                ->add('fullName', 'display', array('label' => 'Name',
+                        'data' => $this->getEntity()->getFullName(), 'mapped' => false)
+                );
 
             if (!$email = $this->getParentProcess()->getRegistrant()->getEmail()) {
                 $builder->add('email', 'email', array(
@@ -50,13 +51,13 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 ));
             } else {
                 $builder->add('email', 'display', array(
-                    'label'  => 'Email address',
-                    'data'   => $email,
+                    'label' => 'Email address',
+                    'data' => $email,
                     'mapped' => false,
                 ));
             }
 
-            if(null === ($dob = $this->getParentProcess()->getRegistrant()->getDob())){
+            if (null === ($dob = $this->getParentProcess()->getRegistrant()->getDob())) {
                 $builder->add('dob', 'birthday', array(
                     'description' => 'Date of birth.',
                     'label' => 'Date of birth',
@@ -69,45 +70,42 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                         'year' => 'Year',
                     ),
                 ));
-            }
-            else{
+            } else {
                 $builder->add('dob', 'display', array(
-                    'label'=>'Date of birth',
-                    'data'=>$dob->format('d/m/Y'),
-                    'mapped'=>false))
-                ;
+                    'label' => 'Date of birth',
+                    'data' => $dob->format('d/m/Y'),
+                    'mapped' => false));
             }
-        }
-        else{
+        } else {
             $builder
                 ->add('title', 'choice', array(
-                    'label'=>'Title',
-                    'multiple'=>false,
-                    'expanded'=>false,
-                    'choices'=>array(
-                        'Mr'=>'Mr',
-                        'Mrs'=>'Mrs',
-                        'Miss'=>'Miss',
-                        'Ms'=>'Ms',
-                        'Dr'=>'Dr',
-                        'Prof'=>'Prof',
-                        'Revd'=>'Revd',
-                        'Misc'=>'Misc',
-                        'Mx'=>'Mx',
+                    'label' => 'Title',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'choices' => array(
+                        'Mr' => 'Mr',
+                        'Mrs' => 'Mrs',
+                        'Miss' => 'Miss',
+                        'Ms' => 'Ms',
+                        'Dr' => 'Dr',
+                        'Prof' => 'Prof',
+                        'Revd' => 'Revd',
+                        'Misc' => 'Misc',
+                        'Mx' => 'Mx',
                     )
                 ))
                 ->add('firstNames', 'text', array(
-                    'label'=>'First name'
+                    'label' => 'First name'
                 ))
                 ->add('middleNames', 'text', array(
-                    'label'=>'Middle name(s)',
-                    'required'=>false
+                    'label' => 'Middle name(s)',
+                    'required' => false
                 ))
                 ->add('lastNames', 'text', array(
-                    'label'=>'Last name'
+                    'label' => 'Last name'
                 ))
                 ->add('email', 'email', array(
-                    'label'=>'Email address'
+                    'label' => 'Email address'
                 ))
                 ->add('dob', 'birthday', array(
                     'label' => 'Date of birth',
@@ -121,23 +119,22 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     ),
                 ))
                 ->add('plainPassword', 'repeated', array(
-                    'type'=>'password',
+                    'type' => 'password',
                     'invalid_message' => 'The password fields must match',
-                    'first_options'  => array('label' => 'Password'),
+                    'first_options' => array('label' => 'Password'),
                     'second_options' => array('label' => 'Repeat Password')
-                ))
-            ;
+                ));
         }
 
 
         $builder
             ->add('sex', 'choice', array(
-                'label'=>'Sex',
-                'multiple'=>false,
-                'expanded'=>true,
-                'choices'=>array(
-                    'm'=>'Male',
-                    'f'=>'Female'
+                'label' => 'Sex',
+                'multiple' => false,
+                'expanded' => true,
+                'choices' => array(
+                    'm' => 'Male',
+                    'f' => 'Female'
                 ),
             ))
             ->add('previousContact', 'choice', array(
@@ -151,19 +148,19 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 'multiple' => false,
             ))
             ->add('previousTitle', 'choice', array(
-                'label'    => 'Previous title',
+                'label' => 'Previous title',
                 'multiple' => false,
                 'expanded' => false,
-                'choices'  => array(
-                    'Mr'   => 'Mr',
-                    'Mrs'  => 'Mrs',
+                'choices' => array(
+                    'Mr' => 'Mr',
+                    'Mrs' => 'Mrs',
                     'Miss' => 'Miss',
-                    'Ms'   => 'Ms',
-                    'Dr'   => 'Dr',
+                    'Ms' => 'Ms',
+                    'Dr' => 'Dr',
                     'Prof' => 'Prof',
                     'Revd' => 'Revd',
                     'Misc' => 'Misc',
-                    'Mx'   => 'Mx',
+                    'Mx' => 'Mx',
                 ),
                 'required' => false,
             ))
@@ -172,7 +169,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 'required' => false,
             ))
             ->add('previousMiddleName', 'text', array(
-                'label'    => 'Previous middle name',
+                'label' => 'Previous middle name',
                 'required' => false
             ))
             ->add('previousLastName', 'text', array(
@@ -182,8 +179,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
             ->add('crsId', 'text', array(
                 'label' => 'If you have an existing CRSid (student identifier comprising your initials and numbers, e.g. jb101) please enter it here',
                 'required' => false,
-            ))
-        ;
+            ));
         parent::buildForm($builder, $options);
     }
 
@@ -191,9 +187,10 @@ class PersonalDetailsType extends AbstractRegistrationStep{
      * @param string $fieldName
      * @return \Symfony\Component\Form\FormInterface
      */
-    private function getErrorTargetByFieldName($fieldName){
-        try{
-            switch($fieldName){
+    private function getErrorTargetByFieldName($fieldName)
+    {
+        try {
+            switch ($fieldName) {
                 case null:
                     $target = $this->getForm();
                     break;
@@ -204,8 +201,7 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                     $target = $this->getForm()->get($fieldName);
                     break;
             }
-        }
-        catch(\OutOfBoundsException $e2){
+        } catch (\OutOfBoundsException $e2) {
             //Field doesn't exist. Add this error to the root so the user can see the message
             $target = $this->getForm();
         }
@@ -216,17 +212,17 @@ class PersonalDetailsType extends AbstractRegistrationStep{
      * @param FormInterface|string $field
      * @param array $fieldErrors
      */
-    private function addFieldErrors($field, $fieldErrors){
-        if(!$field instanceof FormInterface){
+    private function addFieldErrors($field, $fieldErrors)
+    {
+        if (!$field instanceof FormInterface) {
             $field = $this->getErrorTargetByFieldName($field);
         }
-        if($field){
-            foreach($fieldErrors as $fieldError){
-                if(stripos($fieldError, 'email')!==false){
+        if ($field) {
+            foreach ($fieldErrors as $fieldError) {
+                if (stripos($fieldError, 'email') !== false) {
                     $this->getErrorTargetByFieldName('email')
                         ->addError(new FormError($fieldError));
-                }
-                else{
+                } else {
                     $field->addError(new FormError($fieldError));
                 }
             }
@@ -236,47 +232,47 @@ class PersonalDetailsType extends AbstractRegistrationStep{
     /**
      * @param Request $request
      */
-    public function processRequest(Request $request = null){
+    public function processRequest(Request $request = null)
+    {
         $this->getForm()->bind($request);
 
         /** @var $data PersonalDetails */
         $data = $this->getForm()->getData();
 
-        if($this->getForm()->isValid()){
+        if ($this->getForm()->isValid()) {
             //No user, now we can create one!
-            if(!$this->getParentProcess()->getRegistrantId()){
+            if (!$this->getParentProcess()->getRegistrantId()) {
                 /** @var $newUser User */
-                try{
+                try {
                     $newUser = $this->getParentProcess()->getJanusClient()->createUser(
                         array(
-                            'title'=>$data->getTitle(),
-                            'firstNames'=>$data->getFirstNames(),
-                            'middleNames'=>$data->getMiddleNames(),
-                            'lastNames'=>$data->getLastNames(),
-                            'plainPassword'=>$data->getPlainPassword(),
-                            'email'=>$data->getEmail(),
-                            'dob'=>$data->getDob()->format('Y-m-d'),
+                            'title' => $data->getTitle(),
+                            'firstNames' => $data->getFirstNames(),
+                            'middleNames' => $data->getMiddleNames(),
+                            'lastNames' => $data->getLastNames(),
+                            'plainPassword' => $data->getPlainPassword(),
+                            'email' => $data->getEmail(),
+                            'dob' => $data->getDob()->format('Y-m-d'),
                         )
                     );
 
-                    if($newUser && $newUser->getId()){
+                    if ($newUser && $newUser->getId()) {
                         $this->getParentProcess()->setRegistrantId($newUser->getUsername());
                     }
 
                     $progress = $this->getParentProcess()->getProgress(true);
-                    foreach($progress->getStepProgresses() as $stepProgress){
-                        if($stepProgress->getStepName()===$this->getReference()){
+                    foreach ($progress->getStepProgresses() as $stepProgress) {
+                        if ($stepProgress->getStepName() === $this->getReference()) {
                             $this->setStepProgress($stepProgress);
                             break;
                         }
                     }
-                }
-                catch(ValidationException $e){
+                } catch (ValidationException $e) {
                     /** @var $form \Ice\JanusClientBundle\Response\FormError */
                     $form = $e->getForm();
 
                     $errors = $form->getErrorsAsAssociativeArray(true);
-                    foreach($errors as $field => $fieldErrors){
+                    foreach ($errors as $field => $fieldErrors) {
                         $this->addFieldErrors($field, $fieldErrors);
                     }
                     $this->getForm()->isValid();
@@ -288,12 +284,12 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 if (!$existingUser->getDob() || !$existingUser->getEmail()) {
                     // FIXME: Add try/catch in case the email address is already in use, for example
                     $this->getParentProcess()->getJanusClient()->updateUser($existingUser->getUsername(), array(
-                        'title'         => $data->getTitle(),
-                        'firstNames'    => $data->getFirstNames(),
-                        'middleNames'   => $data->getMiddleNames(),
-                        'lastNames'     => $data->getLastNames(),
-                        'email'         => $data->getEmail(),
-                        'dob'           => $data->getDob() ? $data->getDob()->format('Y-m-d') : null,
+                        'title' => $data->getTitle(),
+                        'firstNames' => $data->getFirstNames(),
+                        'middleNames' => $data->getMiddleNames(),
+                        'lastNames' => $data->getLastNames(),
+                        'email' => $data->getEmail(),
+                        'dob' => $data->getDob() ? $data->getDob()->format('Y-m-d') : null,
                     ));
                 }
             }
@@ -307,14 +303,15 @@ class PersonalDetailsType extends AbstractRegistrationStep{
 
 
         //If still valid after any Janus side validation
-        if($this->getForm()->isValid()) {
+        if ($this->getForm()->isValid()) {
             parent::processRequest();
             $this->setComplete();
             $this->save();
         }
     }
 
-    public function getHtmlTemplate(){
+    public function getHtmlTemplate()
+    {
         return 'PersonalDetails.html.twig';
     }
 
@@ -322,7 +319,8 @@ class PersonalDetailsType extends AbstractRegistrationStep{
     /**
      * Sets the entity
      */
-    public function prepare(){
+    public function prepare()
+    {
         if (!$user = $this->getParentProcess()->getRegistrant()) {
             $user = new User;
         }
@@ -336,7 +334,8 @@ class PersonalDetailsType extends AbstractRegistrationStep{
     /**
      * @return bool
      */
-    public function isAvailable(){
+    public function isAvailable()
+    {
         return true;
     }
 
@@ -347,11 +346,11 @@ class PersonalDetailsType extends AbstractRegistrationStep{
     {
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
-            'validation_groups' => function(FormInterface $form) {
+            'validation_groups' => function (FormInterface $form) {
                 /** @var $data PersonalDetails */
                 $data = $form->getData();
                 $groups = array('default');
-                if(!$data->getRegistrantId()){
+                if (!$data->getRegistrantId()) {
                     $groups[] = 'new_user';
                 }
                 return $groups;
