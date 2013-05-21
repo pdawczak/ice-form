@@ -19,14 +19,14 @@ class PersonalDetailsType extends AbstractRegistrationStep{
      * {@inheritDoc}
      */
     protected $childFormOrder = array(
-        1 => 'dob',
-        2 => 'sex', 
-        3 => 'previousContact', 
-        5 => 'previousTitle',
-        6 => 'previousFirstName', 
-        7 => 'previousMiddleName', 
-        8 => 'previousLastName', 
-        9 => 'crsId', 
+        6 => 'dob',
+        7 => 'sex',
+        8 => 'previousContact',
+        9 => 'previousTitle',
+        10 => 'previousFirstName',
+        11 => 'previousMiddleName',
+        12 => 'previousLastName',
+        13 => 'crsId',
     );
 
     /**
@@ -298,7 +298,13 @@ class PersonalDetailsType extends AbstractRegistrationStep{
                 }
             }
 
+            $this->getStepProgress()->setFieldValue('title', 1, 'Title', $data->getTitle());
+            $this->getStepProgress()->setFieldValue('firstNames', 2, 'First name(s)', $data->getFirstNames());
+            $this->getStepProgress()->setFieldValue('middleNames', 3, 'Middle name(s)', $data->getMiddleNames());
+            $this->getStepProgress()->setFieldValue('lastNames', 4, 'Last name(s)', $data->getLastNames());
+            $this->getStepProgress()->setFieldValue('email', 5, 'Email address', $data->getEmail());
         }
+
 
         //If still valid after any Janus side validation
         if($this->getForm()->isValid()) {
