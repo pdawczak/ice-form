@@ -93,16 +93,18 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        function updateScheduleDetails(){
-            $('.scheduleDetail').hide();
-            $('.planChoice').each(function(index, element){
-                if(element.name && element.value){
-                    var id = '#'+element.name+'-detail-'+element.value.replace(':','\\:');
-                    $(id).show();
-                }
-            });
-        };
-        $('.planChoice').on('change', updateScheduleDetails);
-        updateScheduleDetails();
+        $(document).ready(function(){
+            function updateScheduleDetails(){
+                $('.scheduleDetail').hide();
+                $('.planChoice').each(function(index, element){
+                    if(element.name && element.value){
+                        var id = '#'+element.name+'-detail-'+element.value.replace(':','\\:');
+                        $(id).show();
+                    }
+                });
+            };
+            $('.planChoice').on('change', updateScheduleDetails);
+            updateScheduleDetails();
+        });
     </script>
 {% endblock %}
