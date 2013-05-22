@@ -19,6 +19,8 @@ use Ice\MinervaClientBundle\Entity\AcademicInformation;
 use Ice\MercuryClientBundle\Service\PaymentPlanService;
 use Ice\FormBundle\Process\PlaceOrder\Progress;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class PlaceOrder extends AbstractProcess
 {
     /** @var Step\AbstractType */
@@ -44,6 +46,9 @@ class PlaceOrder extends AbstractProcess
 
     /** @var string */
     private $progressId;
+
+    /** @var Response */
+    private $ajaxResponse;
 
     /**
      * @param $index
@@ -359,5 +364,23 @@ class PlaceOrder extends AbstractProcess
     {
         $this->getSession()->set('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId().':'.$this->getProgressId(), $this->progress);
         $this->getSession()->save();
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Response $ajaxResponse
+     * @return PlaceOrder
+     */
+    public function setAjaxResponse($ajaxResponse)
+    {
+        $this->ajaxResponse = $ajaxResponse;
+        return $this;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getAjaxResponse()
+    {
+        return $this->ajaxResponse;
     }
 }
