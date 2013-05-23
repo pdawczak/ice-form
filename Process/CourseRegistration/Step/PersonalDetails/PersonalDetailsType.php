@@ -59,7 +59,6 @@ class PersonalDetailsType extends AbstractRegistrationStep
 
             if (null === ($dob = $this->getParentProcess()->getRegistrant()->getDob())) {
                 $builder->add('dob', 'birthday', array(
-                    'description' => 'Date of birth.',
                     'label' => 'Date of birth',
                     'input' => "datetime",
                     'widget' => "choice",
