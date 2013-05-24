@@ -39,6 +39,9 @@ class ConfirmType extends AbstractType
     }
 
     public function processRequest(Request $request){
+        if ($this->getParentProcess()->getProgress()->getConfirmedOrder()) {
+            return;
+        }
         $newOrder = $this->getParentProcess()->getMercuryClient()->createOrder($this->order);
         $this->getParentProcess()->getProgress()->setConfirmedOrder($newOrder);
         $this->getStepProgress()->setComplete();
@@ -47,6 +50,10 @@ class ConfirmType extends AbstractType
 
     public function prepare()
     {
+        if ($this->getParentProcess()->getProgress()->getConfirmedOrder()) {
+            $this->setPrepared();
+            return;
+        }
         $builder = $this->getParentProcess()->getMercuryClient()->getNewOrderBuilder();
         $builder->setCustomerByAccount($this->getParentProcess()->getCustomer());
         $progress = $this->getParentProcess()->getProgress();
