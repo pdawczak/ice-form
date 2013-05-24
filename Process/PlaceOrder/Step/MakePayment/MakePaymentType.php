@@ -18,9 +18,6 @@ class MakePaymentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('transactionRequest', 'hidden', array(
-            'data'=>$this->request->getReference()
-        ));
         parent::buildForm($builder, $options);
     }
 
@@ -52,18 +49,37 @@ class MakePaymentType extends AbstractType
         return $this->getStepProgress()->isComplete();
     }
 
+    /**
+     * @return bool
+     */
+    public function isPrepared()
+    {
+        return $this->getParentProcess()->getProgress()->getTransactionRequestId() && $this->request;
+    }
 
 
     public function prepare(){
         if($this->isPrepared())
             return;
 
-        $this->request = $this->getParentProcess()->getMercuryClient()
-            ->requestOutstandingOnlineTransactionsByOrder(
-                $this->getParentProcess()->getProgress()->getConfirmedOrder()
+        if ($requestReference = $this->getParentProcess()->getProgress()->getTransactionRequestId()) {
+            $this->request = $this->getParentProcess()->getMercuryClient()
+                ->getTransactionRequestByReference(
+                    $requestReference
+                );
+        }
+        else {
+            $this->request = $this->getParentProcess()->getMercuryClient()
+                ->requestOutstandingOnlineTransactionsByOrder(
+                    $this->getParentProcess()->getProgress()->getConfirmedOrder()
+                );
+
+            $this->getParentProcess()->getProgress()->setTransactionRequestId(
+                $this->request->getReference()
             );
 
-        $this->setPrepared();
+            $this->getParentProcess()->saveProgress();
+        }
     }
 
     public function getReference(){
@@ -86,13 +102,8 @@ class MakePaymentType extends AbstractType
     {
         $form = $this->getForm();
         $form->bind($request);
-        $transactionRequestId = $form->get('transactionRequest')->getData();
 
-        $transactionRequest = $this->getParentProcess()->getMercuryClient()->getTransactionRequestByReference(
-            $transactionRequestId
-        );
-
-        if($transactionRequest->getTransaction()) {
+        if($this->request->getTransaction()) {
             $transactionStatus = 'SUCCESS';
             $this->getStepProgress()->setComplete();
             $this->getParentProcess()->saveProgress();
