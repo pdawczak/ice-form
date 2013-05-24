@@ -23,7 +23,7 @@
         "ice/minervaclient-bundle": ">=0.1",
         "ice/janusclient-bundle": ">=0.2",
         "ice/mercuryclient-bundle": ">=0.3",
-        "ice/veritasclient-bundle": ">=0.1",
+        "ice/veritasclient-bundle": ">=0.2.0",
         "misd/guzzle-bundle": "@stable",
         "jms/serializer-bundle": "0.12.*@dev"
     },

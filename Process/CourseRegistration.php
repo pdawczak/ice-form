@@ -2,6 +2,7 @@
 namespace Ice\FormBundle\Process;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Ice\FormBundle\Process\CourseRegistration\Exception\CapacityException;
 use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
 use Ice\MinervaClientBundle\Entity\Booking;
@@ -54,9 +55,10 @@ class CourseRegistration extends AbstractProcess
      * @param string $reference
      * @return Step\AbstractRegistrationStep
      */
-    public function getStepByReference($reference){
-        foreach($this->getSteps() as $step){
-            if($step->getReference() === $reference){
+    public function getStepByReference($reference)
+    {
+        foreach ($this->getSteps() as $step) {
+            if ($step->getReference() === $reference) {
                 return $step;
             }
         }
@@ -68,13 +70,13 @@ class CourseRegistration extends AbstractProcess
      * @return Step\AbstractRegistrationStep
      * @throws \OutOfBoundsException
      */
-    public function getStepByIndex($index){
+    public function getStepByIndex($index)
+    {
         $steps = $this->getSteps();
-        if(isset($steps[$index])){
+        if (isset($steps[$index])) {
             return $steps[$index];
-        }
-        else{
-            throw new \OutOfBoundsException('No step with index '.$index);
+        } else {
+            throw new \OutOfBoundsException('No step with index ' . $index);
         }
     }
 
@@ -82,8 +84,9 @@ class CourseRegistration extends AbstractProcess
      * @param $reference
      * @return Step\AbstractRegistrationStep
      */
-    private function createStepByReference($reference){
-        $className = 'Ice\\FormBundle\\Process\\CourseRegistration\\Step\\'.ucwords($reference).'\\'.ucwords($reference).'Type';
+    private function createStepByReference($reference)
+    {
+        $className = 'Ice\\FormBundle\\Process\\CourseRegistration\\Step\\' . ucwords($reference) . '\\' . ucwords($reference) . 'Type';
         $reflectionClass = new \ReflectionClass($className);
         return $reflectionClass->newInstance($this, $reference);
     }
@@ -91,19 +94,19 @@ class CourseRegistration extends AbstractProcess
     /**
      * @return \Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep[]
      */
-    public function getSteps(){
-        if(null === $this->steps){
+    public function getSteps()
+    {
+        if (null === $this->steps) {
             $this->steps = array();
-            if($this->registrantId){
+            if ($this->registrantId) {
                 $progress = $this->getProgress(true);
-                foreach($progress->getStepProgresses() as $step){
+                foreach ($progress->getStepProgresses() as $step) {
                     $newStep = $this->createStepByReference($step->getStepName());
                     $newStep->setStepProgress($step);
                     $this->steps[] = $newStep;
                 }
-            }
-            else{
-                foreach($this->getCourse()->getCourseRegistrationRequirements() as $requirement){
+            } else {
+                foreach ($this->getCourse()->getCourseRegistrationRequirements() as $requirement) {
                     $this->steps[] = $this->createStepByReference($requirement->getCode());
                 }
             }
@@ -126,20 +129,19 @@ class CourseRegistration extends AbstractProcess
      */
     public function getProgress($create = false)
     {
-        if(!$this->progress){
+        if (!$this->progress) {
             $booking = $this->getBooking($create);
-            if($booking && $progress = $booking->getRegistrationProgress()){
+            if ($booking && $progress = $booking->getRegistrationProgress()) {
                 $this->progress = $progress;
-            }
-            else if($create){
+            } else if ($create) {
                 $this->getMinervaClient()->setRegistration($this->getRegistrantId(), $this->getCourseId());
                 $progress = $this->buildRegistrationProgress();
                 $this->steps = array();
-                foreach($progress->getStepProgresses() as $step){
+                foreach ($progress->getStepProgresses() as $step) {
                     $this->getMinervaClient()->setRegistrationStep($this->getRegistrantId(), $this->getCourseId(), array(
-                        'stepName'=>$step->getStepName(),
-                        'order'=>$step->getOrder(),
-                        'description'=>$step->getDescription()
+                        'stepName' => $step->getStepName(),
+                        'order' => $step->getOrder(),
+                        'description' => $step->getDescription()
                     ));
                 }
                 $this->progress = $progress;
@@ -154,58 +156,53 @@ class CourseRegistration extends AbstractProcess
      *
      * @param Request $request
      */
-    public function processRequest(Request $request){
+    public function processRequest(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $this->processAjaxRequest($request);
-        }
-        else if($request->getMethod()==='POST'){
-            if(null !== ($stepReference = $request->get('stepReference', null))){
+        } else if ($request->getMethod() === 'POST') {
+            if (null !== ($stepReference = $request->get('stepReference', null))) {
                 $submittedStep = $this->getStepByReference($stepReference);
                 $request->attributes->remove('stepReference');
                 $this->setCurrentStep($submittedStep);
                 $submittedStep->prepare();
                 $submittedStep->processRequest($request);
-                if($submittedStep->isComplete()){
+                if ($submittedStep->isComplete()) {
                     $firstIncompleteStep = null;
                     $wholeProcessComplete = true;
-                    foreach($this->getSteps() as $firstIncompleteStep){
-                        if(!$firstIncompleteStep->isComplete()){
+                    foreach ($this->getSteps() as $firstIncompleteStep) {
+                        if (!$firstIncompleteStep->isComplete()) {
                             $wholeProcessComplete = false;
                             break;
                         }
                     }
-                    if($wholeProcessComplete){
-                        if($this->getProgress()->getCompleted()===null){
+                    if ($wholeProcessComplete) {
+                        if ($this->getProgress()->getCompleted() === null) {
                             $this->getProgress()->setCompleted(new \DateTime());
                         }
                         return;
-                    }
-                    else{
-                        try{
-                            $this->setCurrentStepByIndex($submittedStep->getIndex()+1);
-                        }
-                        catch(\OutOfBoundsException $e){
+                    } else {
+                        try {
+                            $this->setCurrentStepByIndex($submittedStep->getIndex() + 1);
+                        } catch (\OutOfBoundsException $e) {
                             $this->setCurrentStep($firstIncompleteStep);
                         }
                     }
-                }
-                else{
+                } else {
                     $this->setCurrentStep($submittedStep);
                 }
             }
-        }
-        else{
+        } else {
             $this->getCurrentStep()->prepare();
         }
     }
 
     protected function processAjaxRequest(Request $request)
     {
-        if(null !== ($stepReference = $request->get('stepReference', null))){
+        if (null !== ($stepReference = $request->get('stepReference', null))) {
             $submittedStep = $this->createStepByReference($stepReference);
             $submittedStep->processAjaxRequest($request);
-        }
-        else {
+        } else {
             return new Response('AJAX response not supported when no step reference is supplied.', 412);
         }
     }
@@ -245,22 +242,22 @@ class CourseRegistration extends AbstractProcess
      */
     public function getCurrentStep()
     {
-        if(null === $this->currentStep){
-            foreach($this->getSteps() as $step){
-                if(!$step->isComplete() && $step->isAvailable()){
+        if (null === $this->currentStep) {
+            foreach ($this->getSteps() as $step) {
+                if (!$step->isComplete() && $step->isAvailable()) {
                     $this->currentStep = $step;
                     break;
                 }
             }
         }
-        if(null === $this->currentStep){
-            foreach($this->getSteps() as $step){
-                if($step->isAvailable()){
+        if (null === $this->currentStep) {
+            foreach ($this->getSteps() as $step) {
+                if ($step->isAvailable()) {
                     $this->currentStep = $step;
                     break;
                 }
             }
-            if(!$this->currentStep){
+            if (!$this->currentStep) {
                 throw new \RuntimeException("No available registration steps");
             }
         }
@@ -273,9 +270,10 @@ class CourseRegistration extends AbstractProcess
      * @param array $vars Vars to be passed to the template
      * @return string HTML output
      */
-    public function renderStepHtml(array $vars = array()){
+    public function renderStepHtml(array $vars = array())
+    {
         $currentStep = $this->getCurrentStep();
-        if(!$currentStep->isPrepared()) $currentStep->prepare();
+        if (!$currentStep->isPrepared()) $currentStep->prepare();
         return $currentStep->renderHtml($vars);
     }
 
@@ -286,9 +284,10 @@ class CourseRegistration extends AbstractProcess
      *
      * @return string
      */
-    public function renderStepJavaScript(array $vars = array()){
+    public function renderStepJavaScript(array $vars = array())
+    {
         $currentStep = $this->getCurrentStep();
-        if(!$currentStep->isPrepared()) $currentStep->prepare();
+        if (!$currentStep->isPrepared()) $currentStep->prepare();
         return $currentStep->renderJavaScript($vars);
     }
 
@@ -318,11 +317,12 @@ class CourseRegistration extends AbstractProcess
     /**
      * @return bool
      */
-    public function isComplete(){
-        if(!$this->getProgress()){
+    public function isComplete()
+    {
+        if (!$this->getProgress()) {
             return false;
         }
-        return $this->getProgress()->getCompleted()!==null;
+        return $this->getProgress()->getCompleted() !== null;
     }
 
     /**
@@ -358,7 +358,7 @@ class CourseRegistration extends AbstractProcess
      */
     public function getCourse()
     {
-        if(!$this->course && $this->getCourseId()){
+        if (!$this->course && $this->getCourseId()) {
             $this->setCourse($this->getVeritasClient()->getCourse($this->getCourseId()));
         }
         return $this->course;
@@ -397,7 +397,7 @@ class CourseRegistration extends AbstractProcess
      */
     public function getRegistrant()
     {
-        if(!$this->registrant && $this->getRegistrantId()){
+        if (!$this->registrant && $this->getRegistrantId()) {
             $this->setRegistrant($this->getJanusClient()->getUser($this->getRegistrantId()));
         }
         return $this->registrant;
@@ -418,16 +418,15 @@ class CourseRegistration extends AbstractProcess
      */
     public function getAcademicInformation($fetch = false)
     {
-        if(!$this->academicInformation){
-            if(!$this->getCourseId() || !$this->getRegistrantId()){
+        if (!$this->academicInformation) {
+            if (!$this->getCourseId() || !$this->getRegistrantId()) {
                 throw new \RuntimeException("getAcademicInformation called with insufficient information");
             }
-            if($fetch){
-                try{
+            if ($fetch) {
+                try {
                     $this->academicInformation = $this->getMinervaClient()
                         ->getAcademicInformation($this->getRegistrantId(), $this->getCourseId());
-                }
-                catch(NotFoundException $e){
+                } catch (NotFoundException $e) {
                     $this->academicInformation = null;
                 }
             }
@@ -436,12 +435,16 @@ class CourseRegistration extends AbstractProcess
     }
 
     /**
+     * If create is true this will attempt to use the API to create a booking with the mininum
+     * required items. Will throw a CapacityException if any of these are out of stock
+     *
      * @param bool $create Create the booking if it does not exist
+     * @throws \Ice\FormBundle\Process\CourseRegistration\Exception\CapacityException
      * @return \Ice\MinervaClientBundle\Entity\Booking
      */
     public function getBooking($create = false)
     {
-        if(!$this->booking && $create){
+        if (!$this->booking && $create) {
             $this->booking = $this->beginBooking();
         }
         return $this->booking;
@@ -449,17 +452,14 @@ class CourseRegistration extends AbstractProcess
 
     private function beginBooking()
     {
-        if($this->getBooking()){ //Booking already begun
+        if ($this->getBooking()) { //Booking already begun
             return $this->getBooking();
-        }
-
-        else{
-            try{
+        } else {
+            try {
                 $ai = $this->getMinervaClient()->getAcademicInformation(
                     $this->getRegistrantId(),
                     $this->getCourseId());
-            }
-            catch(NotFoundException $e404){
+            } catch (NotFoundException $e404) {
                 $this->getMinervaClient()->createAcademicInformation(
                     $this->getRegistrantId(),
                     $this->getCourseId(),
@@ -469,18 +469,18 @@ class CourseRegistration extends AbstractProcess
                     $this->getCourseId());
             }
 
-            if($booking = $ai->getActiveBooking()){
+            if ($booking = $ai->getActiveBooking()) {
                 return $booking;
             }
 
             $booking = $this->buildBooking($ai);
 
-            foreach($booking->getBookingItems() as $bookingItem){
+            foreach ($booking->getBookingItems() as $bookingItem) {
                 $bookingItems[] = array(
-                    'description'=>$bookingItem->getDescription(),
-                    'price'=>$bookingItem->getPrice(),
-                    'code'=>$bookingItem->getCode(),
-                    'category'=>$bookingItem->getCategory()->getCode(),
+                    'description' => $bookingItem->getDescription(),
+                    'price' => $bookingItem->getPrice(),
+                    'code' => $bookingItem->getCode(),
+                    'category' => $bookingItem->getCategory()->getCode(),
                 );
             }
 
@@ -488,8 +488,8 @@ class CourseRegistration extends AbstractProcess
                 $ai->getIceId(),
                 $ai->getCourseId(),
                 array(
-                    'bookedBy'=>$booking->getBookedBy(),
-                    'bookingItems'=>$bookingItems
+                    'bookedBy' => $booking->getBookedBy(),
+                    'bookingItems' => $bookingItems
                 )
             );
 
@@ -502,15 +502,16 @@ class CourseRegistration extends AbstractProcess
      *
      * @return RegistrationProgress
      */
-    private function buildRegistrationProgress(){
+    private function buildRegistrationProgress()
+    {
         $progress = new RegistrationProgress();
         $requirements = $this->getCourse()->getCourseRegistrationRequirements();
-        foreach($requirements as $i=>$req){
+        foreach ($requirements as $i => $req) {
             $stepProgress = new StepProgress();
             $stepHandler = $this->createStepByReference($req->getCode());
             $stepProgress->setStepName($stepHandler->getReference());
             $stepProgress->setDescription($stepHandler->getTitle());
-            $stepProgress->setOrder($i+1);
+            $stepProgress->setOrder($i + 1);
             $stepHandler->setStepProgress($stepProgress);
             $progress->addStepProgress($stepProgress);
         }
@@ -522,28 +523,40 @@ class CourseRegistration extends AbstractProcess
      * @param AcademicInformation $ai
      * @return Booking
      */
-    private function buildBooking(AcademicInformation $ai){
+    private function buildBooking(AcademicInformation $ai)
+    {
         $booking = new Booking();
         $booking->setAcademicInformation($ai);
         $booking->setBookedBy($ai->getIceId());
 
         $course = $this->getCourse();
         $bookingItemsArray = array();
+
+        //Attempt to add all booking items marked by veritas as 'required'
         foreach ($course->getBookingItems() as $veritasBookingItem) {
             if ($veritasBookingItem->getRequired()) {
-                $minervaBookingItem = new BookingItem();
-                $minervaBookingItem
-                    ->setBooking($booking)
-                    ->setCode($veritasBookingItem->getCode())
-                    ->setDescription($veritasBookingItem->getTitle())
-                    ->setPrice($veritasBookingItem->getPrice())
-                    ->setCategory(
-                        (new Category())
-                            ->setCode($veritasBookingItem->getCategory())
-                            ->setDescription('Does this overwrite stuff?')
-                    )
-                ;
-                $bookingItemsArray[] = $minervaBookingItem;
+                if ($veritasBookingItem->isInStock()) {
+                    $minervaBookingItem = new BookingItem();
+                    $minervaBookingItem
+                        ->setBooking($booking)
+                        ->setCode($veritasBookingItem->getCode())
+                        ->setDescription($veritasBookingItem->getTitle())
+                        ->setPrice($veritasBookingItem->getPrice())
+                        ->setCategory(
+                            (new Category())
+                                ->setCode($veritasBookingItem->getCategory())
+                        );
+                    $bookingItemsArray[] = $minervaBookingItem;
+                } else {
+                    //Throw an exception if the item is out of stock
+                    throw (new CapacityException(
+                        sprintf('Required item %s with description "%s" is out of stock (capacity: %d, allocated: %d)'),
+                        $veritasBookingItem->getCode(),
+                        $veritasBookingItem->getTitle(),
+                        $veritasBookingItem->getCapacity(),
+                        $veritasBookingItem->getNumberAllocated()
+                    ))->setBookingItem($veritasBookingItem);
+                }
             }
         }
         $booking->setBookingItems(new ArrayCollection(
