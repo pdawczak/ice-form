@@ -436,10 +436,9 @@ class CourseRegistration extends AbstractProcess
 
     /**
      * If create is true this will attempt to use the API to create a booking with the mininum
-     * required items. Will throw a CapacityException if any of these are out of stock
+     * required items.
      *
      * @param bool $create Create the booking if it does not exist
-     * @throws \Ice\FormBundle\Process\CourseRegistration\Exception\CapacityException
      * @return \Ice\MinervaClientBundle\Entity\Booking
      */
     public function getBooking($create = false)
@@ -535,29 +534,17 @@ class CourseRegistration extends AbstractProcess
         //Attempt to add all booking items marked by veritas as 'required'
         foreach ($course->getBookingItems() as $veritasBookingItem) {
             if ($veritasBookingItem->getRequired()) {
-                if ($veritasBookingItem->isInStock()) {
-                    $minervaBookingItem = new BookingItem();
-                    $minervaBookingItem
-                        ->setBooking($booking)
-                        ->setCode($veritasBookingItem->getCode())
-                        ->setDescription($veritasBookingItem->getTitle())
-                        ->setPrice($veritasBookingItem->getPrice())
-                        ->setCategory(
-                            (new Category())
-                                ->setCode($veritasBookingItem->getCategory())
-                        );
-                    $bookingItemsArray[] = $minervaBookingItem;
-                } else {
-                    //Throw an exception if the item is out of stock
-                    throw (new CapacityException(
-                        sprintf('Required item %s with description "%s" is out of stock (capacity: %d, allocated: %d)',
-                        $veritasBookingItem->getCode(),
-                        $veritasBookingItem->getTitle(),
-                        $veritasBookingItem->getCapacity(),
-                        $veritasBookingItem->getNumberAllocated()
-                        )
-                    ))->setBookingItem($veritasBookingItem);
-                }
+                $minervaBookingItem = new BookingItem();
+                $minervaBookingItem
+                    ->setBooking($booking)
+                    ->setCode($veritasBookingItem->getCode())
+                    ->setDescription($veritasBookingItem->getTitle())
+                    ->setPrice($veritasBookingItem->getPrice())
+                    ->setCategory(
+                        (new Category())
+                            ->setCode($veritasBookingItem->getCategory())
+                    );
+                $bookingItemsArray[] = $minervaBookingItem;
             }
         }
         $booking->setBookingItems(new ArrayCollection(
