@@ -550,11 +550,12 @@ class CourseRegistration extends AbstractProcess
                 } else {
                     //Throw an exception if the item is out of stock
                     throw (new CapacityException(
-                        sprintf('Required item %s with description "%s" is out of stock (capacity: %d, allocated: %d)'),
+                        sprintf('Required item %s with description "%s" is out of stock (capacity: %d, allocated: %d)',
                         $veritasBookingItem->getCode(),
                         $veritasBookingItem->getTitle(),
                         $veritasBookingItem->getCapacity(),
                         $veritasBookingItem->getNumberAllocated()
+                        )
                     ))->setBookingItem($veritasBookingItem);
                 }
             }
