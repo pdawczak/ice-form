@@ -55,13 +55,13 @@ class PlaceOrder extends AbstractProcess
      * @return Step\AbstractType
      * @throws \OutOfBoundsException
      */
-    public function getStepByIndex($index){
+    public function getStepByIndex($index)
+    {
         $steps = $this->getSteps();
-        if(isset($steps[$index])){
+        if (isset($steps[$index])) {
             return $steps[$index];
-        }
-        else{
-            throw new \OutOfBoundsException('No step with index '.$index);
+        } else {
+            throw new \OutOfBoundsException('No step with index ' . $index);
         }
     }
 
@@ -80,7 +80,7 @@ class PlaceOrder extends AbstractProcess
      */
     public function getProgressId()
     {
-        if($this->progressId === null){
+        if ($this->progressId === null) {
             $this->progressId = uniqid();
         }
         return $this->progressId;
@@ -89,8 +89,9 @@ class PlaceOrder extends AbstractProcess
     /**
      * @return \Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep[]
      */
-    public function getSteps(){
-        if(null === $this->steps){
+    public function getSteps()
+    {
+        if (null === $this->steps) {
             $this->steps = array(
                 new Step\ChoosePlans\ChoosePlansType($this),
                 new Step\Confirm\ConfirmType($this),
@@ -105,9 +106,10 @@ class PlaceOrder extends AbstractProcess
      * @param $reference
      * @return CourseRegistration\Step\AbstractRegistrationStep
      */
-    public function getStepByReference($reference){
-        foreach($this->getSteps() as $step){
-            if($step->getReference() === $reference){
+    public function getStepByReference($reference)
+    {
+        foreach ($this->getSteps() as $step) {
+            if ($step->getReference() === $reference) {
                 return $step;
             }
         }
@@ -118,56 +120,53 @@ class PlaceOrder extends AbstractProcess
      *
      * @param Request $request
      */
-    public function processRequest(Request $request){
+    public function processRequest(Request $request)
+    {
 
-        if($request->getMethod()==='POST'){
-            if(null !== ($stepReference = $request->get('stepReference', null))){
+        if ($request->getMethod() === 'POST') {
+            if (null !== ($stepReference = $request->get('stepReference', null))) {
                 $submittedStep = $this->getStepByReference($stepReference);
                 $request->attributes->remove('stepReference');
                 $this->setCurrentStep($submittedStep);
 
-                if(null !== ($progressId = $request->get('progressId'))){
+                if (null !== ($progressId = $request->get('progressId'))) {
                     $this->setProgressId($progressId);
                 }
 
-                if(null !== $request->get('process-navigation-back', null)){
-                    $this->setCurrentStepByIndex($submittedStep->getIndex()-1);
+                if (null !== $request->get('process-navigation-back', null)) {
+                    $this->setCurrentStepByIndex($submittedStep->getIndex() - 1);
                     $this->getCurrentStep()->prepare();
                     return;
                 }
 
                 $submittedStep->prepare();
                 $submittedStep->processRequest($request);
-                if($submittedStep->isComplete()){
+                if ($submittedStep->isComplete()) {
                     $firstIncompleteStep = null;
                     $wholeProcessComplete = true;
-                    foreach($this->getSteps() as $firstIncompleteStep){
-                        if(!$firstIncompleteStep->isComplete()){
+                    foreach ($this->getSteps() as $firstIncompleteStep) {
+                        if (!$firstIncompleteStep->isComplete()) {
                             $wholeProcessComplete = false;
                             break;
                         }
                     }
-                    if($wholeProcessComplete){
-                        if($this->getProgress()->getCompleted()===null){
+                    if ($wholeProcessComplete) {
+                        if ($this->getProgress()->getCompleted() === null) {
                             $this->getProgress()->setCompleted(new \DateTime());
                         }
                         return;
-                    }
-                    else{
-                        try{
-                            $this->setCurrentStepByIndex($submittedStep->getIndex()+1);
-                        }
-                        catch(\OutOfBoundsException $e){
+                    } else {
+                        try {
+                            $this->setCurrentStepByIndex($submittedStep->getIndex() + 1);
+                        } catch (\OutOfBoundsException $e) {
                             $this->setCurrentStep($firstIncompleteStep);
                         }
                     }
-                }
-                else{
+                } else {
                     $this->setCurrentStep($submittedStep);
                 }
             }
-        }
-        else{
+        } else {
             $this->getCurrentStep()->prepare();
         }
     }
@@ -203,28 +202,27 @@ class PlaceOrder extends AbstractProcess
     }
 
 
-
     /**
      * @return \Ice\FormBundle\Process\PlaceOrder\Step\AbstractType
      */
     public function getCurrentStep()
     {
-        if(null === $this->currentStep){
-            foreach($this->getSteps() as $step){
-                if(!$step->isComplete() && $step->isAvailable()){
+        if (null === $this->currentStep) {
+            foreach ($this->getSteps() as $step) {
+                if (!$step->isComplete() && $step->isAvailable()) {
                     $this->currentStep = $step;
                     break;
                 }
             }
         }
-        if(null === $this->currentStep){
-            foreach($this->getSteps() as $step){
-                if($step->isAvailable()){
+        if (null === $this->currentStep) {
+            foreach ($this->getSteps() as $step) {
+                if ($step->isAvailable()) {
                     $this->currentStep = $step;
                     break;
                 }
             }
-            if(!$this->currentStep){
+            if (!$this->currentStep) {
                 throw new \RuntimeException("No available order steps");
             }
         }
@@ -237,16 +235,18 @@ class PlaceOrder extends AbstractProcess
      * @param array $vars Vars to be passed to the template
      * @return string HTML output
      */
-    public function renderStep(array $vars = array()){
+    public function renderStep(array $vars = array())
+    {
         $currentStep = $this->getCurrentStep();
-        if(!$currentStep->isPrepared()) $currentStep->prepare();
+        if (!$currentStep->isPrepared()) $currentStep->prepare();
         return $currentStep->render($vars);
     }
 
     /**
      * @return bool
      */
-    public function isComplete(){
+    public function isComplete()
+    {
         return false;
     }
 
@@ -283,7 +283,7 @@ class PlaceOrder extends AbstractProcess
      */
     public function getCustomer()
     {
-        if(!$this->customer && $this->getCustomerId()){
+        if (!$this->customer && $this->getCustomerId()) {
             $this->setCustomer($this->getJanusClient()->getUser($this->getCustomerId()));
         }
         return $this->customer;
@@ -292,8 +292,9 @@ class PlaceOrder extends AbstractProcess
     /**
      * @return AcademicInformation|\Ice\MinervaClientBundle\Entity\AcademicInformation[]
      */
-    public function getAcademicInformations(){
-        if($this->academicInformations === null){
+    public function getAcademicInformations()
+    {
+        if ($this->academicInformations === null) {
             $this->academicInformations = $this->getMinervaClient()
                 ->getAllAcademicInformationByIceId($this->getCustomerId());
         }
@@ -303,10 +304,14 @@ class PlaceOrder extends AbstractProcess
     /**
      * @return Booking[]
      */
-    public function getBookingsAvailableToOrder(){
+    public function getBookingsAvailableToOrder()
+    {
         $bookings = array();
-        foreach($this->getAcademicInformations() as $ai){
-            if($booking = $ai->getActiveBooking()){
+        foreach ($this->getAcademicInformations() as $ai) {
+            if ($ai->isRegistrationComplete() &&
+                ($ai->getPaymentStatusCode() === null) &&
+                ($booking = $ai->getActiveBooking())
+            ) {
                 $bookings[] = $booking;
             }
         }
@@ -346,12 +351,12 @@ class PlaceOrder extends AbstractProcess
      */
     public function getProgress()
     {
-        if(null===$this->progress){
+        if (null === $this->progress) {
             $this->progress = $this->getSession()->get(
-                'IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId().':'.$this->getProgressId()
+                'IceFormBundle:PlaceOrder:Progress:' . $this->getCustomerId() . ':' . $this->getProgressId()
             );
         }
-        if(null===$this->progress){
+        if (null === $this->progress) {
             $this->progress = new Progress();
         }
         return $this->progress;
@@ -362,7 +367,7 @@ class PlaceOrder extends AbstractProcess
      */
     public function saveProgress()
     {
-        $this->getSession()->set('IceFormBundle:PlaceOrder:Progress:'.$this->getCustomerId().':'.$this->getProgressId(), $this->progress);
+        $this->getSession()->set('IceFormBundle:PlaceOrder:Progress:' . $this->getCustomerId() . ':' . $this->getProgressId(), $this->progress);
         $this->getSession()->save();
     }
 
