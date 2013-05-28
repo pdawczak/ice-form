@@ -161,6 +161,7 @@ class PlaceOrder extends AbstractProcess
                         } catch (\OutOfBoundsException $e) {
                             $this->setCurrentStep($firstIncompleteStep);
                         }
+                        $this->getCurrentStep()->prepare();
                     }
                 } else {
                     $this->setCurrentStep($submittedStep);
