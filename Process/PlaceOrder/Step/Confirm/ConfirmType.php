@@ -3,6 +3,8 @@ namespace Ice\FormBundle\Process\PlaceOrder\Step\Confirm;
 
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
 use Ice\MercuryClientBundle\Entity\Order;
+use Ice\MercuryClientBundle\Exception\CapacityException as OrderBuilderCapacityException;
+use Ice\FormBundle\Exception\CapacityException;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConfirmType extends AbstractType
@@ -65,7 +67,16 @@ class ConfirmType extends AbstractType
                     $planChoice->getCode(),
                     $planChoice->getVersion()
                 );
-                $builder->addNewBooking($booking, $paymentPlan, $course);
+                try {
+                    $builder->addNewBooking($booking, $paymentPlan, $course);
+                }
+                catch (OrderBuilderCapacityException $mercuryCapacityException) {
+                    $e = (new CapacityException('Capacity problems'))
+                        ->setBookingItem($mercuryCapacityException->getBookingItem())
+                        ->setCourseItem($mercuryCapacityException->getCourseItem())
+                        ->setBookingItem($booking);
+                    throw $e;
+                }
             }
         }
         $this->order = $builder->getOrder();
