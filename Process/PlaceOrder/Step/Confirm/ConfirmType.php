@@ -74,7 +74,10 @@ class ConfirmType extends AbstractType
                     $e = (new CapacityException('Capacity problems'))
                         ->setBookingItem($mercuryCapacityException->getBookingItem())
                         ->setCourseItem($mercuryCapacityException->getCourseItem())
-                        ->setBookingItem($booking);
+                        ->setBooking($booking)
+                        ->setCourse($course)
+                    ;
+
                     throw $e;
                 }
             }

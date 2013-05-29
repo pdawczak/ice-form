@@ -4,6 +4,7 @@ namespace Ice\FormBundle\Exception;
 use Ice\VeritasClientBundle\Entity\BookingItem as CourseBookingItem;
 use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\MinervaClientBundle\Entity\Booking;
+use Ice\VeritasClientBundle\Entity\Course;
 
 class CapacityException extends \Exception
 {
@@ -15,6 +16,9 @@ class CapacityException extends \Exception
 
     /** @var  CourseBookingItem */
     private $courseItem;
+
+    /** @var  Course */
+    private $course;
 
     /**
      * @param \Ice\MinervaClientBundle\Entity\Booking $booking
@@ -68,5 +72,23 @@ class CapacityException extends \Exception
     public function getCourseItem()
     {
         return $this->courseItem;
+    }
+
+    /**
+     * @param \Ice\VeritasClientBundle\Entity\Course $course
+     * @return CapacityException
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        return $this;
+    }
+
+    /**
+     * @return \Ice\VeritasClientBundle\Entity\Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
     }
 }
