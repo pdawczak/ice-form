@@ -75,12 +75,22 @@
                      id="{{ 'plan-choice-booking-' ~ booking.id ~ '-detail-' ~ plan.code ~ ':' ~ plan.version }}">
                     <table>
                         <tr>
-                            <th>Date due</th>
+                            <th>Due</th>
                             <th>Amount</th>
                             <th>Method</th>
                         </tr>
                         {% for receivable in plan.receivables %}
-                            <tr><td>{{ receivable.dueDate | date('Y-m-d') }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
+                            <tr>
+                                <td>
+                                    {% if receivable.dueDate < date() %}
+                                        Now
+                                    {% else %}
+                                        {{ receivable.dueDate | date('j F Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td>
+                                <td>Credit/debit card</td>
+                            </tr>
                         {% endfor %}
                     </table>
                 </div>
