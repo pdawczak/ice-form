@@ -9,7 +9,7 @@ class Declaration
 {
     /**
      * @var bool
-     * @Assert\True()
+     * @Assert\True(message="You must confirm your understanding to continue")
      */
     private $qualificationDeclaration;
 
