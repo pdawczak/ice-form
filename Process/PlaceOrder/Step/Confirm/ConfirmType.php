@@ -3,9 +3,11 @@ namespace Ice\FormBundle\Process\PlaceOrder\Step\Confirm;
 
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
 use Ice\MercuryClientBundle\Entity\Order;
+use Ice\MercuryClientBundle\Entity\Receivable;
 use Ice\MercuryClientBundle\Exception\CapacityException as OrderBuilderCapacityException;
 use Ice\FormBundle\Exception\CapacityException;
 use Symfony\Component\HttpFoundation\Request;
+use Ice\MercuryClientBundle\Entity\PaymentPlanInterface;
 
 class ConfirmType extends AbstractType
 {
@@ -63,10 +65,16 @@ class ConfirmType extends AbstractType
             if($planChoice = $progress->getPlanChoiceByBookingId($booking->getId())){
                 $course = $this->getParentProcess()->getVeritasClient()
                     ->getCourse($booking->getAcademicInformation()->getCourseId());
+
+                /** @var PaymentPlanInterface $paymentPlan */
                 $paymentPlan = $this->getParentProcess()->getPaymentPlanService()->getPaymentPlan(
                     $planChoice->getCode(),
                     $planChoice->getVersion()
                 );
+
+                //FIXME: This probably shouldn't be fixed to online
+                $paymentPlan->setPaymentMethod(Receivable::METHOD_ONLINE);
+
                 try {
                     $builder->addNewBooking($booking, $paymentPlan, $course);
                 }
