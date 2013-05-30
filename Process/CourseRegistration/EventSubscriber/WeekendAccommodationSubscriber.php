@@ -259,9 +259,13 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
      */
     private function createFormForItemType($name, array $choices, $label, $emptyValue = null)
     {
+        if ($emptyValue) {
+            array_unshift($choices, $emptyValue);
+        }
+
         $constraints = array(
             new Choice(array(
-                'choices' => array_keys($choices)
+                'choices' => array_keys($choices),
             ))
         );
 
@@ -270,12 +274,14 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             'choices' => $choices,
             'constraints' => isset($constraints) ? $constraints : array(),
             'required' => false,
+            'expanded' => true,
+            'multiple' => false,
             'invalid_message' => 'Please choose a valid option. Some choices are only valid in combination with others so you may need to re-select multiple options.',
+            'data' => 0,
+            'attr' => array(
+                'class' => 'ajax',
+            ),
         );
-
-        if ($emptyValue) {
-            $options['empty_value'] = $emptyValue;
-        }
 
         $form = $this->factory->createNamed($name, 'choice', null, $options);
 

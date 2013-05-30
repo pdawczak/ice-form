@@ -5,8 +5,8 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            // Perform AJAX request when a change is made in a select element
-            $(document).on("change", "#registration_step_form select", function(event) {
+            // Perform AJAX request when a change is made in a radio element
+            $(document).on("change", '.ajax', function(event) {
                 var form = $("#registration_step_form");
                 var url = form.attr("action");
                 var parent_div = form.parent("div");
