@@ -46,7 +46,7 @@ class WeekendAccommodationType extends AbstractRegistrationStep
                 if ($this->isContinueClicked()) {
                     $groups[] = 'Default';
                 } else {
-                    $groups = 'no_validate';
+                    $groups[] = 'no_validate';
                 }
                 return $groups;
             }
