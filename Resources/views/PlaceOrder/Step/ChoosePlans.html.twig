@@ -2,7 +2,7 @@
 
 {% block form_content %}
 <style type="text/css">
-    .totalPrice{
+    .totalPrice, .totalDescription {
         font-weight: bold;
     }
 
@@ -33,8 +33,9 @@
         width: 100%;
     }
 
-    .scheduleDetail table th{
+    .scheduleDetail table th, .scheduleDetail table td {
         text-align: left;
+        font-size: 14px;
     }
 </style>
     {% for line in lines %}
@@ -42,7 +43,6 @@
         {% set course = line.course %}
         {% set plans = line.plans %}
         <fieldset><legend>{{ course.title }}</legend>
-
 
         <div class="description" style="width: 400px; float:left">
             <table>
@@ -54,7 +54,7 @@
                             <span class="bookingItemDescription">{{ item.description }}</span>
                         </td>
                         <td>
-                            <span class="bookingItemPrice">&pound;{{ (item.price/100) |number_format(2, '.') }}</span>
+                            <span class="bookingItemPrice">&pound;{{ (item.price/100)|number_format(2, '.') }}</span>
                         </td>
                     </tr>
                 {% endfor %}
@@ -63,7 +63,7 @@
                         <span class="totalDescription">Total</span>
                     </td>
                     <td style="border-top: 1px solid black">
-                        <span class="totalPrice">&pound;{{ (total/100) |number_format(2, '.') }}</span>
+                        <span class="totalPrice">&pound;{{ (total/100)|number_format(2, '.') }}</span>
                     </td>
                 </tr>
             </table>
@@ -85,10 +85,10 @@
                                     {% if receivable.dueDate < date() %}
                                         Now
                                     {% else %}
-                                        {{ receivable.dueDate | date('j F Y') }}
+                                        {{ receivable.dueDate|date('j F Y') }}
                                     {% endif %}
                                 </td>
-                                <td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td>
+                                <td>&pound;{{ (receivable.amount/100)|number_format(2, '.') }}</td>
                                 <td>Credit/debit card</td>
                             </tr>
                         {% endfor %}

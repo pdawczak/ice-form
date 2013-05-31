@@ -1,7 +1,49 @@
 {% extends "PlaceOrder/Step/default.html.twig" %}
 
+{% block css %}
+    {{ parent() }}
+    <style>
+        .order-summary td, .order-summary th {
+            font-size: 14px;
+            padding: 2px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .header-row {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .total-column {
+            text-align: right;
+        }
+
+        .separated {
+            height: 20px;
+        }
+
+        fieldset {
+            margin-top: 20px;
+        }
+
+        .order-summary .payment-due-date, .order-summary .payment-amount {
+            width: inherit;
+            white-space: nowrap;
+            padding-right: 20px;
+        }
+
+        .order-summary .payment-method {
+            width: 100%;
+        }
+
+        .order-total th {
+            font-size: 16px;
+        }
+    </style>
+{% endblock %}
 {% block form_content %}
-    <fieldset id="customerInformation"><legend>Customer</legend>
+    <fieldset id="customerInformation">
+        <legend>Your details</legend>
         {{ order.customerLastNames }}, {{ order.customerTitle }} {{ order.customerFirstNames }}<br/>
         {% if order.customerAddress1 %} {{ order.customerAddress1 }} <br/> {% endif %}
         {% if order.customerAddress2 %} {{ order.customerAddress2 }} <br/> {% endif %}
@@ -10,24 +52,52 @@
         {% if order.customerPostcode %} {{ order.customerPostcode }} <br/> {% endif %}
     </fieldset>
 
-    <fieldset style="margin-top:20px"><legend>Bookings</legend>
-    <table style="width: 100%">
+    <fieldset><legend>Your courses</legend>
+    <table class="order-summary">
+        {% set orderTotal = 0 %}
         {% for suborder in order.suborders %}
-            <tr><th style="border-bottom: 1px solid #CCC; text-align: left" colspan="2">{{ suborder.description }}</th></tr>
+            <tr>
+                <th class="header-row" colspan="2">{{ suborder.description }}</th>
+            </tr>
             {% for line in suborder.lineItems %}
-                <tr><td>{{ line.description }}</td><td style="text-align: right">&pound;{{ (line.amount/100) |number_format(2, '.') }}</td></tr>
+                <tr>
+                    <td>{{ line.description }}</td>
+                    <td class="total-column">&pound;{{ (line.amount/100)|number_format(2, '.') }}</td>
+                </tr>
             {% endfor %}
-            <tr><th style="text-align: left">Total</th><th  style="text-align: right">&pound;{{ (suborder.totalAmount/100) |number_format(2, '.') }}</th></tr>
+            <tr>
+                {% set orderTotal = orderTotal + suborder.totalAmount %}
+                <th>Subtotal</th>
+                <th class="total-column">&pound;{{ (suborder.totalAmount/100)|number_format(2, '.') }}</th>
+            </tr>
+            <tr><td colspan="2" class="separated"></td></tr>
         {% endfor %}
+        <tr class="order-total">
+            <th>Order total</th>
+            <th class="total-column">&pound;{{ (orderTotal/100)|number_format(2, '.') }}</th>
+        </tr>
     </table>
     </fieldset>
-    <fieldset style="margin-top:20px"><legend>Payment plan</legend>
-        <table>
+    <fieldset><legend>Your payments</legend>
+        <table class="order-summary">
         {% for suborder in order.suborders %}
-            <tr><th>{{ suborder.description }}</th></tr>
-            {% for receivable in suborder.paymentGroup.receivables %}
-                <tr><td>{{ (receivable.dueDate is null or receivable.dueDate < date()) ? 'Due now' : 'Due ' ~ (receivable.dueDate | date('d/m/Y')) }}</td><td>&pound;{{ (receivable.amount/100) |number_format(2, '.') }}</td><td>{{ receivable.method }}</td></tr>
+            <tr>
+                <th colspan="3">{{ suborder.description }}</th>
+            </tr>
+            {% for receivable in suborder.newReceivables %}
+                <tr>
+                    <td class="payment-due-date">
+                        {% if receivable.dueDate is null or receivable.dueDate < date() %}
+                            Due now
+                        {% else %}
+                            Due {{ receivable.dueDate|date('j F Y') }}
+                        {% endif %}
+                    </td>
+                    <td class="payment-amount">&pound;{{ (receivable.amount/100)|number_format(2, '.') }}</td>
+                    <td class="payment-method">Credit/debit card</td>
+                </tr>
             {% endfor %}
+                <tr><td colspan="3" class="separated"></td></tr>
         {% endfor %}
         </table>
     </fieldset>
