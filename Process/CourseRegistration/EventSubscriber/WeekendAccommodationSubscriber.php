@@ -32,7 +32,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
 
     /**
      * @param FormFactoryInterface $factory
-     * @param Course               $course
+     * @param Course $course
      *
      */
     public function __construct(FormFactoryInterface $factory, Course $course)
@@ -48,6 +48,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
     {
         return array(
             FormEvents::PRE_BIND => 'preBind',
+            FormEvents::POST_BIND => 'postBind',
             FormEvents::PRE_SET_DATA => 'preSetData'
         );
     }
@@ -78,6 +79,37 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Event triggered on POST_BIND.
+     *
+     * It makes sure that incompatible choices are not set on the entity
+     *
+     * @param FormEvent $event
+     */
+    public function postBind(FormEvent $event)
+    {
+        /** @var WeekendAccommodation $entity */
+        $entity = $event->getData();
+
+        if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getAccommodation(), $matches)) {
+            list($all, $itemType, $itemId) = $matches;
+            $entity->setAdaptedBedroomRequired(false);
+            $entity->setAccommodationRequirements(null);
+            $entity->setBedAndBreakfastAccommodation('BANDB-NONE-'.$courseId);
+        }
+
+        if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getBedAndBreakfastAccommodation(), $matches)) {
+            list($all, $itemType, $itemId) = $matches;
+            $entity->setPlatter('PLATTER-NONE-'.$courseId);
+        }
+
+        if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getPlatter(), $matches)) {
+            $entity->setPlatterOption(null);
+        }
+
+        $event->setData($entity);
+    }
+
+    /**
      * Event triggered on PRE_SET_DATA.
      *
      * It adds a new widget to show additional widgets, based on earlier selections:
@@ -105,6 +137,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
     {
         $form->remove('accommodation');
         $form->remove('bedAndBreakfastAccommodation');
+        $form->remove('accommodationRequirementsGroup');
         $form->remove('accommodationSharingWith');
         $form->remove('platter');
         $form->remove('platterOption');
@@ -124,13 +157,12 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             $this->createFormForItemType(
                 'accommodation',
                 $choices,
-                'Accommodation',
-                'No accommodation'
+                'Accommodation'
             )
         );
 
         $accommodationChoice = isset($data['accommodation']) ? $data['accommodation'] : null;
-        if ($accommodationChoice) {
+        if (($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false)) {
             $form->add(
                 $this->factory->create(new AccommodationRequirementsType())
             );
@@ -140,8 +172,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
                 $this->createFormForItemType(
                     'bedAndBreakfastAccommodation',
                     $choices,
-                    'Bed and breakfast accommodation',
-                    'No bed and breakfast accommodation'
+                    'Bed and breakfast accommodation'
                 )
             );
 
@@ -160,22 +191,28 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             }
         }
 
-        $bedAndBreakfastAccommodationChoice = isset($data['bedAndBreakfastAccommodation']) ? $data['bedAndBreakfastAccommodation'] : null;
-        if ($accommodationChoice && $bedAndBreakfastAccommodationChoice) {
+        $bedAndBreakfastAccommodationChoice =
+            isset($data['bedAndBreakfastAccommodation']) ? $data['bedAndBreakfastAccommodation'] : null;
+
+        if (($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false) &&
+            ($bedAndBreakfastAccommodationChoice !== null && strpos($bedAndBreakfastAccommodationChoice, '-NONE-') === false)
+        ) {
             $choices = $this->getChoicesForCategory(self::CATEGORY_PLATTER);
 
             $form->add(
                 $this->createFormForItemType(
                     'platter',
                     $choices,
-                    'Sunday night platter',
-                    'No platter'
+                    'Sunday night platter'
                 )
             );
         }
 
         $platterChoice = isset($data['platter']) ? $data['platter'] : null;
-        if ($platterChoice && $bedAndBreakfastAccommodationChoice && $accommodationChoice) {
+        if (($platterChoice !== null && strpos($platterChoice, '-NONE-') === false) &&
+            ($bedAndBreakfastAccommodationChoice !== null && strpos($bedAndBreakfastAccommodationChoice, '-NONE-') === false) &&
+            ($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false)
+        ) {
             $form->add(
                 $this->factory->createNamed('platterOption', 'choice', null, array(
                     'label' => 'Please indicate the option you would prefer.',
@@ -237,9 +274,12 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
 
         foreach ($this->course->getBookingItems() as $item) {
             if (
-                // Allow bed and breakfast accommodation of the same type as the selected accommodation
-                self::CATEGORY_BED_AND_BREAKFAST_ACCOMMODATION == $item->getCategory()
-                && false !== strpos($item->getCode(), $roomType)
+                // Allow bed and breakfast accommodation of the same type as the selected accommodation. Also allow no B&B
+                self::CATEGORY_BED_AND_BREAKFAST_ACCOMMODATION == $item->getCategory() &&
+                (
+                    false !== strpos($item->getCode(), $roomType) ||
+                    false !== strpos($item->getCode(), '-NONE-')
+                )
             ) {
                 $options[$item->getCode()] = $item->getTitle();
             }
@@ -250,17 +290,18 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
 
 
     /**
-     * @param string      $name        Name of the field
-     * @param array       $choices
-     * @param string      $label
+     * @param string $name        Name of the field
+     * @param array $choices
+     * @param string $label
+     * @param null|string $emptyLabel
      * @param null|string $emptyValue
      *
      * @return \Symfony\Component\Form\FormInterface
      */
-    private function createFormForItemType($name, array $choices, $label, $emptyValue = null)
+    private function createFormForItemType($name, array $choices, $label, $emptyLabel = null, $emptyValue = 'NONE')
     {
-        if ($emptyValue) {
-            array_unshift($choices, $emptyValue);
+        if ($emptyLabel) {
+            array_unshift($choices, array($emptyValue => $emptyLabel));
         }
 
         $constraints = array(
@@ -277,7 +318,6 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             'expanded' => true,
             'multiple' => false,
             'invalid_message' => 'Please choose a valid option. Some choices are only valid in combination with others so you may need to re-select multiple options.',
-            'data' => 0,
             'attr' => array(
                 'class' => 'ajax',
             ),

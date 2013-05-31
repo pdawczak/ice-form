@@ -11,11 +11,26 @@
                 var url = form.attr("action");
                 var parent_div = form.parent("div");
 
+
+                var overlay_target = $('.overlay-target');
+                if(overlay_target.length) {
+                    var overlay_position = overlay_target.offset();
+                    $('.course-registration-overlay').addClass('visible');
+                    $('.course-registration-overlay').css({
+                        position: "absolute",
+                        left: overlay_position.left,
+                        top: overlay_position.top,
+                        width: overlay_target.width(),
+                        height: overlay_target.height()
+                    });
+                }
+
                 $.ajax({
                     type: "POST",
                     url: url,
                     data: form.serialize(),
                     success: function(data) {
+                        $('.course-registration-overlay').removeClass('visible');
                         parent_div.html(data);
                     }
                 });
