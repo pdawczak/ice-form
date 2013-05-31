@@ -454,11 +454,8 @@ class CourseRegistration extends AbstractProcess
         if ($this->getBooking()) { //Booking already begun
             return $this->getBooking();
         } else {
-            try {
-                $ai = $this->getMinervaClient()->getAcademicInformation(
-                    $this->getRegistrantId(),
-                    $this->getCourseId());
-            } catch (NotFoundException $e404) {
+            $ai = $this->getAcademicInformation(true);
+            if(null===$ai) {
                 $this->getMinervaClient()->createAcademicInformation(
                     $this->getRegistrantId(),
                     $this->getCourseId(),
@@ -467,6 +464,7 @@ class CourseRegistration extends AbstractProcess
                     $this->getRegistrantId(),
                     $this->getCourseId());
             }
+
 
             if ($booking = $ai->getActiveBooking()) {
                 return $booking;
