@@ -85,8 +85,8 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
-                        '1' => 'Yes',
-                        '0' => 'No',
+                        'Y' => 'Yes',
+                        'N' => 'No',
                     )
                 )
             )
@@ -96,8 +96,8 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
-                        '1' => 'Yes',
-                        '0' => 'No',
+                        'Y' => 'Yes',
+                        'N' => 'No',
                     )
                 )
             )
@@ -107,8 +107,8 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
-                        '1' => 'Yes',
-                        '0' => 'No',
+                        'Y' => 'Yes',
+                        'N' => 'No',
                     )
                 )
             )
@@ -118,8 +118,8 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
-                        '1' => 'Yes',
-                        '0' => 'No',
+                        'Y' => 'Yes',
+                        'N' => 'No',
                     )
                 )
             )
@@ -129,8 +129,8 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
-                        '1' => 'Yes',
-                        '0' => 'No',
+                        'Y' => 'Yes',
+                        'N' => 'No',
                     )
                 )
             )

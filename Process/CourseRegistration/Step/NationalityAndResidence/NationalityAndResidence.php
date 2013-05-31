@@ -36,27 +36,27 @@ class NationalityAndResidence
     private $ordinarilyResident;
 
     /**
-     * @var bool
+     * @var string
      */
     private $eeaOrSwissNational;
 
     /**
-     * @var bool
+     * @var string
      */
     private $familyMemberEuNational;
 
     /**
-     * @var bool
+     * @var string
      */
     private $settledInUk;
 
     /**
-     * @var bool
+     * @var string
      */
     private $grantedRefugeeStatus;
 
     /**
-     * @var bool
+     * @var string
      */
     private $requireVisa;
 
@@ -102,7 +102,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @param boolean $eeaOrSwissNational
+     * @param string $eeaOrSwissNational
      * @return NationalityAndResidence
      */
     public function setEeaOrSwissNational($eeaOrSwissNational)
@@ -112,7 +112,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getEeaOrSwissNational()
     {
@@ -120,7 +120,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @param boolean $familyMemberEuNational
+     * @param string $familyMemberEuNational
      * @return NationalityAndResidence
      */
     public function setFamilyMemberEuNational($familyMemberEuNational)
@@ -130,7 +130,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getFamilyMemberEuNational()
     {
@@ -138,7 +138,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @param boolean $grantedRefugeeStatus
+     * @param string $grantedRefugeeStatus
      * @return NationalityAndResidence
      */
     public function setGrantedRefugeeStatus($grantedRefugeeStatus)
@@ -148,7 +148,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getGrantedRefugeeStatus()
     {
@@ -192,7 +192,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @param boolean $requireVisa
+     * @param string $requireVisa
      * @return NationalityAndResidence
      */
     public function setRequireVisa($requireVisa)
@@ -202,7 +202,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getRequireVisa()
     {
@@ -228,7 +228,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @param boolean $settledInUk
+     * @param string $settledInUk
      * @return NationalityAndResidence
      */
     public function setSettledInUk($settledInUk)
@@ -238,7 +238,7 @@ class NationalityAndResidence
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getSettledInUk()
     {
