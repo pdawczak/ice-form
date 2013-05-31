@@ -121,7 +121,7 @@ class ResidentialSupportNeedsType extends AbstractRegistrationStep{
                 /** @var $data ResidentialSupportNeeds */
                 $data = $form->getData();
                 $groups = array('default');
-                if($data->getAdditionalNeeds()){
+                if($data->getAdditionalNeeds() === 'Y'){
                     $groups[] = 'has_additional_needs';
                 }
                 return $groups;

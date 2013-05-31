@@ -117,7 +117,7 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
                 /** @var $data DisabilityAndSupportNeeds */
                 $data = $form->getData();
                 $groups = array('Default');
-                if ($data->getAdditionalNeeds()) {
+                if ($data->getAdditionalNeeds() === 'Y') {
                     $groups[] = 'has_additional_needs';
                 }
                 return $groups;
