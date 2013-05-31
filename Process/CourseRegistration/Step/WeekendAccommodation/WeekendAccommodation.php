@@ -238,7 +238,7 @@ class WeekendAccommodation
     {
         $data = [];
         $data['accommodation'] = $this->accommodation;
-        $data['adaptedBedroomRequired'] = $this->adaptedBedroomRequired?1:0;
+        $data['adaptedBedroomRequired'] = $this->adaptedBedroomRequired;
         $data['accommodationRequirements'] = $this->accommodationRequirements;
         $data['accommodationSharingWith'] = $this->accommodationSharingWith;
         $data['bedAndBreakfastAccommodation'] = $this->bedAndBreakfastAccommodation;
