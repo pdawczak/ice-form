@@ -25,8 +25,8 @@ class SupportNeedsType extends AbstractRegistrationStep{
         $builder
             ->add('additionalNeeds', 'choice', array(
                     'choices'=>array(
-                        1=>'Yes',
-                        0=>'No'
+                        'Y'=>'Yes',
+                        'N'=>'No'
                     ),
                     'expanded'=>true,
                     'multiple'=>false,
@@ -40,7 +40,10 @@ class SupportNeedsType extends AbstractRegistrationStep{
             );
 
         $builder->add('shareSupportNeeds', 'choice', array(
-                    'choices'=>array(1=>'Yes', 0=>'No'),
+                    'choices'=>array(
+                        'Y'=>'Yes',
+                        'N'=>'No'
+                    ),
                     'expanded'=>true,
                     'multiple'=>false,
                     'label'=>'Do you consent to this information being passed on to appropriate parties, such as the course administrator or tutor?'
@@ -106,7 +109,7 @@ class SupportNeedsType extends AbstractRegistrationStep{
                 /** @var $data SupportNeeds */
                 $data = $form->getData();
                 $groups = array('default');
-                if($data->getAdditionalNeeds()){
+                if($data->getAdditionalNeeds() === 'Y'){
                     $groups[] = 'has_additional_needs';
                 }
                 return $groups;

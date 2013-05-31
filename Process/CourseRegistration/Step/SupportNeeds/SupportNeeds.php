@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SupportNeeds{
     /**
-     * @var bool
+     * @var string
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
      */
     private $additionalNeeds;
@@ -19,14 +19,14 @@ class SupportNeeds{
     private $additionalNeedsDetail;
 
     /**
-     * @var bool
+     * @var string
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
      */
     private $shareSupportNeeds;
 
 
     /**
-     * @param boolean $additionalNeeds
+     * @param string $additionalNeeds
      * @return SupportNeeds
      */
     public function setAdditionalNeeds($additionalNeeds)
@@ -36,7 +36,7 @@ class SupportNeeds{
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getAdditionalNeeds()
     {
@@ -62,7 +62,7 @@ class SupportNeeds{
     }
 
     /**
-     * @param boolean $shareSupportNeeds
+     * @param string $shareSupportNeeds
      * @return SupportNeeds
      */
     public function setShareSupportNeeds($shareSupportNeeds)
@@ -72,7 +72,7 @@ class SupportNeeds{
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getShareSupportNeeds()
     {
