@@ -10,6 +10,9 @@ use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\MinervaClientBundle\Entity\StepProgress;
+use Ice\MinervaClientBundle\Entity\BookingItem;
+use Ice\MinervaClientBundle\Entity\Booking;
+use Ice\VeritasClientBundle\Entity\Course;
 
 class WeekendAccommodationType extends AbstractRegistrationStep
 {
@@ -55,6 +58,85 @@ class WeekendAccommodationType extends AbstractRegistrationStep
         parent::setDefaultOptions($resolver);
     }
 
+    public function processRequest(Request $request = null)
+    {
+        parent::processRequest($request);
+        if ($this->isContinueClicked() && $this->getForm()->isValid()) {
+            //Update the booking items
+
+            /** @var WeekendAccommodation $weekendAccommodation */
+            $weekendAccommodation = $this->getEntity();
+
+            /** @var Booking $booking */
+            $booking = $this->getParentProcess()->getBooking();
+
+            /** @var BookingItem[] $bookingItems */
+            $bookingItems = $booking->getBookingItems();
+
+            /** @var Course $course */
+            $course = $this->getParentProcess()->getCourse();
+
+            $accommodationSet = false;
+            $bAndBSet = false;
+            $platterSet = false;
+
+            foreach ($bookingItems as $bookingItem) {
+                if ($bookingItem->isCourseAccommodation()) {
+
+                    $courseBookingItem = $this->getParentProcess()->getCourse()->getBookingItemByCode(
+                        $weekendAccommodation->getAccommodation()
+                    );
+
+                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
+                    $accommodationSet = true;
+                } else if ($bookingItem->isAdditionalAccommodation()) {
+
+                    $courseBookingItem = $course->getBookingItemByCode(
+                        $weekendAccommodation->getBedAndBreakfastAccommodation()
+                    );
+
+                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
+                    $bAndBSet = true;
+                } else if ($bookingItem->isEveningPlatter()) {
+
+                    $courseBookingItem = $this->getParentProcess()->getCourse()->getBookingItemByCode(
+                        $weekendAccommodation->getPlatter()
+                    );
+
+                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
+                    $platterSet = true;
+                }
+            }
+
+            $booking->setBookingItems($bookingItems);
+
+            if (!$accommodationSet) {
+                $booking->addBookingItemByCourseBookingItem(
+                    $course->getBookingItemByCode($weekendAccommodation->getAccommodation())
+                );
+            }
+
+            if (!$bAndBSet) {
+                $booking->addBookingItemByCourseBookingItem(
+                    $course->getBookingItemByCode($weekendAccommodation->getBedAndBreakfastAccommodation())
+                );
+            }
+
+            if (!$platterSet) {
+                $booking->addBookingItemByCourseBookingItem(
+                    $course->getBookingItemByCode($weekendAccommodation->getPlatter())
+                );
+            }
+
+            $this->getParentProcess()->getMinervaClient()->updateBooking(
+                $this->getParentProcess()->getRegistrantId(),
+                $this->getParentProcess()->getCourseId(),
+                $booking
+            );
+        }
+    }
+
+
     /**
      * @return string
      */
@@ -77,8 +159,7 @@ class WeekendAccommodationType extends AbstractRegistrationStep
     {
         if ($this->getStepProgress()) {
             $entity = WeekendAccommodation::fromStepProgress($this->getStepProgress());
-        }
-        else{
+        } else {
             $entity = new WeekendAccommodation();
         }
         $this->setEntity($entity);
