@@ -53,8 +53,8 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
             ))
             ->add('additionalNeeds', 'choice', array(
                     'choices' => array(
-                        1 => 'Yes',
-                        0 => 'No'
+                        'Y' => 'Yes',
+                        'N' => 'No'
                     ),
                     'expanded' => true,
                     'multiple' => false,
@@ -68,8 +68,8 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
             )
             ->add('firstFloorAccess', 'choice', array(
                     'choices' => array(
-                        1 => 'I AM able to access the first floor without assistance',
-                        0 => 'I AM NOT able to access the first floor without assistance'
+                        'Y' => 'I AM able to access the first floor without assistance',
+                        'N' => 'I AM NOT able to access the first floor without assistance'
                     ),
                     'expanded' => true,
                     'multiple' => false,
@@ -77,7 +77,10 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
                 )
             )
             ->add('shareSupportNeeds', 'choice', array(
-                    'choices' => array(1 => 'Yes', 0 => 'No'),
+                    'choices' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No'
+                    ),
                     'expanded' => true,
                     'multiple' => false,
                     'label' => 'Do you consent to this information being passed on to appropriate parties, such as the course administrator or tutor?'
