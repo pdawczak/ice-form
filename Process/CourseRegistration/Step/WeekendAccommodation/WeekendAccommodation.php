@@ -12,7 +12,7 @@ class WeekendAccommodation
     private $accommodation;
 
     /**
-     * @var bool
+     * @var string
      */
     private $adaptedBedroomRequired;
 
@@ -114,7 +114,7 @@ class WeekendAccommodation
     }
 
     /**
-     * @param boolean $adaptedBedroomRequired
+     * @param string $adaptedBedroomRequired
      * @return WeekendAccommodation
      */
     public function setAdaptedBedroomRequired($adaptedBedroomRequired)
@@ -124,7 +124,7 @@ class WeekendAccommodation
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getAdaptedBedroomRequired()
     {
@@ -138,7 +138,11 @@ class WeekendAccommodation
     public function setAccommodationRequirementsGroup($accommodationRequirementsGroup)
     {
         if (isset($accommodationRequirementsGroup['adaptedBedroomRequired'])) {
-            $this->setAdaptedBedroomRequired($accommodationRequirementsGroup['adaptedBedroomRequired']?true:false);
+            $this->setAdaptedBedroomRequired(
+                $accommodationRequirementsGroup['adaptedBedroomRequired']?
+                $accommodationRequirementsGroup['adaptedBedroomRequired']:
+                'N'
+            );
         }
         if (isset($accommodationRequirementsGroup['accommodationRequirements'])) {
             $this->setAccommodationRequirements($accommodationRequirementsGroup['accommodationRequirements']);

@@ -16,8 +16,8 @@ class AccommodationRequirementsType extends AbstractType implements FormTypeInte
         $builder
             ->add('adaptedBedroomRequired', 'choice', array(
                 'choices'     => array(
-                    1 => 'Yes',
-                    0 => 'No'
+                    'Y' => 'Yes',
+                    'N' => 'No'
                 ),
                 'expanded'    => true,
                 'multiple'    => false,
@@ -27,7 +27,10 @@ class AccommodationRequirementsType extends AbstractType implements FormTypeInte
                         'message' => 'This question is required.',
                     )),
                     new Choice(array(
-                        'choices' => array(1, 0),
+                        'choices' => array(
+                            'Y',
+                            'N'
+                        ),
                         'message' => 'This question is required.',
                     )),
                 )

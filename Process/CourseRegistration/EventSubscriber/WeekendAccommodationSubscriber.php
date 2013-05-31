@@ -92,14 +92,14 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
 
         if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getAccommodation(), $matches)) {
             list($all, $itemType, $itemId) = $matches;
-            $entity->setAdaptedBedroomRequired(false);
+            $entity->setAdaptedBedroomRequired('N');
             $entity->setAccommodationRequirements(null);
-            $entity->setBedAndBreakfastAccommodation('BANDB-NONE-'.$courseId);
+            $entity->setBedAndBreakfastAccommodation('BANDB-NONE-'.$itemId);
         }
 
         if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getBedAndBreakfastAccommodation(), $matches)) {
             list($all, $itemType, $itemId) = $matches;
-            $entity->setPlatter('PLATTER-NONE-'.$courseId);
+            $entity->setPlatter('PLATTER-NONE-'.$itemId);
         }
 
         if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getPlatter(), $matches)) {
