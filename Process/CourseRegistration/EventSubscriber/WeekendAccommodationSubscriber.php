@@ -164,7 +164,11 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         $accommodationChoice = isset($data['accommodation']) ? $data['accommodation'] : null;
         if (($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false)) {
             $form->add(
-                $this->factory->create(new AccommodationRequirementsType())
+                $this->factory->create(new AccommodationRequirementsType(),
+                [
+                    'adaptedBedroomRequired'=>isset($data['adaptedBedroomRequired'])?$data['adaptedBedroomRequired']:null,
+                    'accommodationRequirements'=>isset($data['accommodationRequirements'])?$data['accommodationRequirements']:null
+                ])
             );
 
             $choices = $this->getBedAndBreakfastAccommodationChoices($accommodationChoice);
