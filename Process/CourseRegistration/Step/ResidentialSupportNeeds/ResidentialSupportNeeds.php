@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ResidentialSupportNeeds{
     /**
-     * @var bool
+     * @var string
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
      */
     private $additionalNeeds;
@@ -19,20 +19,20 @@ class ResidentialSupportNeeds{
     private $additionalNeedsDetail;
 
     /**
-     * @var bool
+     * @var string
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
      */
     private $firstFloorAccess;
 
     /**
-     * @var bool
+     * @var string
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
      */
     private $shareSupportNeeds;
 
 
     /**
-     * @param boolean $additionalNeeds
+     * @param string $additionalNeeds
      * @return ResidentialSupportNeeds
      */
     public function setAdditionalNeeds($additionalNeeds)
@@ -42,7 +42,7 @@ class ResidentialSupportNeeds{
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getAdditionalNeeds()
     {
@@ -68,7 +68,7 @@ class ResidentialSupportNeeds{
     }
 
     /**
-     * @param boolean $firstFloorAccess
+     * @param string $firstFloorAccess
      * @return ResidentialSupportNeeds
      */
     public function setFirstFloorAccess($firstFloorAccess)
@@ -78,7 +78,7 @@ class ResidentialSupportNeeds{
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getFirstFloorAccess()
     {
@@ -86,7 +86,7 @@ class ResidentialSupportNeeds{
     }
 
     /**
-     * @param boolean $shareSupportNeeds
+     * @param string $shareSupportNeeds
      * @return ResidentialSupportNeeds
      */
     public function setShareSupportNeeds($shareSupportNeeds)
@@ -96,7 +96,7 @@ class ResidentialSupportNeeds{
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getShareSupportNeeds()
     {
