@@ -2,41 +2,41 @@
 
 {% block css %}
     {{ parent() }}
-    <style>
-        .order-summary td, .order-summary th {
+    <style type="text/css">
+        #placeorder-process .order-summary td, #placeorder-process .order-summary th {
             font-size: 14px;
             padding: 2px;
             text-align: left;
             width: 100%;
         }
 
-        .header-row {
+        #placeorder-process .header-row {
             border-bottom: 1px solid #ccc;
         }
 
-        .total-column {
+        #placeorder-process .total-column {
             text-align: right;
         }
 
-        .separated {
+        #placeorder-process .separated {
             height: 20px;
         }
 
-        fieldset {
+        #placeorder-process fieldset {
             margin-top: 20px;
         }
 
-        .order-summary .payment-due-date, .order-summary .payment-amount {
+        #placeorder-process .order-summary .payment-due-date, #placeorder-process .order-summary .payment-amount {
             width: inherit;
             white-space: nowrap;
             padding-right: 20px;
         }
 
-        .order-summary .payment-method {
+        #placeorder-process .order-summary .payment-method {
             width: 100%;
         }
 
-        .order-total th {
+        #placeorder-process .order-total th {
             font-size: 16px;
         }
     </style>
