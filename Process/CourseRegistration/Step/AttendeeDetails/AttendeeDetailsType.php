@@ -51,6 +51,8 @@ class AttendeeDetailsType extends AbstractRegistrationStep
         /** @var $entity AttendeeDetails */
         $entity = $this->getEntity();
 
+        $attributes = [];
+
         foreach (array(
                      1 => 'address1',
                      2 => 'address2',
@@ -63,13 +65,24 @@ class AttendeeDetailsType extends AbstractRegistrationStep
                  )
                  as $order => $fieldName) {
             $getter = 'get' . ucfirst($fieldName);
+            $value = $entity->$getter();
+
             $this->getStepProgress()->setFieldValue(
                 $fieldName,
                 $order,
                 $this->getForm()->get($fieldName)->getConfig()->getOption('label'),
-                $entity->$getter()
+                $value
             );
+
+            if (!$value) {
+                $value = '';
+            }
+
+            $attributes[$fieldName] = $value;
         }
+
+        $iceId = $this->getParentProcess()->getRegistrantId();
+        $this->getParentProcess()->getJanusClient()->setAttributes($iceId, $iceId, $attributes);
 
         if ($this->getForm()->isValid()) {
             $this->setComplete();
