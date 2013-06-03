@@ -15,10 +15,10 @@ class AttendeeDetails{
     private $address3;
 
     /** @var string */
-    private $address4;
+    private $town;
 
     /** @var string */
-    private $city;
+    private $county;
 
     /** @var string */
     private $country;
@@ -84,39 +84,39 @@ class AttendeeDetails{
     }
 
     /**
-     * @param string $address4
+     * @param string $county
      * @return AttendeeDetails
      */
-    public function setAddress4($address4)
+    public function setCounty($county)
     {
-        $this->address4 = $address4;
+        $this->county = $county;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getAddress4()
+    public function getCounty()
     {
-        return $this->address4;
+        return $this->county;
     }
 
     /**
-     * @param string $city
+     * @param string $town
      * @return AttendeeDetails
      */
-    public function setCity($city)
+    public function setTown($town)
     {
-        $this->city = $city;
+        $this->town = $town;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getCity()
+    public function getTown()
     {
-        return $this->city;
+        return $this->town;
     }
 
     /**
@@ -182,8 +182,8 @@ class AttendeeDetails{
         $instance->setAddress1($instance->getDeserializedValueByFieldName($stepProgress, 'address1'));
         $instance->setAddress2($instance->getDeserializedValueByFieldName($stepProgress, 'address2'));
         $instance->setAddress3($instance->getDeserializedValueByFieldName($stepProgress, 'address3'));
-        $instance->setAddress4($instance->getDeserializedValueByFieldName($stepProgress, 'address4'));
-        $instance->setCity($instance->getDeserializedValueByFieldName($stepProgress, 'city'));
+        $instance->setTown($instance->getDeserializedValueByFieldName($stepProgress, 'town'));
+        $instance->setCounty($instance->getDeserializedValueByFieldName($stepProgress, 'county'));
         $instance->setPostCode($instance->getDeserializedValueByFieldName($stepProgress, 'postCode'));
         $instance->setCountry($instance->getDeserializedValueByFieldName($stepProgress, 'country'));
         $instance->setTelephone($instance->getDeserializedValueByFieldName($stepProgress, 'telephone'));

@@ -26,8 +26,8 @@ class AttendeeDetailsType extends AbstractRegistrationStep
             ->add('address1', 'text', array('label' => 'Address line 1', 'required' => true, 'constraints' => array(new NotBlank())))
             ->add('address2', 'text', array('label' => 'Address line 2', 'required' => false))
             ->add('address3', 'text', array('label' => 'Address line 3', 'required' => false))
-            ->add('address4', 'text', array('label' => 'Address line 4', 'required' => false))
-            ->add('city', 'text', array('label' => 'City', 'required' => true, 'constraints' => array(new NotBlank())))
+            ->add('town', 'text', array('label' => 'City', 'required' => true, 'constraints' => array(new NotBlank())))
+            ->add('county', 'text', array('label' => 'County', 'required' => false))
             ->add('postCode', 'text', array('label' => 'Post code', 'required' => true, 'constraints' => array(new NotBlank())))
             ->add('country', 'country', array('label' => 'Country', 'required' => true, 'constraints' => array(new NotBlank())))
             ->add('telephone', 'text', array('label' => 'Telephone', 'required' => true, 'constraints' => array(new NotBlank())));
@@ -57,8 +57,8 @@ class AttendeeDetailsType extends AbstractRegistrationStep
                      1 => 'address1',
                      2 => 'address2',
                      3 => 'address3',
-                     4 => 'address4',
-                     5 => 'city',
+                     4 => 'town',
+                     5 => 'county',
                      6 => 'postCode',
                      7 => 'country',
                      8 => 'telephone',
