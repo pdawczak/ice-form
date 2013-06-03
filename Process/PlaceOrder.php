@@ -12,6 +12,7 @@ use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
 use Ice\VeritasClientBundle\Entity\Course;
 use Ice\JanusClientBundle\Entity\User;
+use Ice\MercuryClientBundle\Entity\CustomerInterface;
 
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +33,7 @@ class PlaceOrder extends AbstractProcess
     /** @var string */
     private $customerId;
 
-    /** @var User */
+    /** @var \Ice\MercuryClientBundle\Entity\CustomerInterface */
     private $customer;
 
     /** @var AcademicInformation[] */
@@ -270,7 +271,7 @@ class PlaceOrder extends AbstractProcess
     }
 
     /**
-     * @param \Ice\JanusClientBundle\Entity\User $customer
+     * @param \Ice\MercuryClientBundle\Entity\CustomerInterface $customer
      * @return PlaceOrder
      */
     public function setCustomer($customer)
@@ -280,12 +281,13 @@ class PlaceOrder extends AbstractProcess
     }
 
     /**
-     * @return \Ice\JanusClientBundle\Entity\User
+     * @throws \LogicException
+     * @return \Ice\MercuryClientBundle\Entity\CustomerInterface
      */
     public function getCustomer()
     {
-        if (!$this->customer && $this->getCustomerId()) {
-            $this->setCustomer($this->getJanusClient()->getUser($this->getCustomerId()));
+        if (!$this->customer) {
+            throw new \LogicException("getCustomer called but Customer has not been set");
         }
         return $this->customer;
     }
