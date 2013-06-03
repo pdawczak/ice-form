@@ -4,6 +4,9 @@ namespace Ice\FormBundle\Service;
 
 use Ice\FormBundle\Process\CourseRegistration;
 use Ice\FormBundle\Process\PlaceOrder;
+use Ice\FormBundle\Process\MakePayment;
+
+use Ice\MercuryClientBundle\Entity\Order;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader as TwigLoader;
@@ -80,6 +83,24 @@ class FormService{
             ->setPaymentPlanService($this->getContainer()->get('mercury.payment_plans'))
         ;
         return $placeOrder;
+    }
+
+    /**
+     * @param \Ice\MercuryClientBundle\Entity\Order $order
+     * @return MakePayment
+     */
+    public function makePayment(Order $order){
+        $makePayment = new MakePayment();
+        $makePayment
+            ->setOrder($order)
+            ->setFormFactory($this->getFormFactory())
+            ->setTemplating($this->getTemplating())
+            ->setVeritasClient($this->getVeritasClient())
+            ->setJanusClient($this->getJanusClient())
+            ->setMinervaClient($this->getMinervaClient())
+            ->setMercuryClient($this->getMercuryClient())
+        ;
+        return $makePayment;
     }
 
     /**

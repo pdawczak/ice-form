@@ -95,8 +95,7 @@ class PlaceOrder extends AbstractProcess
         if (null === $this->steps) {
             $this->steps = array(
                 new Step\ChoosePlans\ChoosePlansType($this),
-                new Step\Confirm\ConfirmType($this),
-                new Step\MakePayment\MakePaymentType($this)
+                new Step\Confirm\ConfirmType($this)
             );
         }
         return $this->steps;

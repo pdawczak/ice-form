@@ -1,7 +1,7 @@
 <?php
-namespace Ice\FormBundle\Process\PlaceOrder\Step\MakePayment;
+namespace Ice\FormBundle\Process\MakePayment\Step\MakePayment;
 
-use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
+use Ice\FormBundle\Process\MakePayment\Step\AbstractType;
 use Ice\MercuryClientBundle\Entity\TransactionRequest;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -405,12 +405,12 @@ class MakePaymentType extends AbstractType
     public function renderForm(array $vars = array()){
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
-        return $this->getParentProcess()->getTemplating()->render('PlaceOrder/Step/PaymentReceived.form.html.twig', $vars);
+        return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/PaymentReceived.form.html.twig', $vars);
     }
 
     public function renderReceipt() {
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
-        return $this->getParentProcess()->getTemplating()->render('PlaceOrder/Step/MakePayment.receipt.html.twig', $vars);
+        return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/MakePayment.receipt.html.twig', $vars);
     }
 }
