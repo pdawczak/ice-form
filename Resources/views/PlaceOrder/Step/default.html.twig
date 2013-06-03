@@ -1,0 +1,20 @@
+{% form_theme form 'fields.html.twig' %}
+
+{% block css %}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+<form action="{{ url|e }}" method="post" class="form-horizontal" id="placeorder-process">
+    {% block form_content %}
+        {{ form_widget(form, {form_type: 'horizontal'}) }}
+    {% endblock %}
+        {{ form_rest(form, {form_type: 'horizontal'}) }}
+    <div style="clear:both"></div>
+    <div class="btn-group pull-right">
+    {% block buttons %}
+        <input type="submit" class="btn btn-primary" value="Proceed" />
+    {% endblock %}
+    </div>
+</form>
