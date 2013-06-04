@@ -251,7 +251,10 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
 
         foreach ($this->course->getBookingItems() as $item) {
             if ($category == $item->getCategory()) {
-                $options[$item->getCode()] = $item->getTitle();
+                $options[$item->getCode()] = [
+                    'label'=>$item->getTitle(),
+                    'enabled'=>$item->isInStock()
+                ];
             }
         }
 
@@ -285,7 +288,10 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
                     false !== strpos($item->getCode(), '-NONE-')
                 )
             ) {
-                $options[$item->getCode()] = $item->getTitle();
+                $options[$item->getCode()] = [
+                    'label' => $item->getTitle(),
+                    'enabled' => true
+                ];
             }
         }
 
@@ -297,26 +303,30 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
      * @param string $name        Name of the field
      * @param array $choices
      * @param string $label
-     * @param null|string $emptyLabel
-     * @param null|string $emptyValue
      *
      * @return \Symfony\Component\Form\FormInterface
      */
-    private function createFormForItemType($name, array $choices, $label, $emptyLabel = null, $emptyValue = 'NONE')
+    private function createFormForItemType($name, array $choices, $label)
     {
-        if ($emptyLabel) {
-            array_unshift($choices, array($emptyValue => $emptyLabel));
+        $enabledChoiceKeys = [];
+        $choiceKeysLabels = [];
+
+        foreach ($choices as $key => $choice) {
+            if ($choice['enabled']) {
+                $enabledChoiceKeys[] = $key;
+            }
+            $choiceKeysLabels[$key] = $choice['label'];
         }
 
         $constraints = array(
             new Choice(array(
-                'choices' => array_keys($choices),
+                'choices' => $enabledChoiceKeys,
             ))
         );
 
         $options = array(
             'label' => $label,
-            'choices' => $choices,
+            'choices' => $choiceKeysLabels,
             'constraints' => isset($constraints) ? $constraints : array(),
             'required' => false,
             'expanded' => true,
