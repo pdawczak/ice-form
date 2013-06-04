@@ -14,20 +14,22 @@ class ConfirmType extends AbstractType
     /** @var Order */
     private $order;
 
-    public function getTemplate(){
-        if(count($this->order->getSuborders())>0) {
+    public function getTemplate()
+    {
+        if (count($this->order->getSuborders()) > 0) {
             return 'Confirm.html.twig';
-        }
-        else{
+        } else {
             return 'OrderEmpty.html.twig';
         }
     }
 
-    public function getTitle(){
+    public function getTitle()
+    {
         return 'Confirm order';
     }
 
-    public function isAvailable(){
+    public function isAvailable()
+    {
         return true;
     }
 
@@ -38,11 +40,13 @@ class ConfirmType extends AbstractType
         return parent::render($vars);
     }
 
-    public function isComplete(){
+    public function isComplete()
+    {
         return $this->getStepProgress()->isComplete();
     }
 
-    public function processRequest(Request $request){
+    public function processRequest(Request $request)
+    {
         if ($this->getParentProcess()->getProgress()->getConfirmedOrder()) {
             return;
         }
@@ -59,10 +63,12 @@ class ConfirmType extends AbstractType
             return;
         }
         $builder = $this->getParentProcess()->getMercuryClient()->getNewOrderBuilder();
-        $builder->setCustomerByAccount($this->getParentProcess()->getCustomer());
+
+        $builder->setCustomer($this->getParentProcess()->getCustomer());
+
         $progress = $this->getParentProcess()->getProgress();
-        foreach($this->getParentProcess()->getBookingsAvailableToOrder() as $booking){
-            if($planChoice = $progress->getPlanChoiceByBookingId($booking->getId())){
+        foreach ($this->getParentProcess()->getBookingsAvailableToOrder() as $booking) {
+            if ($planChoice = $progress->getPlanChoiceByBookingId($booking->getId())) {
                 $course = $this->getParentProcess()->getVeritasClient()
                     ->getCourse($booking->getAcademicInformation()->getCourseId());
 
@@ -77,14 +83,12 @@ class ConfirmType extends AbstractType
 
                 try {
                     $builder->addNewBooking($booking, $paymentPlan, $course);
-                }
-                catch (OrderBuilderCapacityException $mercuryCapacityException) {
+                } catch (OrderBuilderCapacityException $mercuryCapacityException) {
                     $e = (new CapacityException('Capacity problems'))
                         ->setBookingItem($mercuryCapacityException->getBookingItem())
                         ->setCourseItem($mercuryCapacityException->getCourseItem())
                         ->setBooking($booking)
-                        ->setCourse($course)
-                    ;
+                        ->setCourse($course);
 
                     throw $e;
                 }
@@ -94,7 +98,13 @@ class ConfirmType extends AbstractType
         $this->setPrepared();
     }
 
-    public function getReference(){
+    private function getCustomer()
+    {
+
+    }
+
+    public function getReference()
+    {
         return 'confirm';
     }
 }
