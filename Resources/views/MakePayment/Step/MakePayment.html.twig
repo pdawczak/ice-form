@@ -1,4 +1,4 @@
-{% extends "MakePayment/Step/default.html.twig" %}
+{% extends "PlaceOrder/Step/default.html.twig" %}
 
 {% block form_content %}
     {{ form_widget(form) }}
@@ -89,7 +89,7 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        {% include "IceFormBundle:MakePayment/Step:MakePayment.js.twig" %}
+        {% include "IceFormBundle:PlaceOrder/Step:MakePayment.js.twig" with {'reference': order.reference } %}
     </script>
 {% endblock %}
 
