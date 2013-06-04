@@ -37,7 +37,10 @@ class PersonalDetails{
     /** @var string */
     private $sex;
 
-    /** @var \DateTime */
+    /** @var \DateTime
+     *  @Assert\Date(groups={"new_user"}, message="Please provide your date of birth")
+     *  @Assert\NotBlank(groups={"new_user"}, message="Please provide your date of birth")
+     */
     private $dob;
 
     /**
