@@ -151,9 +151,6 @@ class PlaceOrder extends AbstractProcess
                         }
                     }
                     if ($wholeProcessComplete) {
-                        if ($this->getProgress()->getCompleted() === null) {
-                            $this->getProgress()->setCompleted(new \DateTime());
-                        }
                         return;
                     } else {
                         try {
@@ -248,7 +245,12 @@ class PlaceOrder extends AbstractProcess
      */
     public function isComplete()
     {
-        return false;
+        foreach ($this->getSteps() as $step) {
+            if (!$step->isComplete()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
