@@ -299,7 +299,7 @@ class MakePaymentType extends AbstractType
 
     public function render(array $vars = array())
     {
-        $vars['order'] = $this->getParentProcess()->getProgress()->getConfirmedOrder();
+        $vars['order'] = $this->getParentProcess()->getOrder();
         $customer = $this->getParentProcess()->getCustomer();
         $vars['transactionRequest'] = $this->request;
         $vars['iframeUrl'] = $this->request->getIframeUrl(array(
@@ -347,7 +347,7 @@ class MakePaymentType extends AbstractType
         else {
             $this->request = $this->getParentProcess()->getMercuryClient()
                 ->requestOutstandingOnlineTransactionsByOrder(
-                    $this->getParentProcess()->getProgress()->getConfirmedOrder()
+                    $this->getParentProcess()->getOrder()
                 );
 
             $this->getParentProcess()->getProgress()->setTransactionRequestId(

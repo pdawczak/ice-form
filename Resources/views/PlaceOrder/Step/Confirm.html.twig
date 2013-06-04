@@ -49,7 +49,10 @@
         {% if order.customerAddress2 %} {{ order.customerAddress2 }} <br/> {% endif %}
         {% if order.customerAddress3 %} {{ order.customerAddress3 }} <br/> {% endif %}
         {% if order.customerAddress4 %} {{ order.customerAddress4 }} <br/> {% endif %}
+        {% if order.customerTown %} {{ order.customerTown }} <br/> {% endif %}
+        {% if order.customerCounty %} {{ order.customerCounty }} <br/> {% endif %}
         {% if order.customerPostcode %} {{ order.customerPostcode }} <br/> {% endif %}
+        {% if order.customerCountry %} {{ order.customerCountry }} <br/> {% endif %}
     </fieldset>
 
     <fieldset><legend>Your courses</legend>

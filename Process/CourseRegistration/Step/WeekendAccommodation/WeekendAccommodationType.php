@@ -13,6 +13,7 @@ use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\MinervaClientBundle\Entity\Booking;
 use Ice\VeritasClientBundle\Entity\Course;
+use Symfony\Component\Form\FormView;
 
 class WeekendAccommodationType extends AbstractRegistrationStep
 {
@@ -195,5 +196,35 @@ class WeekendAccommodationType extends AbstractRegistrationStep
         return parent::getFieldDescription($fieldName);
     }
 
+    /**
+     * Disable radio buttons for items which are out of stock
+     *
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::finishView($view, $form, $options);
 
+        $course = $this->getParentProcess()->getCourse();
+
+        foreach (
+            [
+                'accommodation' => [ 'unavailableMessage' => 'Out of stock' ],
+                'bedAndBreakfastAccommodation' => [ 'unavailableMessage' => 'Out of stock' ],
+                'platter' => [ 'unavailableMessage' => 'Out of stock' ]
+            ] as $fieldName => $options) {
+            if (!isset($view->children[$fieldName])) {
+                continue;
+            }
+            foreach ($view->children[$fieldName]->children as $child) {
+                $code = $child->vars['value'];
+                if (!$course->getBookingItemByCode($code)->isInStock()) {
+                    $child->vars['label'] = $options['unavailableMessage'].' - '.$child->vars['label'];
+                    $child->vars['attr']['disabled'] = 'disabled';
+                }
+            }
+        }
+    }
 }
