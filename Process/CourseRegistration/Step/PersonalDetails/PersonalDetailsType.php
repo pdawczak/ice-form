@@ -75,6 +75,23 @@ class PersonalDetailsType extends AbstractRegistrationStep
                     'data' => $dob->format('d/m/Y'),
                     'mapped' => false));
             }
+
+            if (null === ($sex = $this->getParentProcess()->getRegistrant()->getAttributeValueByName('sex',null))) {
+                $builder->add('sex', 'choice', array(
+                    'label' => 'Sex',
+                    'multiple' => false,
+                    'expanded' => true,
+                    'choices' => array(
+                        'm' => 'Male',
+                        'f' => 'Female'
+                    ),
+                ));
+            } else {
+                $builder->add('sex', 'display', array(
+                    'label' => 'Sex',
+                    'data' => $sex == 'm' ? 'Male' : 'Female',
+                    'mapped' => false));
+            }
         } else {
             $builder
                 ->add('title', 'choice', array(
@@ -117,6 +134,16 @@ class PersonalDetailsType extends AbstractRegistrationStep
                         'year' => 'Year',
                     ),
                 ))
+                ->add('sex', 'choice', array(
+                    'label' => 'Sex',
+                    'multiple' => false,
+                    'expanded' => true,
+                    'required' => false,
+                    'choices' => array(
+                        'm' => 'Male',
+                        'f' => 'Female'
+                    ),
+                ))
                 ->add('plainPassword', 'repeated', array(
                     'type' => 'password',
                     'invalid_message' => 'The password fields must match',
@@ -127,15 +154,6 @@ class PersonalDetailsType extends AbstractRegistrationStep
 
 
         $builder
-            ->add('sex', 'choice', array(
-                'label' => 'Sex',
-                'multiple' => false,
-                'expanded' => true,
-                'choices' => array(
-                    'm' => 'Male',
-                    'f' => 'Female'
-                ),
-            ))
             ->add('previousContact', 'choice', array(
                 'label' => 'Have you previously contacted (even for an enquiry), applied or studied with the University of Cambridge and/or the Institute of Continuing Education (ICE)?',
                 'choices' => array(
@@ -259,6 +277,15 @@ class PersonalDetailsType extends AbstractRegistrationStep
                         $this->getParentProcess()->setRegistrantId($newUser->getUsername());
                     }
 
+                    //Set personal attributes against the user
+                    $this->getParentProcess()->getJanusClient()->setAttributes(
+                        $newUser->getUsername(),
+                        $newUser->getUsername(),
+                        [
+                            'sex'=>$data->getSex()
+                        ]
+                    );
+
                     $progress = $this->getParentProcess()->getProgress(true);
                     foreach ($progress->getStepProgresses() as $stepProgress) {
                         if ($stepProgress->getStepName() === $this->getReference()) {
@@ -291,6 +318,15 @@ class PersonalDetailsType extends AbstractRegistrationStep
                         'dob' => $data->getDob() ? $data->getDob()->format('Y-m-d') : null,
                     ));
                 }
+
+                //Set personal attributes against the user
+                $this->getParentProcess()->getJanusClient()->setAttributes(
+                    $existingUser->getUsername(),
+                    $existingUser->getUsername(),
+                    [
+                        'sex'=>$data->getSex()
+                    ]
+                );
             }
         }
 
@@ -356,6 +392,9 @@ class PersonalDetailsType extends AbstractRegistrationStep
                 else {
                     if (null === $data->getDob()) {
                         $groups[] = 'require_dob';
+                    }
+                    if (null === $data->getSex()) {
+                        $groups[] = 'require_sex';
                     }
                 }
                 return $groups;

@@ -34,7 +34,11 @@ class PersonalDetails{
     /** @var string */
     private $middleNames;
 
-    /** @var string */
+    /**
+     * @var string
+     * @Assert\Choice(groups={"new_user", "require_sex"}, choices = {"m", "f"}, message = "Please indicate your gender.")
+     * @Assert\NotBlank(groups={"new_user", "require_sex"}, message = "Please indicate your gender.")
+     */
     private $sex;
 
     /** @var \DateTime
@@ -271,6 +275,7 @@ class PersonalDetails{
             ->setLastNames($user->getLastNames())
             ->setEmail($user->getEmail())
             ->setDob($user->getDob())
+            ->setSex($user->getAttributeValueByName('sex', null))
         ;
 
         if(null !== $step) {
