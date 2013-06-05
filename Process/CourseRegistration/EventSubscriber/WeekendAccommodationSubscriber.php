@@ -161,6 +161,9 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             )
         );
 
+
+        $bAndBChoices = [];
+
         $accommodationChoice = isset($data['accommodation']) ? $data['accommodation'] : null;
         if (($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false)) {
             $form->add(
@@ -171,14 +174,16 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
                 ])
             );
 
-            $choices = $this->getBedAndBreakfastAccommodationChoices($accommodationChoice);
-            $form->add(
-                $this->createFormForItemType(
-                    'bedAndBreakfastAccommodation',
-                    $choices,
-                    'Bed and breakfast accommodation'
-                )
-            );
+            $bAndBChoices = $this->getBedAndBreakfastAccommodationChoices($accommodationChoice);
+            if (count($bAndBChoices)) {
+                $form->add(
+                    $this->createFormForItemType(
+                        'bedAndBreakfastAccommodation',
+                        $bAndBChoices,
+                        'Bed and breakfast accommodation'
+                    )
+                );
+            }
 
             // Double or twin selected so we need to find out who they are sharing the room with
             if (false !== strpos($accommodationChoice, 'DOUBLE') || false !== strpos($accommodationChoice, 'TWIN')) {
@@ -199,7 +204,9 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             isset($data['bedAndBreakfastAccommodation']) ? $data['bedAndBreakfastAccommodation'] : null;
 
         if (($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false) &&
-            ($bedAndBreakfastAccommodationChoice !== null && strpos($bedAndBreakfastAccommodationChoice, '-NONE-') === false)
+            ($bedAndBreakfastAccommodationChoice !== null && strpos($bedAndBreakfastAccommodationChoice, '-NONE-') === false &&
+            count($bAndBChoices)
+            )
         ) {
             $choices = $this->getChoicesForCategory(self::CATEGORY_PLATTER);
 
@@ -215,7 +222,8 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         $platterChoice = isset($data['platter']) ? $data['platter'] : null;
         if (($platterChoice !== null && strpos($platterChoice, '-NONE-') === false) &&
             ($bedAndBreakfastAccommodationChoice !== null && strpos($bedAndBreakfastAccommodationChoice, '-NONE-') === false) &&
-            ($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false)
+            ($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false) &&
+            count($bAndBChoices)
         ) {
             $form->add(
                 $this->factory->createNamed('platterOption', 'choice', null, array(

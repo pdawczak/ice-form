@@ -118,15 +118,17 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             }
 
             if (!$bAndBSet) {
-                $booking->addBookingItemByCourseBookingItem(
-                    $course->getBookingItemByCode($weekendAccommodation->getBedAndBreakfastAccommodation())
-                );
+                $bAndBItem = $course->getBookingItemByCode($weekendAccommodation->getBedAndBreakfastAccommodation());
+                if ($bAndBItem) {
+                    $booking->addBookingItemByCourseBookingItem($bAndBItem);
+                }
             }
 
             if (!$platterSet) {
-                $booking->addBookingItemByCourseBookingItem(
-                    $course->getBookingItemByCode($weekendAccommodation->getPlatter())
-                );
+                $platterItem = $course->getBookingItemByCode($weekendAccommodation->getPlatter());
+                if ($platterItem) {
+                    $booking->addBookingItemByCourseBookingItem($platterItem);
+                }
             }
 
             $this->getParentProcess()->getMinervaClient()->updateBooking(
