@@ -23,11 +23,11 @@ class MarketingInformationType extends AbstractRegistrationStep{
                 'label'=>'How did you hear about this course? Please select all that apply.',
                 'choices'=>array(
                     'Advert'=>'Advert',
-                    'Another course'=>'Another course',
-                    'Brochure'=>'Brochure',
-                    'ICE website'=>'ICE website',
-                    'Press article'=>'Press article',
-                    'Recommendation'=>'Recommendation',
+                    'Another course'=>'Attended previous courses',
+                    'Brochure'=>'Institute brochure',
+                    'ICE website'=>'Institute website',
+                    'Press article'=>'Newspaper or magazine article',
+                    'Recommendation'=>'Personal recommendation',
                     'Other'=>'Other',
                 )
             ))
