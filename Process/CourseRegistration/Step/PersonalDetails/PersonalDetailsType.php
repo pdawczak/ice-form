@@ -353,6 +353,11 @@ class PersonalDetailsType extends AbstractRegistrationStep
                 if (!$data->getRegistrantId()) {
                     $groups[] = 'new_user';
                 }
+                else {
+                    if (null === $data->getDob()) {
+                        $groups[] = 'require_dob';
+                    }
+                }
                 return $groups;
             }
         ));
