@@ -26,7 +26,7 @@ class AttendeeDetailsType extends AbstractRegistrationStep
             ->add('address1', 'text', array('label' => 'Address line 1', 'required' => true, 'constraints' => array(new NotBlank())))
             ->add('address2', 'text', array('label' => 'Address line 2', 'required' => false))
             ->add('address3', 'text', array('label' => 'Address line 3', 'required' => false))
-            ->add('town', 'text', array('label' => 'City', 'required' => true, 'constraints' => array(new NotBlank())))
+            ->add('town', 'text', array('label' => 'Town', 'required' => true, 'constraints' => array(new NotBlank())))
             ->add('county', 'text', array('label' => 'County', 'required' => false))
             ->add('postCode', 'text', array('label' => 'Post code', 'required' => true, 'constraints' => array(new NotBlank())))
             ->add('country', 'country', array('label' => 'Country', 'required' => true, 'constraints' => array(new NotBlank())))
