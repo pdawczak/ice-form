@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class WeekendAccommodationSubscriber implements EventSubscriberInterface
 {
@@ -329,6 +330,9 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         $constraints = array(
             new Choice(array(
                 'choices' => $enabledChoiceKeys,
+            )),
+            new NotNull(array(
+                'message' => 'Please choose an option.'
             ))
         );
 

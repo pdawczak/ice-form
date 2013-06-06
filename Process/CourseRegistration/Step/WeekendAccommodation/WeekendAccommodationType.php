@@ -77,60 +77,46 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             /** @var Course $course */
             $course = $this->getParentProcess()->getCourse();
 
-            $accommodationSet = false;
-            $bAndBSet = false;
-            $platterSet = false;
+            //Remove all items
+            $newBookingItems = [];
 
+            //Add back any items we're not responsible for
             foreach ($bookingItems as $bookingItem) {
-                if ($bookingItem->isCourseAccommodation()) {
-
-                    $courseBookingItem = $this->getParentProcess()->getCourse()->getBookingItemByCode(
-                        $weekendAccommodation->getAccommodation()
-                    );
-
-                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
-                    $accommodationSet = true;
-                } else if ($bookingItem->isAdditionalAccommodation()) {
-
-                    $courseBookingItem = $course->getBookingItemByCode(
-                        $weekendAccommodation->getBedAndBreakfastAccommodation()
-                    );
-
-                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
-                    $bAndBSet = true;
-                } else if ($bookingItem->isEveningPlatter()) {
-
-                    $courseBookingItem = $this->getParentProcess()->getCourse()->getBookingItemByCode(
-                        $weekendAccommodation->getPlatter()
-                    );
-
-                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
-                    $platterSet = true;
+                if (
+                    !$bookingItem->isCourseAccommodation() &&
+                    !$bookingItem->isAdditionalAccommodation() &&
+                    !$bookingItem->isEveningPlatter()
+                ) {
+                    $newBookingItems[] = $bookingItem;
                 }
             }
 
-            $booking->setBookingItems($bookingItems);
+            $booking->setBookingItems($newBookingItems);
 
-            if (!$accommodationSet) {
+            //Add back any items which we are responsible for
+            if ($weekendAccommodation->getAccommodation()) {
                 $booking->addBookingItemByCourseBookingItem(
                     $course->getBookingItemByCode($weekendAccommodation->getAccommodation())
                 );
-            }
 
-            if (!$bAndBSet) {
-                $bAndBItem = $course->getBookingItemByCode($weekendAccommodation->getBedAndBreakfastAccommodation());
-                if ($bAndBItem) {
-                    $booking->addBookingItemByCourseBookingItem($bAndBItem);
+                if($weekendAccommodation->getBedAndBreakfastAccommodation()) {
+                    $booking->addBookingItemByCourseBookingItem(
+                        $course->getBookingItemByCode(
+                            $weekendAccommodation->getBedAndBreakfastAccommodation()
+                        )
+                    );
+
+                    if($weekendAccommodation->getPlatter()) {
+                        $booking->addBookingItemByCourseBookingItem(
+                            $course->getBookingItemByCode(
+                                $weekendAccommodation->getPlatter()
+                            )
+                        );
+                    }
                 }
             }
 
-            if (!$platterSet) {
-                $platterItem = $course->getBookingItemByCode($weekendAccommodation->getPlatter());
-                if ($platterItem) {
-                    $booking->addBookingItemByCourseBookingItem($platterItem);
-                }
-            }
-
+            //Persist the new items
             $this->getParentProcess()->getMinervaClient()->updateBooking(
                 $this->getParentProcess()->getRegistrantId(),
                 $this->getParentProcess()->getCourseId(),
