@@ -2,7 +2,6 @@
 namespace Ice\FormBundle\Process;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Ice\FormBundle\Process\CourseRegistration\Exception\CapacityException;
 use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
 use Ice\MinervaClientBundle\Entity\Booking;
@@ -322,7 +321,14 @@ class CourseRegistration extends AbstractProcess
         if (!$this->getProgress()) {
             return false;
         }
-        return $this->getProgress()->getCompleted() !== null;
+
+        foreach ($this->getProgress()->getStepProgresses() as $stepProgress) {
+            if ($stepProgress->getCompleted() === null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -455,7 +461,7 @@ class CourseRegistration extends AbstractProcess
             return $this->getBooking();
         } else {
             $ai = $this->getAcademicInformation(true);
-            if(null===$ai) {
+            if (null === $ai) {
                 $this->getMinervaClient()->createAcademicInformation(
                     $this->getRegistrantId(),
                     $this->getCourseId(),
@@ -567,5 +573,20 @@ class CourseRegistration extends AbstractProcess
     public function getAjaxResponse()
     {
         return $this->ajaxResponse;
+    }
+
+    /**
+     * @param BookingItem $bookingItem
+     * @return bool
+     */
+    public function invalidateBookingItem(BookingItem $bookingItem)
+    {
+        if (!$this->getProgress()) {
+            return false;
+        }
+
+        foreach ($this->getSteps() as $step) {
+            $step->invalidateBookingItem($bookingItem);
+        }
     }
 }

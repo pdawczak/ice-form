@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation;
 
 use Ice\FormBundle\Process\CourseRegistration\EventSubscriber\WeekendAccommodationSubscriber;
+use Ice\MinervaClientBundle\Entity\Category;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,8 +11,8 @@ use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\MinervaClientBundle\Entity\StepProgress;
-use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\MinervaClientBundle\Entity\Booking;
+use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\VeritasClientBundle\Entity\Course;
 use Symfony\Component\Form\FormView;
 
@@ -99,14 +100,14 @@ class WeekendAccommodationType extends AbstractRegistrationStep
                     $course->getBookingItemByCode($weekendAccommodation->getAccommodation())
                 );
 
-                if($weekendAccommodation->getBedAndBreakfastAccommodation()) {
+                if ($weekendAccommodation->getBedAndBreakfastAccommodation()) {
                     $booking->addBookingItemByCourseBookingItem(
                         $course->getBookingItemByCode(
                             $weekendAccommodation->getBedAndBreakfastAccommodation()
                         )
                     );
 
-                    if($weekendAccommodation->getPlatter()) {
+                    if ($weekendAccommodation->getPlatter()) {
                         $booking->addBookingItemByCourseBookingItem(
                             $course->getBookingItemByCode(
                                 $weekendAccommodation->getPlatter()
@@ -199,9 +200,9 @@ class WeekendAccommodationType extends AbstractRegistrationStep
 
         foreach (
             [
-                'accommodation' => [ 'unavailableMessage' => 'Out of stock' ],
-                'bedAndBreakfastAccommodation' => [ 'unavailableMessage' => 'Out of stock' ],
-                'platter' => [ 'unavailableMessage' => 'Out of stock' ]
+                'accommodation' => ['unavailableMessage' => 'Out of stock'],
+                'bedAndBreakfastAccommodation' => ['unavailableMessage' => 'Out of stock'],
+                'platter' => ['unavailableMessage' => 'Out of stock']
             ] as $fieldName => $options) {
             if (!isset($view->children[$fieldName])) {
                 continue;
@@ -209,10 +210,30 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             foreach ($view->children[$fieldName]->children as $child) {
                 $code = $child->vars['value'];
                 if (!$course->getBookingItemByCode($code)->isInStock()) {
-                    $child->vars['label'] = $options['unavailableMessage'].' - '.$child->vars['label'];
+                    $child->vars['label'] = $options['unavailableMessage'] . ' - ' . $child->vars['label'];
                     $child->vars['attr']['disabled'] = 'disabled';
                 }
             }
         }
+    }
+
+    /**
+     * If an item we're responsible for becomes invalid, mark the step incomplete
+     *
+     * @param BookingItem $item
+     */
+    public function invalidateBookingItem(BookingItem $item)
+    {
+        if (
+            $item->isCourseAccommodation() ||
+            $item->isEveningPlatter() ||
+            $item->isAdditionalAccommodation()
+        ) {
+            if ($this->isComplete()) {
+                $this->setComplete(false);
+                $this->save();
+            }
+        }
+        parent::invalidateBookingItem($item);
     }
 }
