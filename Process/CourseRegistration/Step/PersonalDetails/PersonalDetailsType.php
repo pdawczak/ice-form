@@ -352,6 +352,12 @@ class PersonalDetailsType extends AbstractRegistrationStep
     }
 
 
+    public function getJavaScriptTemplate()
+    {
+        return 'PersonalDetails.js.twig';
+    }
+
+
     /**
      * Sets the entity
      */
