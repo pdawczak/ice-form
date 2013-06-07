@@ -218,9 +218,10 @@ class WeekendAccommodationType extends AbstractRegistrationStep
     }
 
     /**
-     * If an item we're responsible for becomes invalid, mark the step incomplete
+     * If an item we're responsible for becomes invalid, mark the step incomplete and return true
      *
      * @param BookingItem $item
+     * @return bool
      */
     public function invalidateBookingItem(BookingItem $item)
     {
@@ -233,7 +234,8 @@ class WeekendAccommodationType extends AbstractRegistrationStep
                 $this->setComplete(false);
                 $this->save();
             }
+            return true;
         }
-        parent::invalidateBookingItem($item);
+        return parent::invalidateBookingItem($item);
     }
 }

@@ -429,9 +429,13 @@ abstract class AbstractRegistrationStep extends AbstractType
      * Called by the parent process when the booking item specified is no longer valid (typically because it is out of
      * stock). If this step is responsible for this item it should mark itself incomplete.
      *
+     * If the step has any responsibility over this item it should return true.
+     *
      * @param BookingItem $item
+     * @return bool
      */
     public function invalidateBookingItem(BookingItem $item)
     {
+        return false;
     }
 }

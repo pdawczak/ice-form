@@ -581,12 +581,18 @@ class CourseRegistration extends AbstractProcess
      */
     public function invalidateBookingItem(BookingItem $bookingItem)
     {
+        $handled = false;
+
         if (!$this->getProgress()) {
-            return false;
+            return $handled;
         }
 
         foreach ($this->getSteps() as $step) {
-            $step->invalidateBookingItem($bookingItem);
+            if ($step->invalidateBookingItem($bookingItem)) {
+                $handled = true;
+            }
         }
+
+        return $handled;
     }
 }
