@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\MinLength;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Ice\JanusClientBundle\Entity\User;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class HesaInformationType extends AbstractRegistrationStep
 {
@@ -96,7 +97,11 @@ class HesaInformationType extends AbstractRegistrationStep
             ->add('hesaMostRecentEducationInstitutionName', 'text', array(
                 'label' => 'If you selected UK Higher Education institution, please state which one.',
                 'required' => false,
-                'constraints' => array()
+                'constraints' => array(
+                    new NotBlank(array(
+                        'groups'=>['uk_higher_ed']
+                    ))
+                )
             ))
             ->add('hesaFeeSource', new FeeSourceType(), array(
                 'expanded' => false,
@@ -135,5 +140,24 @@ class HesaInformationType extends AbstractRegistrationStep
     public function getTitle()
     {
         return 'HESA information';
+    }
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+        $resolver->setDefaults(array(
+            'validation_groups' => function (FormInterface $form) {
+                /** @var $data HesaInformation */
+                $data = $form->getData();
+                $groups = ['Default'];
+                if ($data->getHesaMostRecentEducationInstitutionType() === '4941') {
+                    $groups[] = 'uk_higher_ed';
+                }
+                return $groups;
+            }
+        ));
     }
 }
