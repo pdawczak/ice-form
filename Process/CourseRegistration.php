@@ -416,6 +416,12 @@ class CourseRegistration extends AbstractProcess
     public function setAcademicInformation($academicInformation)
     {
         $this->academicInformation = $academicInformation;
+        if ($booking = $this->academicInformation->getActiveBooking()) {
+            $this->booking = $booking;
+            if ($progress = $booking->getRegistrationProgress()) {
+                $this->progress = $progress;
+            }
+        }
         return $this;
     }
 
