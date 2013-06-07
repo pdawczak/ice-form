@@ -10,10 +10,12 @@ $(document).ready(function () {
             data: form.serialize(), // serializes the form's elements.
             success: function(data)
             {
-                if (data.transaction_status !== 'PENDING') {
-                    window.clearInterval(intervalId);
+                if (data.transaction_status === 'SUCCESS') {
                     $('#receipt-placeholder').html(data.html);
-                    window.location.replace("order/{{ reference }}")
+                    //window.location.replace("order/{{ reference }}")
+                }
+                else {
+                    window.setTimeout(pollTransactionStatus, 1000);
                 }
             }
         });
@@ -45,5 +47,5 @@ $(document).ready(function () {
         window.attachEvent('message', handleFrameEvent);
     }
 
-    intervalId = window.setInterval(pollTransactionStatus, 1000);
+    intervalId = window.setTimeout(pollTransactionStatus, 1000);
 });
