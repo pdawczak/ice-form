@@ -55,6 +55,12 @@ class MakePayment extends AbstractProcess
     /** @var Order */
     private $order;
 
+    /** @var bool  */
+    private $isViewOrderClicked = false;
+
+    /** @var bool */
+    private $isStudentHomeClicked = false;
+
     /**
      * @param $index
      * @return Step\AbstractType
@@ -413,5 +419,41 @@ class MakePayment extends AbstractProcess
     public function getAjaxResponse()
     {
         return $this->ajaxResponse;
+    }
+
+    /**
+     * @param boolean $isStudentHomeClicked
+     * @return MakePayment
+     */
+    public function setIsStudentHomeClicked($isStudentHomeClicked)
+    {
+        $this->isStudentHomeClicked = $isStudentHomeClicked;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isStudentHomeClicked()
+    {
+        return $this->isStudentHomeClicked;
+    }
+
+    /**
+     * @param boolean $isViewOrderClicked
+     * @return MakePayment
+     */
+    public function setIsViewOrderClicked($isViewOrderClicked)
+    {
+        $this->isViewOrderClicked = $isViewOrderClicked;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isViewOrderClicked()
+    {
+        return $this->isViewOrderClicked;
     }
 }

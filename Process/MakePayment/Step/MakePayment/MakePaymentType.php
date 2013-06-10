@@ -4,6 +4,8 @@ namespace Ice\FormBundle\Process\MakePayment\Step\MakePayment;
 use Ice\FormBundle\Process\MakePayment\Step\AbstractType;
 use Ice\MercuryClientBundle\Entity\TransactionRequest;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +20,18 @@ class MakePaymentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::PRE_BIND, function(FormEvent $e) {
+            $data = $e->getData();
+            if (isset($data['viewOrder'])) {
+                $this->getParentProcess()->setIsViewOrderClicked(true);
+                unset($data['viewOrder']);
+            }
+            if (isset($data['studentHome'])) {
+                $this->getParentProcess()->setIsStudentHomeClicked(true);
+                unset($data['studentHome']);
+            }
+            $e->setData($data);
+        });
         parent::buildForm($builder, $options);
     }
 
@@ -379,10 +393,17 @@ class MakePaymentType extends AbstractType
         $form = $this->getForm();
         $form->bind($request);
 
-        if($this->request->getTransaction()) {
-            $transactionStatus = 'SUCCESS';
-            $this->getStepProgress()->setComplete();
+        if (
+            $this->getParentProcess()->isViewOrderClicked() ||
+            $this->getParentProcess()->isStudentHomeClicked()
+        ) {
+            $this->getStepProgress()->setComplete(true);
             $this->getParentProcess()->saveProgress();
+            return;
+        }
+
+        if(!$this->request->getTransaction()) {
+            $transactionStatus = 'SUCCESS';
             $html = $this->renderReceipt();
         }
         else{
@@ -411,6 +432,8 @@ class MakePaymentType extends AbstractType
     public function renderReceipt() {
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
+        $vars['order'] = $this->getParentProcess()->getOrder();
+        $vars['amount'] = $this->request->getTotalRequestAmount();
         return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/MakePayment.receipt.html.twig', $vars);
     }
 }
