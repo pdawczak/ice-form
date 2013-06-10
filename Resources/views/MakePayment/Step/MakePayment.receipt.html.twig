@@ -6,7 +6,7 @@
         <div class="formBody">
             <form action="{{ url|e }}" method="post" class="form-horizontal" id="placeorder-process">
                 {% block form_content %}
-                    {% if order.suborders | length != 1 %}
+                    {% if order.suborders | length == 1 %}
                         <p>
                             Thank you. Your payment of <strong>&pound;{{ (amount/100) | number_format(2, '.')  }}</strong>
                             has been received successfully and your place on
