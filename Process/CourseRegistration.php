@@ -2,7 +2,6 @@
 namespace Ice\FormBundle\Process;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Ice\FormBundle\Process\CourseRegistration\Exception\CapacityException;
 use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
 use Ice\MinervaClientBundle\Entity\Booking;
@@ -322,7 +321,14 @@ class CourseRegistration extends AbstractProcess
         if (!$this->getProgress()) {
             return false;
         }
-        return $this->getProgress()->getCompleted() !== null;
+
+        foreach ($this->getProgress()->getStepProgresses() as $stepProgress) {
+            if ($stepProgress->getCompleted() === null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -410,6 +416,14 @@ class CourseRegistration extends AbstractProcess
     public function setAcademicInformation($academicInformation)
     {
         $this->academicInformation = $academicInformation;
+        if ($academicInformation) {
+            if ($booking = $this->academicInformation->getActiveBooking()) {
+                $this->booking = $booking;
+                if ($progress = $booking->getRegistrationProgress()) {
+                    $this->progress = $progress;
+                }
+            }
+        }
         return $this;
     }
 
@@ -455,7 +469,7 @@ class CourseRegistration extends AbstractProcess
             return $this->getBooking();
         } else {
             $ai = $this->getAcademicInformation(true);
-            if(null===$ai) {
+            if (null === $ai) {
                 $this->getMinervaClient()->createAcademicInformation(
                     $this->getRegistrantId(),
                     $this->getCourseId(),
@@ -567,5 +581,26 @@ class CourseRegistration extends AbstractProcess
     public function getAjaxResponse()
     {
         return $this->ajaxResponse;
+    }
+
+    /**
+     * @param BookingItem $bookingItem
+     * @return bool
+     */
+    public function invalidateBookingItem(BookingItem $bookingItem)
+    {
+        $handled = false;
+
+        if (!$this->getProgress()) {
+            return $handled;
+        }
+
+        foreach ($this->getSteps() as $step) {
+            if ($step->invalidateBookingItem($bookingItem)) {
+                $handled = true;
+            }
+        }
+
+        return $handled;
     }
 }

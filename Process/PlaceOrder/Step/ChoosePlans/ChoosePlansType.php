@@ -45,7 +45,7 @@ class ChoosePlansType extends AbstractType
 
 
             if (count($this->lines) > 1) {
-                $plansPlain['later'] = 'Arrange to pay for this booking later';
+                $plansPlain['later'] = 'Pay for this course later';
             }
 
             $data = null;

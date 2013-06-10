@@ -1,0 +1,21 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeAdditionalNeeds(){
+            if($('input:radio[name=previousContact]:checked').val() === 'Y'){
+                $('#whenPreviousStudyYes').show();
+            }
+            else {
+                $('#whenPreviousStudyYes').hide();
+            }
+        }
+
+        $('input:radio[name=previousContact]').each(function(index, domElement){
+            $(domElement).change(onChangeAdditionalNeeds);
+        });
+
+        onChangeAdditionalNeeds();
+    </script>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation;
 
 use Ice\FormBundle\Process\CourseRegistration\EventSubscriber\WeekendAccommodationSubscriber;
+use Ice\MinervaClientBundle\Entity\Category;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,8 +11,8 @@ use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\MinervaClientBundle\Entity\StepProgress;
-use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\MinervaClientBundle\Entity\Booking;
+use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\VeritasClientBundle\Entity\Course;
 use Symfony\Component\Form\FormView;
 
@@ -77,58 +78,46 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             /** @var Course $course */
             $course = $this->getParentProcess()->getCourse();
 
-            $accommodationSet = false;
-            $bAndBSet = false;
-            $platterSet = false;
+            //Remove all items
+            $newBookingItems = [];
 
+            //Add back any items we're not responsible for
             foreach ($bookingItems as $bookingItem) {
-                if ($bookingItem->isCourseAccommodation()) {
-
-                    $courseBookingItem = $this->getParentProcess()->getCourse()->getBookingItemByCode(
-                        $weekendAccommodation->getAccommodation()
-                    );
-
-                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
-                    $accommodationSet = true;
-                } else if ($bookingItem->isAdditionalAccommodation()) {
-
-                    $courseBookingItem = $course->getBookingItemByCode(
-                        $weekendAccommodation->getBedAndBreakfastAccommodation()
-                    );
-
-                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
-                    $bAndBSet = true;
-                } else if ($bookingItem->isEveningPlatter()) {
-
-                    $courseBookingItem = $this->getParentProcess()->getCourse()->getBookingItemByCode(
-                        $weekendAccommodation->getPlatter()
-                    );
-
-                    $bookingItem->setAllByCourseBookingItem($courseBookingItem);
-                    $platterSet = true;
+                if (
+                    !$bookingItem->isCourseAccommodation() &&
+                    !$bookingItem->isAdditionalAccommodation() &&
+                    !$bookingItem->isEveningPlatter()
+                ) {
+                    $newBookingItems[] = $bookingItem;
                 }
             }
 
-            $booking->setBookingItems($bookingItems);
+            $booking->setBookingItems($newBookingItems);
 
-            if (!$accommodationSet) {
+            //Add back any items which we are responsible for
+            if ($weekendAccommodation->getAccommodation()) {
                 $booking->addBookingItemByCourseBookingItem(
                     $course->getBookingItemByCode($weekendAccommodation->getAccommodation())
                 );
+
+                if ($weekendAccommodation->getBedAndBreakfastAccommodation()) {
+                    $booking->addBookingItemByCourseBookingItem(
+                        $course->getBookingItemByCode(
+                            $weekendAccommodation->getBedAndBreakfastAccommodation()
+                        )
+                    );
+
+                    if ($weekendAccommodation->getPlatter()) {
+                        $booking->addBookingItemByCourseBookingItem(
+                            $course->getBookingItemByCode(
+                                $weekendAccommodation->getPlatter()
+                            )
+                        );
+                    }
+                }
             }
 
-            if (!$bAndBSet) {
-                $booking->addBookingItemByCourseBookingItem(
-                    $course->getBookingItemByCode($weekendAccommodation->getBedAndBreakfastAccommodation())
-                );
-            }
-
-            if (!$platterSet) {
-                $booking->addBookingItemByCourseBookingItem(
-                    $course->getBookingItemByCode($weekendAccommodation->getPlatter())
-                );
-            }
-
+            //Persist the new items
             $this->getParentProcess()->getMinervaClient()->updateBooking(
                 $this->getParentProcess()->getRegistrantId(),
                 $this->getParentProcess()->getCourseId(),
@@ -211,9 +200,9 @@ class WeekendAccommodationType extends AbstractRegistrationStep
 
         foreach (
             [
-                'accommodation' => [ 'unavailableMessage' => 'Out of stock' ],
-                'bedAndBreakfastAccommodation' => [ 'unavailableMessage' => 'Out of stock' ],
-                'platter' => [ 'unavailableMessage' => 'Out of stock' ]
+                'accommodation' => ['unavailableMessage' => 'Out of stock'],
+                'bedAndBreakfastAccommodation' => ['unavailableMessage' => 'Out of stock'],
+                'platter' => ['unavailableMessage' => 'Out of stock']
             ] as $fieldName => $options) {
             if (!isset($view->children[$fieldName])) {
                 continue;
@@ -221,10 +210,32 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             foreach ($view->children[$fieldName]->children as $child) {
                 $code = $child->vars['value'];
                 if (!$course->getBookingItemByCode($code)->isInStock()) {
-                    $child->vars['label'] = $options['unavailableMessage'].' - '.$child->vars['label'];
+                    $child->vars['label'] = $options['unavailableMessage'] . ' - ' . $child->vars['label'];
                     $child->vars['attr']['disabled'] = 'disabled';
                 }
             }
         }
+    }
+
+    /**
+     * If an item we're responsible for becomes invalid, mark the step incomplete and return true
+     *
+     * @param BookingItem $item
+     * @return bool
+     */
+    public function invalidateBookingItem(BookingItem $item)
+    {
+        if (
+            $item->isCourseAccommodation() ||
+            $item->isEveningPlatter() ||
+            $item->isAdditionalAccommodation()
+        ) {
+            if ($this->isComplete()) {
+                $this->setComplete(false);
+                $this->save();
+            }
+            return true;
+        }
+        return parent::invalidateBookingItem($item);
     }
 }

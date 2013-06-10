@@ -17,10 +17,12 @@
             </p>
             {{ form_row(form.accommodationSharingWith, {'form_type': 'horizontal'}) }}
         {% endif %}
-        {% if form.bedAndBreakfastAccommodation is defined %}
+        {% if form.accommodationRequirementsGroup is defined %}
             <p>While every effort is made to meet the needs of students with support needs, it is not otherwise possible to accommodate requests for particular rooms or facilities.</p>
             {{ form_row(form.accommodationRequirementsGroup.adaptedBedroomRequired, {'form_type': 'horizontal'}) }}
             {{ form_row(form.accommodationRequirementsGroup.accommodationRequirements, {'form_type': 'horizontal'}) }}
+        {% endif %}
+        {% if form.bedAndBreakfastAccommodation is defined %}
             {{ form_row(form.bedAndBreakfastAccommodation, {'form_type': 'horizontal'}) }}
         {% endif %}
         {% if form.platter is defined %}

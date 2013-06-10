@@ -3,6 +3,8 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Ice\MinervaClientBundle\Entity\BookingItem;
+use Ice\MinervaClientBundle\Entity\Category;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
@@ -15,7 +17,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 use Ice\MinervaClientBundle\Entity\StepProgress;
 
-abstract class AbstractRegistrationStep extends AbstractType{
+abstract class AbstractRegistrationStep extends AbstractType
+{
     protected $title;
 
     /** @var string */
@@ -56,12 +59,13 @@ abstract class AbstractRegistrationStep extends AbstractType{
      */
     protected $childFormOrder = array();
 
-    public function buildForm(FormBuilderInterface $builder, array $options){
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder->add('stepReference', 'hidden', array(
-                'data'=>$this->getReference(),
-                'mapped'=>false
-            ))
-            ->addEventListener(FormEvents::PRE_BIND, function(FormEvent $e) {
+            'data' => $this->getReference(),
+            'mapped' => false
+        ))
+            ->addEventListener(FormEvents::PRE_BIND, function (FormEvent $e) {
                 $data = $e->getData();
                 $data['stepReference'] = $this->getReference();
                 if (isset($data['continue'])) {
@@ -76,34 +80,38 @@ abstract class AbstractRegistrationStep extends AbstractType{
      * @param CourseRegistration $parentProcess
      * @param string|null $reference
      */
-    public function __construct(CourseRegistration $parentProcess, $reference = null){
+    public function __construct(CourseRegistration $parentProcess, $reference = null)
+    {
         $this->parentProcess = $parentProcess;
         $this->reference = $reference;
     }
 
-    public function getTitle(){
+    public function getTitle()
+    {
         //The step reference, camelCase to Title case
         return ucfirst(strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $this->getReference())));
     }
 
-    public function renderHtml(array $vars = array()){
+    public function renderHtml(array $vars = array())
+    {
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
-        if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
+        if ($this->getStepProgress() && $this->getStepProgress()->getBegan() === null) {
             $this->getStepProgress()->setBegan(new \DateTime);
             $this->save();
         }
-        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getHtmlTemplate(), $vars);
+        return $this->getParentProcess()->getTemplating()->render('Registration/Step/' . $this->getHtmlTemplate(), $vars);
     }
 
-    public function renderJavaScript(array $vars = array()){
+    public function renderJavaScript(array $vars = array())
+    {
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
-        if($this->getStepProgress() && $this->getStepProgress()->getBegan() === null){
+        if ($this->getStepProgress() && $this->getStepProgress()->getBegan() === null) {
             $this->getStepProgress()->setBegan(new \DateTime);
             $this->save();
         }
-        return $this->getParentProcess()->getTemplating()->render('Registration/Step/'.$this->getJavaScriptTemplate(), $vars);
+        return $this->getParentProcess()->getTemplating()->render('Registration/Step/' . $this->getJavaScriptTemplate(), $vars);
     }
 
     public function processAjaxRequest(Request $request)
@@ -124,17 +132,19 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /**
      * @return Form|\Symfony\Component\Form\FormInterface
      */
-    protected function getForm(){
-        if(null === $this->form){
+    protected function getForm()
+    {
+        if (null === $this->form) {
             $this->form = $this->getParentProcess()->getFormFactory()->create($this, $this->getEntity());
         }
         return $this->form;
     }
 
-    public function getIndex(){
-        if(null === $this->indexCache){
-            foreach($this->getParentProcess()->getSteps() as $index=>$step){
-                if($this === $step){
+    public function getIndex()
+    {
+        if (null === $this->indexCache) {
+            foreach ($this->getParentProcess()->getSteps() as $index => $step) {
+                if ($this === $step) {
                     $this->indexCache = $index;
                     break;
                 }
@@ -146,14 +156,16 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /**
      * @return string
      */
-    public function getHtmlTemplate(){
+    public function getHtmlTemplate()
+    {
         return 'default.html.twig';
     }
 
     /**
      * @return string
      */
-    public function getJavaScriptTemplate(){
+    public function getJavaScriptTemplate()
+    {
         return 'default.js.twig';
     }
 
@@ -208,7 +220,8 @@ abstract class AbstractRegistrationStep extends AbstractType{
         $this->save();
     }
 
-    public function getName(){
+    public function getName()
+    {
         return '';
     }
 
@@ -222,8 +235,8 @@ abstract class AbstractRegistrationStep extends AbstractType{
      */
     protected function setStepProgressValues($entity, array $formOrder, FormInterface $form, StepProgress $progress)
     {
-        foreach($formOrder as $order => $fieldName) {
-            $getter = 'get'.ucfirst($fieldName);
+        foreach ($formOrder as $order => $fieldName) {
+            $getter = 'get' . ucfirst($fieldName);
             $progress->setFieldValue(
                 $fieldName,
                 $order,
@@ -243,8 +256,7 @@ abstract class AbstractRegistrationStep extends AbstractType{
     {
         try {
             return $this->getForm()->get($fieldName)->getConfig()->getOption('label');
-        }
-        catch(\OutOfBoundsException $e) {
+        } catch (\OutOfBoundsException $e) {
             return $fieldName;
         }
     }
@@ -254,25 +266,28 @@ abstract class AbstractRegistrationStep extends AbstractType{
         return $this->reference;
     }
 
-    public function isCurrent(){
+    public function isCurrent()
+    {
         return $this->getReference() === $this->getParentProcess()->getCurrentStep()->getReference();
     }
 
-    public function setComplete($complete = true){
-        if($complete && !$this->isComplete()){ //Change to complete
+    public function setComplete($complete = true)
+    {
+        if ($complete && !$this->isComplete()) { //Change to complete
             $this->getStepProgress()->setCompleted(new \DateTime());
-        }
-        else if($this->isComplete() && !$complete){ //Change to incomplete
+        } else if ($this->isComplete() && !$complete) { //Change to incomplete
             $this->getStepProgress()->setCompleted(null);
         }
     }
 
-    public function setUpdated(){
+    public function setUpdated()
+    {
         $this->getStepProgress()->setUpdated(new \DateTime());
     }
 
-    public function isComplete(){
-        if(null === $this->getStepProgress()){
+    public function isComplete()
+    {
+        if (null === $this->getStepProgress()) {
             return false;
         }
         return null !== $this->getStepProgress()->getCompleted();
@@ -284,8 +299,9 @@ abstract class AbstractRegistrationStep extends AbstractType{
      * @throws \RuntimeException if the entity has not yet been prepared
      * @return \stdClass
      */
-    public function getEntity(){
-        if(null === $this->entity){
+    public function getEntity()
+    {
+        if (null === $this->entity) {
             throw new \RuntimeException('Entity has not been prepared');
         }
         return $this->entity;
@@ -295,7 +311,8 @@ abstract class AbstractRegistrationStep extends AbstractType{
      * @param $entity
      * @return AbstractRegistrationStep
      */
-    protected function setEntity($entity){
+    protected function setEntity($entity)
+    {
         $this->entity = $entity;
         return $this;
     }
@@ -331,28 +348,29 @@ abstract class AbstractRegistrationStep extends AbstractType{
      */
     private function dateToString($dateOrNull)
     {
-        if(null === $dateOrNull){
+        if (null === $dateOrNull) {
             return null;
         }
         return $dateOrNull->format('Y-m-d H:i:s');
     }
 
-    public function save(){
-        $values =             array(
-            'stepName'=>$this->getStepProgress()->getStepName(),
-            'order'=>$this->getStepProgress()->getOrder(),
-            'description'=>$this->getStepProgress()->getDescription(),
-            'began'=>$this->dateToString($this->getStepProgress()->getBegan()),
-            'updated'=>$this->dateToString($this->getStepProgress()->getUpdated()),
-            'completed'=>$this->dateToString($this->getStepProgress()->getCompleted()),
-            'registrationFieldValues'=>array()
+    public function save()
+    {
+        $values = array(
+            'stepName' => $this->getStepProgress()->getStepName(),
+            'order' => $this->getStepProgress()->getOrder(),
+            'description' => $this->getStepProgress()->getDescription(),
+            'began' => $this->dateToString($this->getStepProgress()->getBegan()),
+            'updated' => $this->dateToString($this->getStepProgress()->getUpdated()),
+            'completed' => $this->dateToString($this->getStepProgress()->getCompleted()),
+            'registrationFieldValues' => array()
         );
-        foreach($this->getStepProgress()->getFieldValues() as $fieldValue){
+        foreach ($this->getStepProgress()->getFieldValues() as $fieldValue) {
             $values['registrationFieldValues'][] = array(
-                'fieldName'=>$fieldValue->getFieldName(),
-                'value'=>$fieldValue->getValueSerialized(),
-                'order'=>$fieldValue->getOrder(),
-                'description'=>$fieldValue->getDescription()
+                'fieldName' => $fieldValue->getFieldName(),
+                'value' => $fieldValue->getValueSerialized(),
+                'order' => $fieldValue->getOrder(),
+                'description' => $fieldValue->getDescription()
             );
         }
 
@@ -384,7 +402,8 @@ abstract class AbstractRegistrationStep extends AbstractType{
     /**
      * @return bool
      */
-    public function isAvailable(){
+    public function isAvailable()
+    {
         return $this->getParentProcess()->getRegistrantId() && $this->getParentProcess()->getCourseId();
     }
 
@@ -404,5 +423,19 @@ abstract class AbstractRegistrationStep extends AbstractType{
     public function isContinueClicked()
     {
         return $this->continueClicked;
+    }
+
+    /**
+     * Called by the parent process when the booking item specified is no longer valid (typically because it is out of
+     * stock). If this step is responsible for this item it should mark itself incomplete.
+     *
+     * If the step has any responsibility over this item it should return true.
+     *
+     * @param BookingItem $item
+     * @return bool
+     */
+    public function invalidateBookingItem(BookingItem $item)
+    {
+        return false;
     }
 }

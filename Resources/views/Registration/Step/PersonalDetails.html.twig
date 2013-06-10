@@ -6,6 +6,7 @@
         {{ form_row(form.fullName, {'form_type': 'horizontal'}) }}
         {{ form_row(form.email, {'form_type': 'horizontal'}) }}
         {{ form_row(form.dob, {'form_type': 'horizontal'}) }}
+        {{ form_row(form.sex, {'form_type': 'horizontal'}) }}
     {% endif %}
     {# User has not been previously created. All fields are editable to allow an account to be created. #}
     {% if form.title is defined %}
@@ -15,15 +16,17 @@
         {{ form_row(form.lastNames, {'form_type': 'horizontal'}) }}
         {{ form_row(form.email, {'form_type': 'horizontal'}) }}
         {{ form_row(form.dob, {'form_type': 'horizontal'}) }}
+        {{ form_row(form.sex, {'form_type': 'horizontal'}) }}
         {{ form_row(form.plainPassword, {'form_type': 'horizontal'}) }}
     {% endif %}
-    {{ form_row(form.sex, {'form_type': 'horizontal'}) }}
-    <p>If you used a different name during previous study at, or contact with, ICE or the University, please include it here</p>
     {{ form_row(form.previousContact, {'form_type': 'horizontal'}) }}
-    {{ form_row(form.previousTitle, {'form_type': 'horizontal'}) }}
-    {{ form_row(form.previousFirstName, {'form_type': 'horizontal'}) }}
-    {{ form_row(form.previousMiddleName, {'form_type': 'horizontal'}) }}
-    {{ form_row(form.previousLastName, {'form_type': 'horizontal'}) }}
-    {{ form_row(form.crsId, {'form_type': 'horizontal'}) }}
-    {{ form_rest(form) }}
+    <div id="whenPreviousStudyYes">
+        <p>If you used a different name during previous study at, or contact with, ICE or the University, please include it here</p>
+        {{ form_row(form.previousTitle, {'form_type': 'horizontal'}) }}
+        {{ form_row(form.previousFirstName, {'form_type': 'horizontal'}) }}
+        {{ form_row(form.previousMiddleName, {'form_type': 'horizontal'}) }}
+        {{ form_row(form.previousLastName, {'form_type': 'horizontal'}) }}
+        {{ form_row(form.crsId, {'form_type': 'horizontal'}) }}
+        {{ form_rest(form) }}
+    </div>
 {% endblock %}
