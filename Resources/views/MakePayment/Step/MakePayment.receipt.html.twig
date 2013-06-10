@@ -1,4 +1,44 @@
 <h1>Payment received</h1>
-<p>[Text to be determined]</p>
 
+    <div class="bootstrap">
+    <div class="formContainer">
+        <h2>Payment received</h2>
+        <div class="formBody">
+            <form action="{{ url|e }}" method="post" class="form-horizontal" id="placeorder-process">
+                {% block form_content %}
+                    {% if order.suborders | length == 1 %}
+                        <p>
+                            Thank you. Your payment of <strong>&pound;{{ (amount/100) | number_format(2, '.')  }}</strong>
+                            has been received successfully and your place on
+                            <strong>{{ order.suborders[0].description }}</strong> has been confirmed.
+                        </p>
+                    {% else %}
+                        <p>
+                            Thank you. Your payment of <strong>&pound;{{ (amount/100) | number_format(2, '.')  }}</strong>
+                            has been received successfully and your place on  following courses has been confirmed:
+                        </p>
+                        <ul>
+                            {% for suborder in order.suborders %}
+                            <li style="font-size: 15px"><strong>{{ suborder.description }}</strong></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <p>
+                        Your order reference is <strong>{{ order.reference }}</strong>, please make a note of this for your records.
+                        You will receive confirmation by email shortly.
+                    </p>
+                {% endblock %}
+                {{ form_rest(form, {form_type: 'horizontal'}) }}
+                <div style="clear:both"></div>
+                <div class="btn-group pull-right">
+                    {% block buttons %}
+                        <input type="submit" name="studentHome" class="btn" value="Your student home" />
+                        <input type="submit" name="viewOrder" class="btn btn-primary" value="View or print order" />
+                    {% endblock %}
+                </div>
+            </form>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+</div>
 {{ form_rest(form) }}
