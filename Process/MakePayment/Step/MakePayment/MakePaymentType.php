@@ -402,7 +402,7 @@ class MakePaymentType extends AbstractType
             return;
         }
 
-        if(!$this->request->getTransaction()) {
+        if($this->request->getTransaction()) {
             $transactionStatus = 'SUCCESS';
             $html = $this->renderReceipt();
         }
