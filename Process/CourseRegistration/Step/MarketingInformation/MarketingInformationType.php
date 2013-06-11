@@ -23,17 +23,19 @@ class MarketingInformationType extends AbstractRegistrationStep{
                 'label'=>'How did you hear about this course? Please select all that apply.',
                 'choices'=>array(
                     'Advert'=>'Advert',
-                    'Another course'=>'Attended previous courses',
-                    'Brochure'=>'Institute brochure',
-                    'ICE website'=>'Institute website',
-                    'Press article'=>'Newspaper or magazine article',
-                    'Recommendation'=>'Personal recommendation',
+                    'Attended previous course(s)'=>'Attended previous course(s)',
+                    'Course brochure'=>'Course brochure',
+                    'Event'=>'Event',
+                    'Flyer/leaflet'=>'Flyer/leaflet',
+                    'Institute website'=>'Institute website (www.ice.cam.ac.uk)',
+                    'Newspaper or magazine article'=>'Newspaper or magazine article',
+                    'Personal recommendation'=>'Personal recommendation',
                     'Other'=>'Other',
                 )
             ))
             ->add('marketingDetail', 'textarea', array(
                 'required'=>false,
-                'label'=>'If other, please specify'
+                'label'=>'Please give details of how/wehere you found our advert, article, brochure, event, flyer or website, as applicable.'
             ))
             ->add('marketingOptIn', 'checkbox', array(
                 'label'=>'Please tick if you would like to receive occasional emails about upcoming courses, events and
@@ -89,10 +91,6 @@ class MarketingInformationType extends AbstractRegistrationStep{
         return 'MarketingInformation.html.twig';
     }
 
-    public function getJavaScriptTemplate(){
-        return 'MarketingInformation.js.twig';
-    }
-
     public function prepare(){
         $this->setEntity(MarketingInformation::fromStepProgress($this->getStepProgress()));
         $this->setPrepared();
@@ -104,16 +102,5 @@ class MarketingInformationType extends AbstractRegistrationStep{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         parent::setDefaultOptions($resolver);
-        $resolver->setDefaults(array(
-            'validation_groups' => function(FormInterface $form) {
-                /** @var $data MarketingInformation */
-                $data = $form->getData();
-                $groups = array('default');
-                if(in_array('Other', $data->getMarketingHowHeard())){
-                    $groups[] = 'how_heard_other';
-                }
-                return $groups;
-            }
-        ));
     }
 }

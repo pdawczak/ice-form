@@ -8,19 +8,18 @@ use Ice\MinervaClientBundle\Exception\NotFoundException;
 class MarketingInformation{
     /**
      * @var array
-     * @Assert\NotBlank(groups={"default"}, message="Please select at least one option")
+     * @Assert\NotBlank(message="Please select at least one option")
      */
     private $marketingHowHeard = array();
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"how_heard_other"})
      */
     private $marketingDetail;
 
     /**
      * @var bool
-     * @Assert\NotNull(groups={"default"})
+     * @Assert\NotNull()
      */
     private $marketingOptIn;
 
