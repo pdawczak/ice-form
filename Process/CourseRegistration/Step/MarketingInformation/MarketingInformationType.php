@@ -35,7 +35,7 @@ class MarketingInformationType extends AbstractRegistrationStep{
             ))
             ->add('marketingDetail', 'textarea', array(
                 'required'=>false,
-                'label'=>'Please give details of how/wehere you found our advert, article, brochure, event, flyer or website, as applicable.'
+                'label'=>'Please give details of how/where you found our advert, article, brochure, event, flyer or website, as applicable.'
             ))
             ->add('marketingOptIn', 'checkbox', array(
                 'label'=>'Please tick if you would like to receive occasional emails about upcoming courses, events and
