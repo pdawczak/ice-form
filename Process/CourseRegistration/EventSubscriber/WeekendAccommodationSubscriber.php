@@ -91,19 +91,30 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         /** @var WeekendAccommodation $entity */
         $entity = $event->getData();
 
-        if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getAccommodation(), $matches)) {
+        if (
+            null === $entity->getAccommodation() ||
+            preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getAccommodation(), $matches)
+        )
+        {
             list($all, $itemType, $itemId) = $matches;
             $entity->setAdaptedBedroomRequired('N');
             $entity->setAccommodationRequirements(null);
-            $entity->setBedAndBreakfastAccommodation('BANDB-NONE-'.$itemId);
+            $entity->setBedAndBreakfastAccommodation(null);
         }
 
-        if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getBedAndBreakfastAccommodation(), $matches)) {
+        if (
+            null === $entity->getBedAndBreakfastAccommodation() ||
+            preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getBedAndBreakfastAccommodation(), $matches)
+        ) {
+
             list($all, $itemType, $itemId) = $matches;
-            $entity->setPlatter('PLATTER-NONE-'.$itemId);
+            $entity->setPlatter(null);
         }
 
-        if (preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getPlatter(), $matches)) {
+        if (
+            null === $entity->getBedAndBreakfastAccommodation() ||
+            preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getPlatter(), $matches)
+        ) {
             $entity->setPlatterOption(null);
         }
 
