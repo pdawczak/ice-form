@@ -200,9 +200,9 @@ class WeekendAccommodationType extends AbstractRegistrationStep
 
         foreach (
             [
-                'accommodation' => ['unavailableMessage' => 'Out of stock'],
-                'bedAndBreakfastAccommodation' => ['unavailableMessage' => 'Out of stock'],
-                'platter' => ['unavailableMessage' => 'Out of stock']
+                'accommodation' => ['unavailableMessage' => 'Unavailable'],
+                'bedAndBreakfastAccommodation' => ['unavailableMessage' => 'Unavailable'],
+                'platter' => ['unavailableMessage' => 'Unavailable']
             ] as $fieldName => $options) {
             if (!isset($view->children[$fieldName])) {
                 continue;
