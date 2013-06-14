@@ -169,7 +169,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             $this->createFormForItemType(
                 'accommodation',
                 $choices,
-                'Accommodation'
+                'Course accommodation'
             )
         );
 
@@ -192,7 +192,7 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
                     $this->createFormForItemType(
                         'bedAndBreakfastAccommodation',
                         $bAndBChoices,
-                        'Bed and breakfast accommodation'
+                        'Sunday night B&B accommodation'
                     )
                 );
             }
