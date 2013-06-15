@@ -14,9 +14,9 @@ class EducationInstitutionType extends AbstractType
             'choices' => array(
                 '4901' => 'UK state school',
                 '4911' => 'UK independent school',
-                '4921' => 'UK independent school',
-                '4931' => 'Any non-UK institution',
+                '4921' => 'UK Further Education college',
                 '4941' => 'UK Higher Education Institute',
+                '4931' => 'Any non-UK institution',
             )
         ));
     }
