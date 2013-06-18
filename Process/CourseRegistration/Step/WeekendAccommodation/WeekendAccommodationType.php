@@ -210,7 +210,9 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             foreach ($view->children[$fieldName]->children as $child) {
                 $code = $child->vars['value'];
                 if ($courseItem = $course->getBookingItemByCode($code)) {
-                    $child->vars['label'].= sprintf(" £%.02f", $courseItem->getPrice()/100);
+                    if ($courseItem->getPrice()) {
+                        $child->vars['label'].= sprintf(" £%.02f", $courseItem->getPrice()/100);
+                    }
                     if (!$course->getBookingItemByCode($code)->isInStock()) {
                         $child->vars['label'] = $options['unavailableMessage'] . ' - ' . $child->vars['label'];
                         $child->vars['attr']['disabled'] = 'disabled';
