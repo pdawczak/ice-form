@@ -96,7 +96,6 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getAccommodation(), $matches)
         )
         {
-            list($all, $itemType, $itemId) = $matches;
             $entity->setAdaptedBedroomRequired('N');
             $entity->setAccommodationRequirements(null);
             $entity->setBedAndBreakfastAccommodation(null);
@@ -106,8 +105,6 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             null === $entity->getBedAndBreakfastAccommodation() ||
             preg_match('/^([a-z]+)-NONE-(\d+)$/i', $entity->getBedAndBreakfastAccommodation(), $matches)
         ) {
-
-            list($all, $itemType, $itemId) = $matches;
             $entity->setPlatter(null);
         }
 
