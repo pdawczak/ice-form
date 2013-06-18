@@ -153,7 +153,7 @@ class HesaInformationType extends AbstractRegistrationStep
                 /** @var $data HesaInformation */
                 $data = $form->getData();
                 $groups = ['Default'];
-                if ($data->getHesaMostRecentEducationInstitutionType() === '4941') {
+                if (intval($data->getHesaMostRecentEducationInstitutionType()) === 4941) {
                     $groups[] = 'uk_higher_ed';
                 }
                 return $groups;
