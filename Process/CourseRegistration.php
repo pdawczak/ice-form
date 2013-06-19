@@ -457,7 +457,10 @@ class CourseRegistration extends AbstractProcess
      */
     public function getBooking($create = false)
     {
-        if (!$this->booking && ($ai = $this->getAcademicInformation(true))) {
+        if (!$this->booking &&
+            $this->getRegistrantId() &&
+            $this->getCourseId() &&
+            ($ai = $this->getAcademicInformation(true))) {
             $this->booking = $ai->getActiveBooking();
         }
 
