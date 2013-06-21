@@ -31,7 +31,7 @@ class SupportNeeds{
      */
     public function setAdditionalNeeds($additionalNeeds)
     {
-        $this->additionalNeeds = $additionalNeeds===null?null:($additionalNeeds==true);
+        $this->additionalNeeds = $additionalNeeds;
         return $this;
     }
 
@@ -67,7 +67,7 @@ class SupportNeeds{
      */
     public function setShareSupportNeeds($shareSupportNeeds)
     {
-        $this->shareSupportNeeds = $shareSupportNeeds===null?null:($shareSupportNeeds==true);
+        $this->shareSupportNeeds = $shareSupportNeeds;
         return $this;
     }
 

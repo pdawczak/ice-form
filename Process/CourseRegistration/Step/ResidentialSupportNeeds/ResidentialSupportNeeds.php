@@ -30,14 +30,13 @@ class ResidentialSupportNeeds{
      */
     private $shareSupportNeeds;
 
-
     /**
      * @param string $additionalNeeds
      * @return ResidentialSupportNeeds
      */
     public function setAdditionalNeeds($additionalNeeds)
     {
-        $this->additionalNeeds = $additionalNeeds===null?null:($additionalNeeds==true);
+        $this->additionalNeeds = $additionalNeeds;
         return $this;
     }
 
@@ -73,7 +72,7 @@ class ResidentialSupportNeeds{
      */
     public function setFirstFloorAccess($firstFloorAccess)
     {
-        $this->firstFloorAccess = $firstFloorAccess===null?null:($firstFloorAccess==true);
+        $this->firstFloorAccess = $firstFloorAccess;
         return $this;
     }
 
@@ -91,7 +90,7 @@ class ResidentialSupportNeeds{
      */
     public function setShareSupportNeeds($shareSupportNeeds)
     {
-        $this->shareSupportNeeds = $shareSupportNeeds===null?null:($shareSupportNeeds==true);
+        $this->shareSupportNeeds = $shareSupportNeeds;
         return $this;
     }
 
