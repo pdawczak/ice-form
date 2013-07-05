@@ -1,11 +1,11 @@
 <?php
-namespace Ice\FormBundle\Process\CourseRegistration\Step\ResidentialSupportNeeds;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\MadingleySupportNeeds;
 
 use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ResidentialSupportNeeds{
+class MadingleySupportNeeds{
     /**
      * @var string
      * @Assert\NotNull(groups={"default"}, message="This is a required field")
@@ -32,7 +32,7 @@ class ResidentialSupportNeeds{
 
     /**
      * @param string $additionalNeeds
-     * @return ResidentialSupportNeeds
+     * @return MadingleySupportNeeds
      */
     public function setAdditionalNeeds($additionalNeeds)
     {
@@ -50,7 +50,7 @@ class ResidentialSupportNeeds{
 
     /**
      * @param string $additionalNeedsDetail
-     * @return ResidentialSupportNeeds
+     * @return MadingleySupportNeeds
      */
     public function setAdditionalNeedsDetail($additionalNeedsDetail)
     {
@@ -68,7 +68,7 @@ class ResidentialSupportNeeds{
 
     /**
      * @param string $firstFloorAccess
-     * @return ResidentialSupportNeeds
+     * @return MadingleySupportNeeds
      */
     public function setFirstFloorAccess($firstFloorAccess)
     {
@@ -86,7 +86,7 @@ class ResidentialSupportNeeds{
 
     /**
      * @param string $shareSupportNeeds
-     * @return ResidentialSupportNeeds
+     * @return MadingleySupportNeeds
      */
     public function setShareSupportNeeds($shareSupportNeeds)
     {
@@ -104,7 +104,7 @@ class ResidentialSupportNeeds{
 
     /**
      * @param StepProgress $stepProgress
-     * @return ResidentialSupportNeeds
+     * @return MadingleySupportNeeds
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();
