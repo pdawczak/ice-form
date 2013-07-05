@@ -1,6 +1,6 @@
 <?php
 
-namespace Ice\FormBundle\Process\CourseRegistration\Step\ResidentialSupportNeeds;
+namespace Ice\FormBundle\Process\CourseRegistration\Step\MadingleySupportNeeds;
 
 use Ice\JanusClientBundle\Exception\ValidationException;
 use Symfony\Component\Form\FormError;
@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\JanusClientBundle\Entity\User;
 
 
-class ResidentialSupportNeedsType extends AbstractRegistrationStep{
+class MadingleySupportNeedsType extends AbstractRegistrationStep{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -65,15 +65,15 @@ class ResidentialSupportNeedsType extends AbstractRegistrationStep{
     }
 
     public function getHtmlTemplate(){
-        return 'ResidentialSupportNeeds.html.twig';
+        return 'MadingleySupportNeeds.html.twig';
     }
 
     public function getJavaScriptTemplate(){
-        return 'ResidentialSupportNeeds.js.twig';
+        return 'MadingleySupportNeeds.js.twig';
     }
 
     public function prepare(){
-        $this->setEntity(ResidentialSupportNeeds::fromStepProgress($this->getStepProgress()));
+        $this->setEntity(MadingleySupportNeeds::fromStepProgress($this->getStepProgress()));
         $this->setPrepared();
     }
 
@@ -127,5 +127,13 @@ class ResidentialSupportNeedsType extends AbstractRegistrationStep{
                 return $groups;
             }
         ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return 'Support needs';
     }
 }
