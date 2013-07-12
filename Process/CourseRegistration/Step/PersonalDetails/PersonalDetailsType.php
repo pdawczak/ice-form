@@ -308,15 +308,25 @@ class PersonalDetailsType extends AbstractRegistrationStep
                 // Set DOB and/or email address if this has not been set before
                 $existingUser = $this->getParentProcess()->getRegistrant();
                 if (!$existingUser->getDob() || !$existingUser->getEmail()) {
-                    // FIXME: Add try/catch in case the email address is already in use, for example
-                    $this->getParentProcess()->getJanusClient()->updateUser($existingUser->getUsername(), array(
-                        'title' => $data->getTitle(),
-                        'firstNames' => $data->getFirstNames(),
-                        'middleNames' => $data->getMiddleNames(),
-                        'lastNames' => $data->getLastNames(),
-                        'email' => $data->getEmail(),
-                        'dob' => $data->getDob() ? $data->getDob()->format('Y-m-d') : null,
-                    ));
+                    try {
+                        $this->getParentProcess()->getJanusClient()->updateUser($existingUser->getUsername(), array(
+                            'title' => $data->getTitle(),
+                            'firstNames' => $data->getFirstNames(),
+                            'middleNames' => $data->getMiddleNames(),
+                            'lastNames' => $data->getLastNames(),
+                            'email' => $data->getEmail(),
+                            'dob' => $data->getDob() ? $data->getDob()->format('Y-m-d') : null,
+                        ));
+                    } catch (ValidationException $e) {
+                        /** @var $form \Ice\JanusClientBundle\Response\FormError */
+                        $form = $e->getForm();
+
+                        $errors = $form->getErrorsAsAssociativeArray(true);
+                        foreach ($errors as $field => $fieldErrors) {
+                            $this->addFieldErrors($field, $fieldErrors);
+                        }
+                        $this->getForm()->isValid();
+                    }
                 }
 
                 //Set personal attributes against the user
