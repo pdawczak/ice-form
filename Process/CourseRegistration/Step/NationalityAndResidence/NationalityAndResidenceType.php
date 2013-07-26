@@ -68,12 +68,14 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     'expanded'=>false,
                     'multiple'=>false,
                     'choices'=>array(
-                        'EU' => 'EU',
+                        'GBR' => 'UK',
+                        'CHI' => 'Channel Islands',
+                        'EU' => 'EU (outside UK)',
                         'ISL' => 'Iceland',
                         'LIE' => 'Lichtenstein',
                         'NOR' => 'Norway',
                         'CHE' => 'Switzerland',
-                        'BOT' => 'Overseas territories',
+                        'BOT' => 'British Overseas Territories',
                         'IMN' => 'Isle of Man',
                         'NO' => 'NO',
                     )
