@@ -32,31 +32,37 @@ class NationalityAndResidence
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $ordinarilyResident;
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $eeaOrSwissNational;
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $familyMemberEuNational;
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $settledInUk;
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $grantedRefugeeStatus;
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $requireVisa;
 
