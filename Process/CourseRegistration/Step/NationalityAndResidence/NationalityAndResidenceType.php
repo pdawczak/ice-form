@@ -105,7 +105,6 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
             )
             ->add('settledInUk', 'choice', array(
                     'label' => 'Are you a non-UK/EU citizen settled in the UK?',
-                    'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
@@ -116,7 +115,6 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
             )
             ->add('grantedRefugeeStatus', 'choice', array(
                     'label' => 'Have you been granted refugee status in the UK?',
-                    'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
@@ -127,7 +125,6 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
             )
             ->add('requireVisa', 'choice', array(
                     'label' => 'Do you require a visa to study in the UK? ',
-                    'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
