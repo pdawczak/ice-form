@@ -52,6 +52,7 @@ class MakePaymentType extends AbstractType
     {
         $vars['order'] = $this->getParentProcess()->getOrder();
         $vars['transactionRequest'] = $this->request;
+        $vars['isAdmin'] = $this->getParentProcess()->getAdministrator() !== null;
 
         $vars['iframeUrl'] = $this->getParentProcess()->getMercuryClient()->getPaymentPagesService()->getIframeUrl(
             $this->request,
