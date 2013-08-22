@@ -36,8 +36,12 @@ class MakePaymentType extends AbstractType
     }
 
 
-    public function getTemplate(){
+    public function getHtmlTemplate(){
         return 'MakePayment.html.twig';
+    }
+
+    public function getJavaScriptTemplate(){
+        return 'MakePayment.js.twig';
     }
 
     public function getTitle(){
@@ -48,7 +52,7 @@ class MakePaymentType extends AbstractType
         return true;
     }
 
-    public function render(array $vars = array())
+    public function renderHtml(array $vars = array())
     {
         $vars['order'] = $this->getParentProcess()->getOrder();
         $vars['transactionRequest'] = $this->request;
@@ -59,7 +63,7 @@ class MakePaymentType extends AbstractType
             $this->getParentProcess()->getCustomer()
         );
 
-        return parent::render($vars);
+        return parent::renderHtml($vars);
     }
 
     public function isComplete(){

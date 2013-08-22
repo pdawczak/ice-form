@@ -60,16 +60,39 @@ abstract class AbstractType extends BaseAbstractType{
     /**
      * @return string
      */
-    abstract public function getTemplate();
+    abstract public function getHtmlTemplate();
+
+    /**
+     * @return string
+     */
+    abstract public function getJavaScriptTemplate();
 
     /**
      * @param array $vars
      * @return mixed
      */
     public function render(array $vars = array()){
+        return $this->renderHtml($vars).$this->renderJavascript($vars);
+    }
+
+    /**
+     * @param array $vars
+     * @return mixed
+     */
+    public function renderHtml(array $vars = array()){
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
-        return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/'.$this->getTemplate(), $vars);
+        return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/'.$this->getHtmlTemplate(), $vars);
+    }
+
+    /**
+     * @param array $vars
+     * @return mixed
+     */
+    public function renderJavascript(array $vars = array()){
+        $vars['form'] = $this->getForm()->createView();
+        $vars['url'] = $this->getParentProcess()->getUrl();
+        return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/'.$this->getJavaScriptTemplate(), $vars);
     }
 
     /**

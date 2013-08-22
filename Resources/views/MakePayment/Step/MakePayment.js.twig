@@ -1,3 +1,4 @@
+<script type="text/javascript">
 $(document).ready(function () {
     var intervalId;
 
@@ -12,7 +13,6 @@ $(document).ready(function () {
             {
                 if (data.transaction_status === 'SUCCESS') {
                     $('#receipt-placeholder').html(data.html);
-                    //window.location.replace("order/{{ reference }}")
                 }
                 else {
                     window.setTimeout(pollTransactionStatus, 1000);
@@ -49,3 +49,4 @@ $(document).ready(function () {
 
     intervalId = window.setTimeout(pollTransactionStatus, 1000);
 });
+</script>

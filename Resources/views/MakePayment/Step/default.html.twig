@@ -3,9 +3,6 @@
 {% block css %}
 {% endblock %}
 
-{% block javascript %}
-{% endblock %}
-
 <form action="{{ url|e }}" method="post" class="form-horizontal" id="placeorder-process">
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}

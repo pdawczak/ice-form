@@ -254,7 +254,7 @@ class MakePayment extends AbstractProcess
     }
 
     /**
-     * Returns HTML from <form> to </form> for the current step
+     * Returns HTML from <form> to </form> appended with Javascript from <script> to </script> for the current step
      *
      * @param array $vars Vars to be passed to the template
      * @return string HTML output
@@ -264,6 +264,32 @@ class MakePayment extends AbstractProcess
         $currentStep = $this->getCurrentStep();
         if (!$currentStep->isPrepared()) $currentStep->prepare();
         return $currentStep->render($vars);
+    }
+
+    /**
+     * Returns HTML from <form> to </form> for the current step
+     *
+     * @param array $vars Vars to be passed to the template
+     * @return string HTML output
+     */
+    public function renderStepHtml(array $vars = array())
+    {
+        $currentStep = $this->getCurrentStep();
+        if (!$currentStep->isPrepared()) $currentStep->prepare();
+        return $currentStep->renderHtml($vars);
+    }
+
+    /**
+     * Returns Javascript from <script> to </script> for the current step
+     *
+     * @param array $vars Vars to be passed to the template
+     * @return string HTML output
+     */
+    public function renderStepJavascript(array $vars = array())
+    {
+        $currentStep = $this->getCurrentStep();
+        if (!$currentStep->isPrepared()) $currentStep->prepare();
+        return $currentStep->renderJavascript($vars);
     }
 
     /**
