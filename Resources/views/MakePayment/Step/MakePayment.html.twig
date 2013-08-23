@@ -26,20 +26,24 @@
                 <fieldset>
                     <legend>Payment plan</legend>
                     <p>This payment is for: <span style="float:right; font-weight: bold">&pound;{{ "%0.2f" | format (transactionRequest.totalRequestAmount/100) }}</span></p>
-                    <p>Billing details entered now will be used to take the following payments automatically on the dates specified:</p>
-                    <table style="width: 100%">
+                    {% if order.totalAmount > transactionRequest.totalRequestAmount %}
+                        <p>Billing details entered now will be used to take the following payments automatically on the dates specified:</p>
+                        <table style="width: 100%">
 
-                        {% for suborder in order.suborders %}
-                            {% if order.suborders | length > 1 %}
-                                <tr><th colspan="2">{{ suborder.description }}</th></tr>
-                            {% endif %}
-                            {% for receivable in suborder.paymentGroup.receivables %}
-                                {% if receivable.dueDate > date() %}
-                                    <tr><td>{{ receivable.dueDate | date("d/m/Y")}}</td><td style="text-align: right">&pound;{{ "%0.2f" | format (receivable.amount/100) }}</td></tr>
+                            {% for suborder in order.suborders %}
+                                {% if order.suborders | length > 1 %}
+                                    <tr><th colspan="2">{{ suborder.description }}</th></tr>
                                 {% endif %}
+                                {% for receivable in suborder.paymentGroup.receivables %}
+                                    {% if receivable.dueDate > date() %}
+                                        <tr><td>{{ receivable.dueDate | date("d/m/Y")}}</td><td style="text-align: right">&pound;{{ "%0.2f" | format (receivable.amount/100) }}</td></tr>
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
-                    </table>
+                        </table>
+                    {% else %}
+                        <p>This is payment in full.</p>
+                    {% endif %}
                 </fieldset>
             </div>
         </div>
