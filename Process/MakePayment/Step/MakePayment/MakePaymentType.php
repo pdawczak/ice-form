@@ -18,6 +18,9 @@ class MakePaymentType extends AbstractType
 
     private $ajaxResponse;
 
+    /** @var string */
+    private $receiptTemplate = 'MakePayment/Step/MakePayment.receipt.html.twig';
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_BIND, function(FormEvent $e) {
@@ -160,11 +163,29 @@ class MakePaymentType extends AbstractType
         return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/PaymentReceived.form.html.twig', $vars);
     }
 
+    /**
+     * @param string $receiptTemplate
+     * @return MakePaymentType
+     */
+    public function setReceiptTemplate($receiptTemplate)
+    {
+        $this->receiptTemplate = $receiptTemplate;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReceiptTemplate()
+    {
+        return $this->receiptTemplate;
+    }
+
     public function renderReceipt() {
         $vars['form'] = $this->getForm()->createView();
         $vars['url'] = $this->getParentProcess()->getUrl();
         $vars['order'] = $this->getParentProcess()->getOrder();
         $vars['amount'] = $this->request->getTotalRequestAmount();
-        return $this->getParentProcess()->getTemplating()->render('MakePayment/Step/MakePayment.receipt.html.twig', $vars);
+        return $this->getParentProcess()->getTemplating()->render($this->getReceiptTemplate(), $vars);
     }
 }
