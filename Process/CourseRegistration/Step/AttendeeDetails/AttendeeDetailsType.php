@@ -98,7 +98,11 @@ class AttendeeDetailsType extends AbstractRegistrationStep
      */
     public function prepare()
     {
-        $contact = AttendeeDetails::fromStepProgress($this->getStepProgress());
+        if ($this->getStepProgress()->getUpdated()) {
+            $contact = AttendeeDetails::fromStepProgress($this->getStepProgress());
+        } else {
+            $contact = AttendeeDetails::fromUser($this->getParentProcess()->getRegistrant());
+        }
         $this->setEntity($contact);
         $this->setPrepared();
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Ice\FormBundle\Process\CourseRegistration\Step\AttendeeDetails;
 
+use Ice\JanusClientBundle\Entity\User;
 use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
 
@@ -187,6 +188,23 @@ class AttendeeDetails{
         $instance->setPostCode($instance->getDeserializedValueByFieldName($stepProgress, 'postCode'));
         $instance->setCountry($instance->getDeserializedValueByFieldName($stepProgress, 'country'));
         $instance->setTelephone($instance->getDeserializedValueByFieldName($stepProgress, 'telephone'));
+        return $instance;
+    }
+
+    /**
+     * @param User $user
+     * @return AttendeeDetails
+     */
+    public static function fromUser(User $user){
+        $instance = new self();
+        $instance->setAddress1($user->getAttributeValueByName('address1'));
+        $instance->setAddress2($user->getAttributeValueByName('address2'));
+        $instance->setAddress3($user->getAttributeValueByName('address3'));
+        $instance->setTown($user->getAttributeValueByName('town'));
+        $instance->setCounty($user->getAttributeValueByName('county'));
+        $instance->setPostCode($user->getAttributeValueByName('postCode'));
+        $instance->setCountry($user->getAttributeValueByName('country'));
+        $instance->setTelephone($user->getAttributeValueByName('telephone'));
         return $instance;
     }
 
