@@ -102,6 +102,11 @@ class MakePaymentType extends AbstractType
                 $this->request->getReference()
             );
 
+            if ($this->request->getTotalRequestAmount() === 0) {
+                //Nothing to request, we're done.
+                $this->getStepProgress()->setComplete();
+            }
+
             $this->getParentProcess()->saveProgress();
         }
     }
