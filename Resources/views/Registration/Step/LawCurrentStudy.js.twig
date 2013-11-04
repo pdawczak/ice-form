@@ -1,0 +1,21 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeEnrolledWithUoL(){
+            if($('input:radio[name=llbEnrolledWithUniversityOfLondon]:checked').val() === 'N'){
+                $('#whenEnrolledWithUoLNo').show();
+            }
+            else {
+                $('#whenEnrolledWithUoLNo').hide();
+            }
+        }
+
+        $('input:radio[name=llbEnrolledWithUniversityOfLondon]').each(function(index, domElement){
+            $(domElement).change(onChangeEnrolledWithUoL);
+        });
+
+        onChangeEnrolledWithUoL();
+    </script>
+{% endblock %}

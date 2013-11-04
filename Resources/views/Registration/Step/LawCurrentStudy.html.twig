@@ -1,0 +1,7 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    {{ form_row(form.llbEnrolledWithUniversityOfLondon, {'form_type':'horizontal'}) }}
+    <div id="whenEnrolledWithUoLNo">{{ form_row(form.quAltUni, {'form_type':'horizontal'}) }}</div>
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}
