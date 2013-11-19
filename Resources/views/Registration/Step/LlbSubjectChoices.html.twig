@@ -1,0 +1,7 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>Please select a minimum of two areas of law from the available options below.</p>
+    {{ form_row(form.subjectChoices, {'form_type':'horizontal'}) }}
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}
