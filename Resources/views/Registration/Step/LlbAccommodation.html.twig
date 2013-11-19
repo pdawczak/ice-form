@@ -1,0 +1,8 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>Accommodation is provided at Selwyn College for the duration of the course. Please select your accommodation
+        preference from the choices below.</p>
+    {{ form_row(form.accommodation, {'form_type':'horizontal'}) }}
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}
