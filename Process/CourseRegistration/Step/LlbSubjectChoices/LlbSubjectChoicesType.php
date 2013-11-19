@@ -1,7 +1,6 @@
 <?php
 namespace Ice\FormBundle\Process\CourseRegistration\Step\LlbSubjectChoices;
 
-use Ice\FormBundle\Process\CourseRegistration\EventSubscriber\LlbSubjectChoicesSubscriber;
 use Ice\JanusClientBundle\Exception\ValidationException;
 use JMS\Serializer\Tests\Fixtures\Person;
 use Symfony\Component\Form\FormError;
