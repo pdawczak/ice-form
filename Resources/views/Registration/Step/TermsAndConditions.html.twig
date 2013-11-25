@@ -1,0 +1,8 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+
+    Please tick to confirm you have read and accept our <a target="_blank" href="http://www.ice.cam.ac.uk/terms">terms and conditions</a> and our <a target="_blank" href="http://www.ice.cam.ac.uk/studying-with-us/information-for-students/fees-and-refunds">cancellations and refunds policy</a>.
+    {{ form_row(form.termsAndConditions, {form_type:'horizontal'}) }}
+    {{ form_rest(form) }}
+{% endblock %}
