@@ -5,6 +5,7 @@ use Ice\JanusClientBundle\Exception\ValidationException;
 use JMS\Serializer\Tests\Fixtures\Person;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
 use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
@@ -181,7 +182,7 @@ class LlbAccommodationType extends AbstractRegistrationStep
         foreach ($course->getBookingItems() as $item) {
             if ($item->getCategory() === self::CATEGORY_ACCOMMODATION && substr($item->getCode(), 0, 13) === 'ACCOMMODATION') {
                 $options[$item->getCode()] = [
-                    'label'=>sprintf("%s (£%.02f)", $item->getTitle(), $item->getPrice()/100),
+                    'label'=>$item->getTitle(),
                     'enabled'=>$item->isInStock()
                 ];
             }
@@ -189,5 +190,40 @@ class LlbAccommodationType extends AbstractRegistrationStep
         }
 
         return $options;
+    }
+
+    /**
+     * Disable radio buttons for items which are out of stock
+     *
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::finishView($view, $form, $options);
+
+        $course = $this->getParentProcess()->getCourse();
+
+        foreach (
+            [
+                'accommodation' => ['unavailableMessage' => 'Unavailable']
+            ] as $fieldName => $options) {
+            if (!isset($view->children[$fieldName])) {
+                continue;
+            }
+            foreach ($view->children[$fieldName]->children as $child) {
+                $code = $child->vars['value'];
+                if ($courseItem = $course->getBookingItemByCode($code)) {
+                    if ($courseItem->getPrice()) {
+                        $child->vars['label'].= sprintf(" £%.02f", $courseItem->getPrice()/100);
+                    }
+                    if (!$course->getBookingItemByCode($code)->isInStock()) {
+                        $child->vars['label'] = $options['unavailableMessage'] . ' - ' . $child->vars['label'];
+                        $child->vars['attr']['disabled'] = 'disabled';
+                    }
+                }
+            }
+        }
     }
 }
