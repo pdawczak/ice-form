@@ -50,6 +50,11 @@ class PassportPhotoType extends AbstractRegistrationStep
         return 'PassportPhoto.html.twig';
     }
 
+    public function getJavascriptTemplate()
+    {
+        return 'PassportPhoto.js.twig';
+    }
+
     public function prepare()
     {
         $this->setEntity(PassportPhoto::fromStepProgress($this->getStepProgress()));
