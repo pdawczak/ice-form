@@ -5,7 +5,7 @@ namespace Ice\FormBundle\Process\CourseRegistration\Step;
 use Ice\FormBundle\Process\CourseRegistration;
 use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\MinervaClientBundle\Entity\Category;
-use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
