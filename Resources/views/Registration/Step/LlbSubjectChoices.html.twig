@@ -2,6 +2,9 @@
 
 {% block form_content %}
     <p>Please select a minimum of two areas of law from the available options below.</p>
+
+    <p>Please note that there is a  non-refundable registration fee of <b>&pound;200 in addition</b> to the subject fees for your selected courses.</p>
+
     {{ form_row(form.subjectChoices, {'form_type':'horizontal'}) }}
     {{ form_rest(form, {'form_type':'horizontal'}) }}
 {% endblock %}
