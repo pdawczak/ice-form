@@ -31,7 +31,7 @@ class TermsAndConditionsType extends AbstractRegistrationStep
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
             ->add('termsAndConditions', 'checkbox', array(
-                'label'=>'I confirm'
+                'label'=>'I have read and agree to the terms and conditions of sale and the cancellation and refund policy'
             ))
 
         ;
