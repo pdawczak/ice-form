@@ -26,6 +26,11 @@ class NonMadingleyDisabilityAndSupportNeedsType extends AbstractRegistrationStep
         6 => 'shareSupportNeeds',
     ];
 
+    public function getTitle()
+    {
+        return 'Disability and support needs';
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
