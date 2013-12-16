@@ -1,0 +1,32 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        Under the Equality Act 2010, a disability is any physical or mental impairment which has a substantial and long
+        term adverse effect on an individual’s ability to carry out normal day to day activities.
+    </p>
+
+    <p>
+        We invite disclosure from anyone who feels they may have a disability or other condition which is likely to
+        require additional support during their studies.
+    </p>
+
+    <p>
+        By supplying this information you may be put in contact with our Disability Advisor to establish what support,
+        if any, is required to enable you to study effectively. Please contact
+        <a href="mailto:studentsupport@ice.cam.ac.uk">studentsupport@ice.cam.ac.uk</a> if you have any questions.
+    </p>
+
+    <p>
+    {{ form_row(form.disabilityListed) }}
+    </p>
+
+    {{ form_row(form.inReceiptOfDisabledStudentsAllowance, {'form_type':'horizontal'}) }}
+    {{ form_row(form.additionalNeeds, {'form_type':'horizontal'}) }}
+
+    <div id="whenAdditionalNeedsYes">{{ form_row(form.additionalNeedsDetail, {'form_type':'horizontal'}) }}</div>
+
+    {{ form_row(form.shareSupportNeeds, {'form_type':'horizontal'}) }}
+
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}
