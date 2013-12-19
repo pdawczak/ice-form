@@ -154,7 +154,9 @@ class LlbSubjectChoicesType extends AbstractRegistrationStep
                 'choices' => $enabledChoiceKeys,
                 'multiple' => true,
                 'min' => 2,
+                'max' => 4,
                 'minMessage' => 'You must select at least {{ limit }} subjects.',
+                'maxMessage' => 'You may not select more than {{ limit }} subjects.',
                 'multipleMessage' => 'One or more of your chosen subjects is no longer available.'
             ))
         );
@@ -196,5 +198,11 @@ class LlbSubjectChoicesType extends AbstractRegistrationStep
         }
 
         return $options;
+    }
+
+    public function renderHtml(array $vars = array())
+    {
+        $vars['tuitionFeePence'] = $this->getParentProcess()->getCourse()->getTuitionFee();
+        return parent::renderHtml($vars);
     }
 }
