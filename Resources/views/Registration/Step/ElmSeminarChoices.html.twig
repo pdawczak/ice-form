@@ -1,0 +1,11 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>Please choose 3 seminars from the list below in order of preference. You will be allocated two seminar subjects. Your third subject will only be allocated if we are unable to place you in your first two preferred subjects.</p>
+    <ul>
+    {% for choice in seminarChoices %}
+        <li>{{ choice }}</li>
+    {% endfor %}
+    </ul>
+    {{ parent() }}
+{% endblock %}
