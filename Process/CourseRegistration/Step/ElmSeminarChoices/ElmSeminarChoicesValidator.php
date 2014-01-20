@@ -13,32 +13,34 @@ class ElmSeminarChoicesValidator
      */
     public static function areChoicesValid(ElmSeminarChoices $choices, $context)
     {
-        if (!$choices->getFirstChoice()) {
-            $context->addViolationAtSubPath('firstChoice', "Please select a first choice");
+        if (!$choices->getSeminarChoicesFirstChoice()) {
+            $context->addViolationAtSubPath('seminarChoicesFirstChoice', "Please select a first choice");
         }
 
-        if (!$choices->getSecondChoice()) {
-            $context->addViolationAtSubPath('secondChoice', "Please select a second choice");
+        if (!$choices->getSeminarChoicesSecondChoice()) {
+            $context->addViolationAtSubPath('seminarChoicesSecondChoice', "Please select a second choice");
         }
 
-        if (!$choices->getThirdChoice()) {
-            $context->addViolationAtSubPath('thirdChoice', "Please select a third choice");
+        if (!$choices->getSeminarChoicesThirdChoice()) {
+            $context->addViolationAtSubPath('seminarChoicesThirdChoice', "Please select a third choice");
         }
 
-        if (!$choices->getFirstChoice() || !$choices->getSecondChoice() || !$choices->getThirdChoice()) {
+        if (!$choices->getSeminarChoicesFirstChoice() ||
+            !$choices->getSeminarChoicesSecondChoice() ||
+            !$choices->getSeminarChoicesThirdChoice()) {
             return;
         }
 
-        if ($choices->getFirstChoice() === $choices->getSecondChoice()) {
-            $context->addViolationAtSubPath('secondChoice', "Second choice cannot be equal to the first");
+        if ($choices->getSeminarChoicesFirstChoice() === $choices->getSeminarChoicesSecondChoice()) {
+            $context->addViolationAtSubPath('seminarChoicesSecondChoice', "Second choice cannot be equal to the first");
         }
 
-        if ($choices->getFirstChoice() === $choices->getThirdChoice()) {
-            $context->addViolationAtSubPath('thirdChoice', "Third choice cannot be equal to the first");
+        if ($choices->getSeminarChoicesFirstChoice() === $choices->getSeminarChoicesThirdChoice()) {
+            $context->addViolationAtSubPath('seminarChoicesThirdChoice', "Third choice cannot be equal to the first");
         }
 
-        if ($choices->getSecondChoice() === $choices->getThirdChoice()) {
-            $context->addViolationAtSubPath('thirdChoice', "Third choice cannot be equal to the second");
+        if ($choices->getSeminarChoicesSecondChoice() === $choices->getSeminarChoicesThirdChoice()) {
+            $context->addViolationAtSubPath('seminarChoicesThirdChoice', "Third choice cannot be equal to the second");
         }
     }
 
@@ -46,10 +48,10 @@ class ElmSeminarChoicesValidator
      * @param ElmSeminarChoices $choices
      * @param ExecutionContext $context
      */
-    public static function isHopeToGainValid(ElmSeminarChoices $choices, $context)
+    public static function isSeminarChoicesPersonalStatementValid(ElmSeminarChoices $choices, $context)
     {
-        if (!$choices->getHopeToGain()) {
-            $context->addViolationAtSubPath('hopeToGain', "This is a required field");
+        if (!$choices->getSeminarChoicesPersonalStatement()) {
+            $context->addViolationAtSubPath('seminarChoicesPersonalStatement', "This is a required field");
         }
     }
 }

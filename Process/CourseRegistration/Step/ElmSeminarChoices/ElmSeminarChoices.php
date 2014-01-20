@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package Ice\FormBundle\Process\CourseRegistration\Step\ElmSeminarChoices
  * @Assert\Callback(methods={
  *  {"Ice\FormBundle\Process\CourseRegistration\Step\ElmSeminarChoices\ElmSeminarChoicesValidator", "areChoicesValid"},
- *  {"Ice\FormBundle\Process\CourseRegistration\Step\ElmSeminarChoices\ElmSeminarChoicesValidator", "isHopeToGainValid"}
+ *  {"Ice\FormBundle\Process\CourseRegistration\Step\ElmSeminarChoices\ElmSeminarChoicesValidator", "isSeminarChoicesPersonalStatementValid"}
  * })
  */
 class ElmSeminarChoices
@@ -19,22 +19,22 @@ class ElmSeminarChoices
     /**
      * @var string
      */
-    private $firstChoice;
+    private $seminarChoicesFirstChoice;
 
     /**
      * @var string
      */
-    private $secondChoice;
+    private $seminarChoicesSecondChoice;
 
     /**
      * @var string
      */
-    private $thirdChoice;
+    private $seminarChoicesThirdChoice;
 
     /**
      * @var string
      */
-    private $hopeToGain;
+    private $seminarChoicesPersonalStatement;
 
     /**
      * @param StepProgress $stepProgress
@@ -42,10 +42,10 @@ class ElmSeminarChoices
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();
-        $instance->setHopeToGain($instance->getDeserializedValueByFieldName($stepProgress, 'hopeToGain'));
-        $instance->setFirstChoice($instance->getDeserializedValueByFieldName($stepProgress, 'firstChoice'));
-        $instance->setSecondChoice($instance->getDeserializedValueByFieldName($stepProgress, 'secondChoice'));
-        $instance->setThirdChoice($instance->getDeserializedValueByFieldName($stepProgress, 'thirdChoice'));
+        $instance->setSeminarChoicesPersonalStatement($instance->getDeserializedValueByFieldName($stepProgress, 'seminarChoicesPersonalStatement'));
+        $instance->setSeminarChoicesFirstChoice($instance->getDeserializedValueByFieldName($stepProgress, 'seminarChoicesFirstChoice'));
+        $instance->setSeminarChoicesSecondChoice($instance->getDeserializedValueByFieldName($stepProgress, 'seminarChoicesSecondChoice'));
+        $instance->setSeminarChoicesThirdChoice($instance->getDeserializedValueByFieldName($stepProgress, 'seminarChoicesThirdChoice'));
         return $instance;
     }
 
@@ -64,74 +64,74 @@ class ElmSeminarChoices
     }
 
     /**
-     * @param string $hopeToGain
+     * @param string $seminarChoicesPersonalStatement
      * @return ElmSeminarChoices
      */
-    public function setHopeToGain($hopeToGain)
+    public function setSeminarChoicesPersonalStatement($seminarChoicesPersonalStatement)
     {
-        $this->hopeToGain = $hopeToGain;
+        $this->seminarChoicesPersonalStatement = $seminarChoicesPersonalStatement;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getHopeToGain()
+    public function getSeminarChoicesPersonalStatement()
     {
-        return $this->hopeToGain;
+        return $this->seminarChoicesPersonalStatement;
     }
 
     /**
-     * @param string $firstChoice
+     * @param string $seminarChoicesFirstChoice
      * @return ElmSeminarChoices
      */
-    public function setFirstChoice($firstChoice)
+    public function setSeminarChoicesFirstChoice($seminarChoicesFirstChoice)
     {
-        $this->firstChoice = $firstChoice;
+        $this->seminarChoicesFirstChoice = $seminarChoicesFirstChoice;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getFirstChoice()
+    public function getSeminarChoicesFirstChoice()
     {
-        return $this->firstChoice;
+        return $this->seminarChoicesFirstChoice;
     }
 
     /**
-     * @param string $secondChoice
+     * @param string $seminarChoicesSecondChoice
      * @return ElmSeminarChoices
      */
-    public function setSecondChoice($secondChoice)
+    public function setSeminarChoicesSecondChoice($seminarChoicesSecondChoice)
     {
-        $this->secondChoice = $secondChoice;
+        $this->seminarChoicesSecondChoice = $seminarChoicesSecondChoice;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getSecondChoice()
+    public function getSeminarChoicesSecondChoice()
     {
-        return $this->secondChoice;
+        return $this->seminarChoicesSecondChoice;
     }
 
     /**
-     * @param string $thirdChoice
+     * @param string $seminarChoicesThirdChoice
      * @return ElmSeminarChoices
      */
-    public function setThirdChoice($thirdChoice)
+    public function setSeminarChoicesThirdChoice($seminarChoicesThirdChoice)
     {
-        $this->thirdChoice = $thirdChoice;
+        $this->seminarChoicesThirdChoice = $seminarChoicesThirdChoice;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getThirdChoice()
+    public function getSeminarChoicesThirdChoice()
     {
-        return $this->thirdChoice;
+        return $this->seminarChoicesThirdChoice;
     }
 }

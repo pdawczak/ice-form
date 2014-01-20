@@ -19,16 +19,16 @@ use Ice\JanusClientBundle\Entity\User;
 class ElmSeminarChoicesType extends AbstractRegistrationStep
 {
     protected $childFormOrder = [
-        1 => 'firstChoice',
-        2 => 'secondChoice',
-        3 => 'thirdChoice',
-        4 => 'hopeToGain'
+        1 => 'seminarChoicesFirstChoice',
+        2 => 'seminarChoicesSecondChoice',
+        3 => 'seminarChoicesThirdChoice',
+        4 => 'seminarChoicesPersonalStatement'
     ];
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstChoice', 'choice', array(
+            ->add('seminarChoicesFirstChoice', 'choice', array(
                     'choices'=>$this->getChoices(),
                     'expanded'=>false,
                     'multiple'=>false,
@@ -36,7 +36,7 @@ class ElmSeminarChoicesType extends AbstractRegistrationStep
                     'label'=>'First choice'
                 )
             )
-            ->add('secondChoice', 'choice', array(
+            ->add('seminarChoicesSecondChoice', 'choice', array(
                     'choices'=>$this->getChoices(),
                     'expanded'=>false,
                     'multiple'=>false,
@@ -44,7 +44,7 @@ class ElmSeminarChoicesType extends AbstractRegistrationStep
                     'label'=>'Second choice'
                 )
             )
-            ->add('thirdChoice', 'choice', array(
+            ->add('seminarChoicesThirdChoice', 'choice', array(
                     'choices'=>$this->getChoices(),
                     'expanded'=>false,
                     'multiple'=>false,
@@ -52,7 +52,7 @@ class ElmSeminarChoicesType extends AbstractRegistrationStep
                     'label'=>'Third choice'
                 )
             )
-            ->add('hopeToGain', 'textarea', array(
+            ->add('seminarChoicesPersonalStatement', 'textarea', array(
                 'label' => 'Please state briefly (200 words maximum) what you hope to gain from this course. ',
                 'required' => true))
             ;
@@ -68,7 +68,7 @@ class ElmSeminarChoicesType extends AbstractRegistrationStep
             'Company Law' => 'Company Law',
             'Law of Contract' => 'Law of Contract',
             'Private International Law' => 'Private International Law',
-            'Constitutional and Administrative Law ' => 'Constitutional and Administrative Law ',
+            'Constitutional and Administrative Law' => 'Constitutional and Administrative Law',
             'Law of Trusts' => 'Law of Trusts'
         );
     }
