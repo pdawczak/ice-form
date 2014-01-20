@@ -1,0 +1,8 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>This summer school is for lawyers and students from non-common law countries with no knowledge of the English legal system.</p>
+
+    {{ form_row(form.confirmNotCommonLaw) }}
+    {{ form_rest(form) }}
+{% endblock %}
