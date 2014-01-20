@@ -1,0 +1,33 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+        function onChangeAccommodation(){
+            var val = $('input:radio[name=accommodation]:checked').val();
+
+            if(val && val.indexOf("ENSUITE") != -1){
+                $('#whenEnsuite').show();
+                $('#whenStandard').hide();
+                $('#whenStandardOrEnsuite').show();
+            }
+            else if(val && val.indexOf("STANDARD") != -1) {
+                $('#whenEnsuite').hide();
+                $('#whenStandard').show();
+                $('#whenStandardOrEnsuite').show();
+            }
+            else {
+                $('#whenEnsuite').hide();
+                $('#whenStandard').hide();
+                $('#whenStandardOrEnsuite').hide();
+            }
+        }
+
+        $('input:radio[name=accommodation]').each(function(index, domElement){
+            $(domElement).change(onChangeAccommodation);
+        });
+
+        onChangeAccommodation();
+    </script>
+{% endblock %}
