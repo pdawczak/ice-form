@@ -99,6 +99,82 @@ class ElmAccommodationType extends AbstractRegistrationStep
         return parent::renderHtml($vars);
     }
 
+
+    /**
+     * @param Request $request
+     */
+    public function processRequest(Request $request = null)
+    {
+        $this->getForm()->bind($request);
+        /** @var $entity ElmAccommodation */
+        $entity = $this->getEntity();
+
+        if ($this->isContinueClicked() && $this->getForm()->isValid()) {
+            $course = $this->getParentProcess()->getCourse();
+
+            $booking = $this->getParentProcess()->getBooking();
+
+            $bookingItems = $booking->getBookingItems();
+
+            //Remove all items
+            $newBookingItems = [];
+
+            //Add back any items we're not responsible for
+            foreach ($bookingItems as $bookingItem) {
+                if (
+                    substr($bookingItem->getCode(),0,13) !== 'ACCOMMODATION'
+                ) {
+                    $newBookingItems[] = $bookingItem;
+                }
+            }
+
+            $booking->setBookingItems($newBookingItems);
+
+            //Add back any items which we are responsible for
+            if ($choice = $entity->getAccommodation()) {
+                $booking->addBookingItemByCourseBookingItem(
+                    $course->getBookingItemByCode($choice)
+                );
+            }
+
+            //Add back any items which we are responsible for
+            if ($choice = $entity->getSundayAccommodation()) {
+                $booking->addBookingItemByCourseBookingItem(
+                    $course->getBookingItemByCode($choice)
+                );
+            }
+
+            //Persist the new items
+            $this->getParentProcess()->getMinervaClient()->updateBooking(
+                $this->getParentProcess()->getRegistrantId(),
+                $this->getParentProcess()->getCourseId(),
+                $booking
+            );
+        }
+
+        $this->getStepProgress()->setFieldValue(
+            'accommodation',
+            1,
+            'Course accommodation',
+            $entity->getAccommodation()
+        );
+
+        $this->getStepProgress()->setFieldValue(
+            'sundayAccommodation',
+            2,
+            'Additional accommodation',
+            $entity->getSundayAccommodation()
+        );
+
+        if ($this->getForm()->isValid()) {
+            $this->setComplete();
+        } else {
+            $this->setComplete(false);
+        }
+        $this->setUpdated();
+        $this->save();
+    }
+
     /**
      * @return string
      */
