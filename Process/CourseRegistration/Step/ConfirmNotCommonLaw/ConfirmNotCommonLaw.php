@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\ConfirmNotCommonLaw;
 
 use Ice\MinervaClientBundle\Entity\StepProgress;
+use Ice\MinervaClientBundle\Exception\NotFoundException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ConfirmNotCommonLaw
@@ -33,6 +34,22 @@ class ConfirmNotCommonLaw
 
     public static function fromStepProgress(StepProgress $progress)
     {
-        return new self();
+        $instance = new self();
+        $instance->setConfirmNotCommonLaw($instance->getDeserializedValueByFieldName($progress, 'confirmNotCommonLaw'));
+        return $instance;
+    }
+
+    /**
+     * @param StepProgress $stepProgress
+     * @param $fieldName
+     * @return mixed|null
+     */
+    private function getDeserializedValueByFieldName(StepProgress $stepProgress, $fieldName){
+        try{
+            return $stepProgress->getFieldValueByName($fieldName)->getValue();
+        }
+        catch(NotFoundException $e){
+            return null;
+        }
     }
 }
