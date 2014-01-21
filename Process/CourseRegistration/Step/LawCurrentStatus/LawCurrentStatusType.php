@@ -59,7 +59,7 @@ class LawCurrentStatusType extends AbstractRegistrationStep
                     'year' => 'Year',
                 )))
             ->add('oneYearOfStudy', 'checkbox', array(
-                'label' => 'I confirm that I will have completed a minimum of one year of legal studies at undergraduate level by the start date of this summer school.',
+                'label' => 'I confirm that I have or will have completed a minimum of one year of legal studies at undergraduate level by '.$this->getParentProcess()->getCourse()->getStartDate()->format('F jS, Y').'.',
                 'required' => false
             ))
 
