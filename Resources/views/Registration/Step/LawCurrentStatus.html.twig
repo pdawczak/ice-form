@@ -4,6 +4,7 @@
     <fieldset><legend>Current status and qualifications</legend>
         {{ form_row(form.currentStatus, {'form_type':'horizontal'}) }}
         <div id="whenOther">{{ form_row(form.specifyOther, {'form_type':'horizontal'}) }}</div>
+        {{ form_row(form.oneYearOfStudy, {'form_type':'horizontal'}) }}
         {{ form_row(form.currentQualifications, {'form_type':'horizontal'}) }}
     </fieldset>
 
@@ -21,7 +22,6 @@
     <fieldset id="whenLawStudent"><legend>Law students</legend>
         {{ form_row(form.courseTitle, {'form_type':'horizontal'}) }}
         {{ form_row(form.courseStartDate, {'form_type':'horizontal'}) }}
-        {{ form_row(form.oneYearOfStudy, {'form_type':'horizontal'}) }}
     </fieldset>
     {{ form_rest(form, {'form_type':'horizontal'}) }}
 {% endblock %}

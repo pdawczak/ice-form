@@ -33,7 +33,7 @@ class LawCurrentStatus
 
     /**
      * @var int
-     * @Assert\NotBlank(groups={"status_student"})
+     * @Assert\NotBlank(groups={"default"})
      */
     private $oneYearOfStudy;
 
