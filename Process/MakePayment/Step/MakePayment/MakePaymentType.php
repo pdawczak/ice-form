@@ -59,6 +59,25 @@ class MakePaymentType extends AbstractType
     {
         $vars['order'] = $this->getParentProcess()->getOrder();
         $vars['transactionRequest'] = $this->request;
+
+        $order = $this->getParentProcess()->getOrder();
+
+        $paymentGroupInfo = [];
+
+        foreach ($order->getSuborders() as $suborder) {
+            $thisPaymentGroup = $suborder->getPaymentGroup();
+            if (isset($paymentGroupInfo[$thisPaymentGroup->getId()])){
+                $paymentGroupInfo[$thisPaymentGroup->getId()]['suborderDescriptions'][] = $suborder->getDescription();
+            } else {
+                $paymentGroupInfo[$thisPaymentGroup->getId()] = [
+                    'paymentGroup' => $thisPaymentGroup,
+                    'suborderDescriptions' => [$suborder->getDescription()]
+                ];
+            }
+        }
+
+        $vars['paymentGroupInfos'] = $paymentGroupInfo;
+
         $vars['isAdmin'] = $this->getParentProcess()->getAdministrator() !== null;
 
         $vars['iframeUrl'] = $this->getParentProcess()->getMercuryClient()->getPaymentPagesService()->getIframeUrl(

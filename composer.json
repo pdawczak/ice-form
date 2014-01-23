@@ -20,12 +20,11 @@
         }
     ],
     "require": {
-        "ice/minervaclient-bundle": ">=0.2.0@dev",
-        "ice/janusclient-bundle": ">=0.3@dev",
-        "ice/mercuryclient-bundle": ">=2.0.0@dev",
-        "ice/veritasclient-bundle": ">=0.2.0@dev",
-        "misd/guzzle-bundle": "@stable",
-        "jms/serializer-bundle": "0.12.*@dev"
+        "ice/minervaclient-bundle": ">=1.7.0",
+        "ice/janusclient-bundle": ">=0.3",
+        "ice/mercuryclient-bundle": ">=2.0.0",
+        "ice/veritasclient-bundle": ">=0.2.0",
+        "misd/guzzle-bundle": "@stable"
     },
     "require-dev": {
         "symfony/form": "2.2.*",

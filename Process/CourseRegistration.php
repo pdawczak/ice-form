@@ -4,6 +4,7 @@ namespace Ice\FormBundle\Process;
 use Doctrine\Common\Collections\ArrayCollection;
 use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
+use Ice\FormBundle\Process\CourseRegistration\StepDirectorInterface;
 use Ice\MinervaClientBundle\Entity\Booking;
 use Ice\MinervaClientBundle\Entity\BookingItem;
 use Ice\MinervaClientBundle\Entity\Category;
@@ -51,6 +52,19 @@ class CourseRegistration extends AbstractProcess
     private $ajaxResponse = null;
 
     /**
+     * @var StepDirectorInterface
+     */
+    private $stepDirector;
+
+    /**
+     * @param StepDirectorInterface $stepDirector
+     */
+    public function __construct(StepDirectorInterface $stepDirector)
+    {
+        $this->stepDirector = $stepDirector;
+    }
+
+    /**
      * @param string $reference
      * @return Step\AbstractRegistrationStep
      */
@@ -81,13 +95,12 @@ class CourseRegistration extends AbstractProcess
 
     /**
      * @param $reference
+     * @param $version
      * @return Step\AbstractRegistrationStep
      */
-    private function createStepByReference($reference)
+    private function createStepByReference($reference, $version)
     {
-        $className = 'Ice\\FormBundle\\Process\\CourseRegistration\\Step\\' . ucwords($reference) . '\\' . ucwords($reference) . 'Type';
-        $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->newInstance($this, $reference);
+        return $this->stepDirector->getStepFactory($reference)->getStep($this, $reference, $version);
     }
 
     /**
@@ -100,13 +113,13 @@ class CourseRegistration extends AbstractProcess
             if ($this->registrantId) {
                 $progress = $this->getProgress(true);
                 foreach ($progress->getStepProgresses() as $step) {
-                    $newStep = $this->createStepByReference($step->getStepName());
+                    $newStep = $this->createStepByReference($step->getStepName(), $step->getStepVersion());
                     $newStep->setStepProgress($step);
                     $this->steps[] = $newStep;
                 }
             } else {
                 foreach ($this->getCourse()->getCourseRegistrationRequirements() as $requirement) {
-                    $this->steps[] = $this->createStepByReference($requirement->getCode());
+                    $this->steps[] = $this->createStepByReference($requirement->getCode(), $requirement->getVersion());
                 }
             }
         }
@@ -198,11 +211,16 @@ class CourseRegistration extends AbstractProcess
 
     protected function processAjaxRequest(Request $request)
     {
-        if (null !== ($stepReference = $request->get('stepReference', null))) {
-            $submittedStep = $this->createStepByReference($stepReference);
-            $submittedStep->processAjaxRequest($request);
+        if (($progress = $this->getProgress()) && (null !== ($stepReference = $request->get('stepReference', null)))) {
+            foreach ($progress->getStepProgresses() as $step) {
+                if ($step->getStepName() === $stepReference) {
+                    $submittedStep = $this->createStepByReference($stepReference,$step->getStepVersion());
+                    $submittedStep->processAjaxRequest($request);
+                    return;
+                }
+            }
         } else {
-            return new Response('AJAX response not supported when no step reference is supplied.', 412);
+            return new Response('AJAX response not supported when no step reference is supplied or no progress is available.', 412);
         }
     }
 
@@ -526,7 +544,7 @@ class CourseRegistration extends AbstractProcess
         $requirements = $this->getCourse()->getCourseRegistrationRequirements();
         foreach ($requirements as $i => $req) {
             $stepProgress = new StepProgress();
-            $stepHandler = $this->createStepByReference($req->getCode());
+            $stepHandler = $this->createStepByReference($req->getCode(), $req->getVersion());
             $stepProgress->setStepName($stepHandler->getReference());
             $stepProgress->setDescription($stepHandler->getTitle());
             $stepProgress->setOrder($i + 1);
