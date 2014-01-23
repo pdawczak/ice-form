@@ -25,8 +25,8 @@ class LawCurrentStatusType extends AbstractRegistrationStep
         $builder
             ->add('currentStatus', 'choice', array(
                     'choices'=>array(
-                        'Professional'=>'Lawyer',
-                        'Student'=>'Law student',
+                        'Lawyer'=>'Lawyer',
+                        'LawStudent'=>'Law student',
                         'Other'=>'Other'
                     ),
                     'expanded'=>true,
@@ -155,7 +155,7 @@ class LawCurrentStatusType extends AbstractRegistrationStep
                 /** @var $data LawCurrentStatus */
                 $data = $form->getData();
                 $groups = array('default');
-                if($data->getCurrentStatus() === 'Student'){
+                if($data->getCurrentStatus() === 'LawStudent'){
                     $groups[] = 'status_student';
                 }
                 if($data->getCurrentStatus() === 'Other'){
