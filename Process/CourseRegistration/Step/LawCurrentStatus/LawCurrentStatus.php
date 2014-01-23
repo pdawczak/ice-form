@@ -33,7 +33,7 @@ class LawCurrentStatus
 
     /**
      * @var int
-     * @Assert\NotBlank(groups={"default"})
+     * @Assert\NotBlank(groups={"default"}, message="This is a requirement for this course")
      */
     private $oneYearOfStudy;
 
