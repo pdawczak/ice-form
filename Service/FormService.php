@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Service;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Ice\FormBundle\Process\CourseRegistrationFactoryInterface;
 use Ice\FormBundle\Process\PlaceOrder;
 use Ice\FormBundle\Process\MakePayment;
 
@@ -16,7 +17,8 @@ use Ice\JanusClientBundle\Service\JanusClient;
 use Ice\MercuryClientBundle\Service\MercuryClient;
 use Symfony\Component\DependencyInjection\Container;
 
-class FormService{
+class FormService
+{
     /** @var FormFactory */
     private $formFactory;
 
@@ -42,35 +44,36 @@ class FormService{
     private $container;
 
     /**
+     * @var CourseRegistrationFactoryInterface
+     */
+    private $courseRegistrationFactory;
+
+    /**
+     * @param CourseRegistrationFactoryInterface $courseRegistrationFactory
+     */
+    public function __construct(CourseRegistrationFactoryInterface $courseRegistrationFactory)
+    {
+        $this->courseRegistrationFactory = $courseRegistrationFactory;
+    }
+
+    /**
      * Begin OR resume a course registration
      *
      * @param int $courseId
      * @param string|null $registrantId
      * @return CourseRegistration
      */
-    public function beginCourseRegistrationProcess($courseId, $registrantId = null){
-        $courseRegistration = new CourseRegistration();
-        $courseRegistration
-            ->setCourseId($courseId)
-            ->setFormFactory($this->getFormFactory())
-            ->setTemplating($this->getTemplating())
-            ->setVeritasClient($this->getVeritasClient())
-            ->setJanusClient($this->getJanusClient())
-            ->setMinervaClient($this->getMinervaClient())
-        ;
-
-        if($registrantId){
-            $courseRegistration->setRegistrantId($registrantId);
-        }
-
-        return $courseRegistration;
+    public function beginCourseRegistrationProcess($courseId, $registrantId = null)
+    {
+        return $this->courseRegistrationFactory->getCourseRegistrationProcess($courseId, $registrantId);
     }
 
     /**
      * @param string $customerId
      * @return PlaceOrder
      */
-    public function placeOrder($customerId){
+    public function placeOrder($customerId)
+    {
         $placeOrder = new PlaceOrder();
         $placeOrder
             ->setCustomerId($customerId)
@@ -80,8 +83,7 @@ class FormService{
             ->setJanusClient($this->getJanusClient())
             ->setMinervaClient($this->getMinervaClient())
             ->setMercuryClient($this->getMercuryClient())
-            ->setPaymentPlanService($this->getContainer()->get('mercury.payment_plans'))
-        ;
+            ->setPaymentPlanService($this->getContainer()->get('mercury.payment_plans'));
         return $placeOrder;
     }
 
@@ -89,7 +91,8 @@ class FormService{
      * @param \Ice\MercuryClientBundle\Entity\Order $order
      * @return MakePayment
      */
-    public function makePayment(Order $order){
+    public function makePayment(Order $order)
+    {
         $makePayment = new MakePayment();
         $makePayment
             ->setOrder($order)
@@ -98,8 +101,7 @@ class FormService{
             ->setVeritasClient($this->getVeritasClient())
             ->setJanusClient($this->getJanusClient())
             ->setMinervaClient($this->getMinervaClient())
-            ->setMercuryClient($this->getMercuryClient())
-        ;
+            ->setMercuryClient($this->getMercuryClient());
         return $makePayment;
     }
 
@@ -146,7 +148,7 @@ class FormService{
     public function setTwigLoader($twigLoader)
     {
         $this->twigLoader = $twigLoader;
-        $this->twigLoader->addPath(__DIR__.'/../Resources/views');
+        $this->twigLoader->addPath(__DIR__ . '/../Resources/views');
         return $this;
     }
 

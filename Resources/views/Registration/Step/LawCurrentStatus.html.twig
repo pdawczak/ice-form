@@ -1,0 +1,27 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <fieldset><legend>Current status and qualifications</legend>
+        {{ form_row(form.currentStatus, {'form_type':'horizontal'}) }}
+        <div id="whenOther">{{ form_row(form.specifyOther, {'form_type':'horizontal'}) }}</div>
+        {{ form_row(form.oneYearOfStudy, {'form_type':'horizontal'}) }}
+        {{ form_row(form.currentQualifications, {'form_type':'horizontal'}) }}
+    </fieldset>
+
+    <fieldset><legend>Current place of work or study</legend>
+        {{ form_row(form.companyOrInstitution, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionAddress1, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionAddress2, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionAddress3, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionTown, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionCounty, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionPostCode, {'form_type':'horizontal'}) }}
+        {{ form_row(form.institutionCountry, {'form_type':'horizontal'}) }}
+    </fieldset>
+
+    <fieldset id="whenLawStudent"><legend>Law students</legend>
+        {{ form_row(form.courseTitle, {'form_type':'horizontal'}) }}
+        {{ form_row(form.courseStartDate, {'form_type':'horizontal'}) }}
+    </fieldset>
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}

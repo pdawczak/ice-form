@@ -32,14 +32,20 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
     private $course;
 
     /**
+     * @var bool
+     */
+    private $platterFieldsEnabled;
+
+    /**
      * @param FormFactoryInterface $factory
      * @param Course $course
-     *
+     * @param $platterFieldsEnabled
      */
-    public function __construct(FormFactoryInterface $factory, Course $course)
+    public function __construct(FormFactoryInterface $factory, Course $course, $platterFieldsEnabled)
     {
         $this->factory = $factory;
         $this->course = $course;
+        $this->platterFieldsEnabled = $platterFieldsEnabled;
     }
 
     /**
@@ -148,8 +154,10 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
         $form->remove('bedAndBreakfastAccommodation');
         $form->remove('accommodationRequirementsGroup');
         $form->remove('accommodationSharingWith');
-        $form->remove('platter');
-        $form->remove('platterOption');
+        if($this->platterFieldsEnabled) {
+            $form->remove('platter');
+            $form->remove('platterOption');
+        }
     }
 
     /**
@@ -189,7 +197,8 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
                     $this->createFormForItemType(
                         'bedAndBreakfastAccommodation',
                         $bAndBChoices,
-                        'Sunday night B&B accommodation'
+                        'Sunday night B&B accommodation',
+                        $this->platterFieldsEnabled // This only needs to be an AJAX field if there's a platter option
                     )
                 );
             }
@@ -209,12 +218,20 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             }
         }
 
+        if ($this->platterFieldsEnabled) {
+            $this->addPlatterFields($accommodationChoice, $bAndBChoices, $form, $data);
+        }
+    }
+
+    private function addPlatterFields($accommodationChoice, $bAndBChoices, $form, $data)
+    {
         $bedAndBreakfastAccommodationChoice =
             isset($data['bedAndBreakfastAccommodation']) ? $data['bedAndBreakfastAccommodation'] : null;
 
-        if (($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false) &&
+        if (
+            ($accommodationChoice !== null && strpos($accommodationChoice, '-NONE-') === false) &&
             ($bedAndBreakfastAccommodationChoice !== null && strpos($bedAndBreakfastAccommodationChoice, '-NONE-') === false &&
-            count($bAndBChoices)
+                count($bAndBChoices)
             )
         ) {
             $choices = $this->getChoicesForCategory(self::CATEGORY_PLATTER);
@@ -321,9 +338,10 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
      * @param array $choices
      * @param string $label
      *
+     * @param bool $ajax
      * @return \Symfony\Component\Form\FormInterface
      */
-    private function createFormForItemType($name, array $choices, $label)
+    private function createFormForItemType($name, array $choices, $label, $ajax = true)
     {
         $enabledChoiceKeys = [];
         $choiceKeysLabels = [];
@@ -351,15 +369,15 @@ class WeekendAccommodationSubscriber implements EventSubscriberInterface
             'required' => false,
             'expanded' => true,
             'multiple' => false,
-            'invalid_message' => 'Please choose a valid option. Some choices are only valid in combination with others so you may need to re-select multiple options.',
-            'attr' => array(
-                'class' => 'ajax',
-            ),
+            'invalid_message' => 'Please choose a valid option. Some choices are only valid in combination with others so you may need to re-select multiple options.'
         );
+
+        if ($ajax) {
+            $options['attr'] = array('class' => 'ajax');
+        }
 
         $form = $this->factory->createNamed($name, 'choice', null, $options);
 
         return $form;
     }
-
 }

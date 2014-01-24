@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="ice.forms" class="Ice\FormBundle\Service\FormService">
+            <argument type="service" id="ice.forms.course_registration_factory" />
             <call method="setFormFactory">
                 <argument type="service" id="form.factory" />
             </call>
@@ -36,6 +37,30 @@
         </service>
         <service id="ice.forms.type.display" class="Ice\FormBundle\Type\DisplayType">
             <tag name="form.type" alias="display" />
+        </service>
+
+        <service id="ice.forms.course_registration_factory" class="Ice\FormBundle\Process\CourseRegistrationFactory">
+            <argument type="service" id="ice.forms.course_registration.step_director" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="janus.client" />
+            <argument type="service" id="minerva.client" />
+            <argument type="service" id="veritas.client" />
+        </service>
+
+
+        <service id="ice.forms.course_registration.default_step_factory"
+                 class="Ice\FormBundle\Process\CourseRegistration\DefaultStepFactory" />
+
+        <service id="ice.forms.course_registration.weekend_accommodation_factory"
+                 class="Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation\WeekendAccommodationTypeFactory" />
+
+        <service id="ice.forms.course_registration.step_director" class="Ice\FormBundle\Process\CourseRegistration\StepDirector">
+            <argument type="service" id="ice.forms.course_registration.default_step_factory" />
+            <call method="setStepFactory">
+                <argument type="string">weekendAccommodation</argument>
+                <argument type="service" id="ice.forms.course_registration.weekend_accommodation_factory" />
+            </call>
         </service>
     </services>
 </container>

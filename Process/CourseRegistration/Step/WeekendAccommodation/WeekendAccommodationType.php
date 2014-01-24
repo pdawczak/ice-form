@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation;
 
 use Ice\FormBundle\Process\CourseRegistration\EventSubscriber\WeekendAccommodationSubscriber;
+use Ice\FormBundle\Process\CourseRegistration;
 use Ice\MinervaClientBundle\Entity\Category;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +19,41 @@ use Symfony\Component\Form\FormView;
 
 class WeekendAccommodationType extends AbstractRegistrationStep
 {
-    protected $childFormOrder = array(
-        1 => 'accommodation',
-        2 => 'accommodationSharingWith',
-        4 => 'adaptedBedroomRequired',
-        5 => 'accommodationRequirements',
-        6 => 'bedAndBreakfastAccommodation',
-        7 => 'platter',
-        8 => 'platterOption',
-    );
+    protected $childFormOrder;
+
+    /**
+     * @var int
+     */
+    private $version;
+
+    public function __construct(CourseRegistration $parentProcess, $reference = null, $version)
+    {
+        $this->version = intval($version);
+
+        $this->childFormOrder = array(
+            1 => 'accommodation',
+            2 => 'accommodationSharingWith',
+            4 => 'adaptedBedroomRequired',
+            5 => 'accommodationRequirements',
+            6 => 'bedAndBreakfastAccommodation'
+        );
+
+        if ($this->enablePlatterFields()) {
+            $this->childFormOrder[7] = 'platter';
+            $this->childFormOrder[8] = 'platterOption';
+        }
+
+        parent::__construct($parentProcess, $reference);
+    }
+
+    /**
+     * @return bool
+     */
+    private function enablePlatterFields()
+    {
+        return $this->version === 1;
+    }
+
 
     /**
      * @param FormBuilderInterface $builder
@@ -35,7 +62,7 @@ class WeekendAccommodationType extends AbstractRegistrationStep
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->addEventSubscriber(new WeekendAccommodationSubscriber($builder->getFormFactory(), $this->getParentProcess()->getCourse()));
+            ->addEventSubscriber(new WeekendAccommodationSubscriber($builder->getFormFactory(), $this->getParentProcess()->getCourse(), $this->enablePlatterFields()));
 
         parent::buildForm($builder, $options);
     }

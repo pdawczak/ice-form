@@ -1,0 +1,36 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeCurrentStatus(){
+            var val = $('input:radio[name=currentStatus]:checked').val();
+            if(val === 'Student'){
+                $('#whenProfessional').hide();
+                $('#whenStudent').show();
+                $('#whenOther').hide();
+            }
+            else if(val === 'Other') {
+                $('#whenProfessional').hide();
+                $('#whenStudent').hide();
+                $('#whenOther').show();
+            }
+            else if(val === 'Professional') {
+                $('#whenProfessional').show();
+                $('#whenStudent').hide();
+                $('#whenOther').hide();
+            }
+            else {
+                $('#whenProfessional').hide();
+                $('#whenStudent').hide();
+                $('#whenOther').hide();
+            }
+        }
+
+        $('input:radio[name=currentStatus]').each(function(index, domElement){
+            $(domElement).change(onChangeCurrentStatus);
+        });
+
+        onChangeCurrentStatus();
+    </script>
+{% endblock %}

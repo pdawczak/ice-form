@@ -1,0 +1,16 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        Accommodation for the duration of the course ({{ numberNights }} nights from {{ accommodationFirstNight | date('l, jS F') }} to {{ accommodationLastNight | date('l, jS F') }}) is provided by Selwyn College. Please select your preferred accommodation
+        package from the options below.
+    </p>
+    {{ form_row(form.accommodation, {'form_type':'horizontal'}) }}
+    <p id="whenStandardOrEnsuite">
+        Accommodation is also available prior to the course on the night of {{ accommodationSunday | date('l, jS F') }} in the same room. Bed and breakfast will be provided.
+    </p>
+    <div id="whenStandard">{{ form_row(form.sundayStandard, {'form_type':'horizontal'}) }}</div>
+    <div id="whenEnsuite">{{ form_row(form.sundayEnsuite, {'form_type':'horizontal'}) }}</div>
+
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}

@@ -26,15 +26,19 @@
                 <fieldset>
                     <legend>Payment plan</legend>
                     <p>This payment is for: <span style="float:right; font-weight: bold">&pound;{{ "%0.2f" | format (transactionRequest.totalRequestAmount/100) }}</span></p>
+
                     {% if order.totalAmount > transactionRequest.totalRequestAmount %}
                         <p>Billing details entered now will be used to take the following payments automatically on the dates specified:</p>
                         <table style="width: 100%">
-
-                            {% for suborder in order.suborders %}
-                                {% if order.suborders | length > 1 %}
-                                    <tr><th colspan="2">{{ suborder.description }}</th></tr>
+                            {% for paymentGroupInfo in paymentGroupInfos %}
+                                {% if paymentGroupInfos | length > 1 %}
+                                    <tr><th colspan="2">{{ paymentGroupInfo.suborderDescriptions | join(' and ') }}</th></tr>
                                 {% endif %}
-                                {% for receivable in suborder.paymentGroup.receivables %}
+                                {% if paymentGroupInfo.paymentGroup.receivables | length == 1 %}
+
+                                {% endif %}
+                                {% endif %}
+                                {% for receivable in paymentGroupInfo.paymentGroup.receivables %}
                                     {% if receivable.dueDate > date() %}
                                         <tr><td>{{ receivable.dueDate | date("d/m/Y")}}</td><td style="text-align: right">&pound;{{ "%0.2f" | format (receivable.amount/100) }}</td></tr>
                                     {% endif %}
