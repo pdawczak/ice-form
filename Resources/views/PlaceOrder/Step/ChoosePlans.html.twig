@@ -6,7 +6,7 @@
         font-weight: bold;
     }
 
-    .schedule{
+    .schedule, .additional{
         margin: 10px;
         float: right;
         width: 40%;
@@ -100,6 +100,14 @@
                     </table>
                 </div>
             {% endfor %}
+        </div>
+        <div class="additional">
+            {% if course.id == 10932 %}
+            <p>
+                <strong>Note:</strong> Online payment is available by credit/debit card only. To arrange payment by bank
+                transfer or third party sponsor, please contact our Admissions team on +44 (0)1223 746262 or <a href="mailto:ice.admissions@ice.cam.ac.uk">ice.admissions@ice.cam.ac.uk</a>.
+            </p>
+            {% endif %}
         </div>
         </fieldset>
     {% endfor %}
