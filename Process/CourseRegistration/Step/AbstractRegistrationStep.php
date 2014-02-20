@@ -400,9 +400,21 @@ abstract class AbstractRegistrationStep extends AbstractType
     }
 
     /**
+     * By default, a step is available only if the registrant and course are known.
+     *
      * @return bool
      */
     public function isAvailable()
+    {
+        return $this->areRegistrantAndCourseKnown();
+    }
+
+    /**
+     * Return true if the registrant ID and course ID are both available.
+     *
+     * @return bool
+     */
+    protected function areRegistrantAndCourseKnown()
     {
         return $this->getParentProcess()->getRegistrantId() && $this->getParentProcess()->getCourseId();
     }
