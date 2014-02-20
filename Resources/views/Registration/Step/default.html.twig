@@ -4,7 +4,16 @@
     {% block form_content %}
         {{ form_widget(form, {form_type: 'horizontal'}) }}
     {% endblock %}
-    <div class="btn-group pull-right">
-        <input type="submit" class="btn btn-primary" value="Continue" name="continue" />
+    <div class="pull-right">
+        {% if secondaryButtonLabel is defined %}
+            {% if secondaryButtonUrl is defined %}
+                <a href="{{ secondaryButtonUrl }}" class="btn" >{{ secondaryButtonLabel }}</a>
+            {% else %}
+                <input type="submit" class="btn" value="{{ secondaryButtonLabel }}"
+                       name="{{ secondaryButtonName | default('back') }}" />
+            {% endif %}
+        {% endif %}
+        <input type="submit" class="btn btn-primary" value="{{ primaryButtonLabel | default('Continue') }}"
+               name="{{ primaryButtonName | default('continue') }}" />
     </div>
 </form>
