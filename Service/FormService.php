@@ -59,11 +59,24 @@ class FormService
     /**
      * Begin OR resume a course registration
      *
+     * @deprecated in favour of getCourseRegistrationProcess
      * @param int $courseId
      * @param string|null $registrantId
      * @return CourseRegistration
      */
     public function beginCourseRegistrationProcess($courseId, $registrantId = null)
+    {
+        return $this->getCourseRegistrationProcess($courseId, $registrantId);
+    }
+
+    /**
+     * Begin OR resume a course registration
+     *
+     * @param int $courseId
+     * @param string|null $registrantId
+     * @return CourseRegistration
+     */
+    public function getCourseRegistrationProcess($courseId, $registrantId = null)
     {
         return $this->courseRegistrationFactory->getCourseRegistrationProcess($courseId, $registrantId);
     }
