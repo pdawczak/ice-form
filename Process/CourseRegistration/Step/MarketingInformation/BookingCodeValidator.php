@@ -24,12 +24,17 @@ class BookingCodeValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        if (!$value) {
+            return;
+        }
+
         if ($handler = $this->bookingCodeHandlerManager->getHandlerFor(
             $value,
             $constraint->course,
             $constraint->user
         )) {
-            return $handler->validate($value, $constraint, $this->context);
+            $handler->validate($value, $constraint, $this->context);
+            return;
         }
 
         $this->context->addViolation("This code is not recognised. If you have not been given a code, please leave this field blank.");
