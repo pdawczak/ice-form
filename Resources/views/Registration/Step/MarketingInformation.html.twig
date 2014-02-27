@@ -3,6 +3,7 @@
 {% block form_content %}
     {{ form_row(form.marketingHowHeard, {'form_type':'horizontal'}) }}
     <div id="whenHowHeardOther">{{ form_row(form.marketingDetail, {'form_type':'horizontal'}) }}</div>
+    {{ form_row(form.bookingCode, {'form_type':'horizontal'}) }}
     {{ form_row(form.marketingOptIn, {'form_type':'horizontal'}) }}
     {{ form_rest(form, {'form_type':'horizontal'}) }}
 {% endblock %}

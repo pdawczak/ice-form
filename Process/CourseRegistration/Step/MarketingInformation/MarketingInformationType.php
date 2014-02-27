@@ -2,15 +2,29 @@
 
 namespace Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation;
 
+use Ice\FormBundle\Process\CourseRegistration;
+use Ice\MinervaClientBundle\Entity\Booking;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
 use Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Ice\JanusClientBundle\Entity\User;
+use Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation\BookingCodeHandler\BookingCodeHandlerManager;
 
-class MarketingInformationType extends AbstractRegistrationStep{
+class MarketingInformationType extends AbstractRegistrationStep
+{
+    private $bookingCodeHandlerManager;
+
+    public function __construct(CourseRegistration $parentProcess, $reference = null, BookingCodeHandlerManager $manager)
+    {
+        $this->bookingCodeHandlerManager = $manager;
+        parent::__construct($parentProcess, $reference);
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -43,6 +57,24 @@ class MarketingInformationType extends AbstractRegistrationStep{
                 'required'=>false
                 )
             )
+            ->add('bookingCode', 'text', array(
+                    'label'=>'If you have been given a booking code, please enter it here',
+                    'required'=>false,
+                    'constraints'=>[
+                        new BookingCodeConstraint([
+                            'course'=>$this->getParentProcess()->getCourse(),
+                            'user'=>$this->getParentProcess()->getRegistrant()
+                        ])
+                    ]
+                )
+            )
+            ->addEventListener(FormEvents::PRE_BIND, function (FormEvent $e) {
+                $data = $e->getData();
+                if (isset($data['bookingCode'])) {
+                    $data['bookingCode'] = strtoupper($data['bookingCode']);
+                    $e->setData($data);
+                }
+            })
         ;
         parent::buildForm($builder, $options);
     }
@@ -58,7 +90,8 @@ class MarketingInformationType extends AbstractRegistrationStep{
         foreach(array(
                     1=>'marketingHowHeard',
                     2=>'marketingDetail',
-                    3=>'marketingOptIn'
+                    3=>'marketingOptIn',
+                    4=>'bookingCode'
                 )
                 as $order=>$fieldName){
             $getter = 'get'.ucfirst($fieldName);
@@ -78,6 +111,26 @@ class MarketingInformationType extends AbstractRegistrationStep{
         );
 
         if($this->getForm()->isValid()){
+
+            $course = $this->getParentProcess()->getCourse();
+            $user = $this->getParentProcess()->getRegistrant();
+            $booking = $this->getParentProcess()->getBooking();
+
+            $bookingCodeHandler = $this->bookingCodeHandlerManager->getHandlerFor(
+                $entity->getBookingCode(),
+                $course,
+                $user
+            );
+
+            if($bookingCodeHandler->updateBooking(
+                $entity->getBookingCode(),
+                $booking,
+                $course,
+                $user
+            )) {
+                $this->getParentProcess()->persistBooking();
+            }
+
             $this->setComplete();
         }
         else{
@@ -102,5 +155,19 @@ class MarketingInformationType extends AbstractRegistrationStep{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         parent::setDefaultOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        //This step is only available if no orders have been placed, because it requires an order amendment which we can't
+        //deal with yet.
+        return $this->areRegistrantAndCourseKnown() &&
+        $this->getParentProcess()->getBooking(false) &&
+        !$this->getParentProcess()->getBooking(false)->getOrderReference();
     }
 }

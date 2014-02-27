@@ -24,6 +24,11 @@ class MarketingInformation{
     private $marketingOptIn;
 
     /**
+     * @var string
+     */
+    private $bookingCode;
+
+    /**
      * @param string $marketingDetail
      * @return MarketingInformation
      */
@@ -85,6 +90,7 @@ class MarketingInformation{
         $instance = new self();
         $instance->setMarketingHowHeard($instance->getDeserializedValueByFieldName($stepProgress, 'marketingHowHeard'));
         $instance->setMarketingDetail($instance->getDeserializedValueByFieldName($stepProgress, 'marketingDetail'));
+        $instance->setBookingCode($instance->getDeserializedValueByFieldName($stepProgress, 'bookingCode'));
         $instance->setMarketingOptIn($instance->getDeserializedValueByFieldName($stepProgress, 'marketingOptIn'));
         return $instance;
     }
@@ -101,5 +107,33 @@ class MarketingInformation{
         catch(NotFoundException $e){
             return null;
         }
+    }
+
+    /**
+     * @param string $bookingCode
+     * @return MarketingInformation
+     */
+    public function setBookingCode($bookingCode)
+    {
+        $this->bookingCode = $bookingCode;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBookingCode()
+    {
+        return $this->bookingCode;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidCodes()
+    {
+        return [
+            'DISCOUNT-CC2014'
+        ];
     }
 }

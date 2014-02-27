@@ -2,6 +2,7 @@
 namespace Ice\FormBundle\Process;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Ice\FormBundle\Process\CourseRegistration\PreProcessor\ItemValueCalculator;
 use Ice\FormBundle\Process\CourseRegistration\Step as Step;
 
 use Ice\FormBundle\Process\CourseRegistration\StepDirectorInterface;
@@ -51,6 +52,9 @@ class CourseRegistration extends AbstractProcess
     /** @var Response */
     private $ajaxResponse = null;
 
+    /** @var  ItemValueCalculator */
+    private $itemValueCalculator;
+
     /**
      * @var StepDirectorInterface
      */
@@ -62,6 +66,7 @@ class CourseRegistration extends AbstractProcess
     public function __construct(StepDirectorInterface $stepDirector)
     {
         $this->stepDirector = $stepDirector;
+        $this->itemValueCalculator = new ItemValueCalculator();
     }
 
     /**
@@ -627,5 +632,17 @@ class CourseRegistration extends AbstractProcess
         }
 
         return $handled;
+    }
+
+    public function persistBooking()
+    {
+        $booking = $this->getBooking(false);
+        if (!$booking) {
+            throw new \RuntimeException("Tried to update a booking which does not exist");
+        }
+
+        $this->itemValueCalculator->recalculateValues($booking, $this->getCourse());
+
+        $this->getMinervaClient()->updateBooking($this->getRegistrantId(), $this->getCourseId(), $booking);
     }
 }

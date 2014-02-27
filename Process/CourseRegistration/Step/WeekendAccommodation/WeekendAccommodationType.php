@@ -145,11 +145,7 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             }
 
             //Persist the new items
-            $this->getParentProcess()->getMinervaClient()->updateBooking(
-                $this->getParentProcess()->getRegistrantId(),
-                $this->getParentProcess()->getCourseId(),
-                $booking
-            );
+            $this->getParentProcess()->persistBooking();
         }
     }
 

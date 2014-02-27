@@ -55,12 +55,37 @@
         <service id="ice.forms.course_registration.weekend_accommodation_factory"
                  class="Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation\WeekendAccommodationTypeFactory" />
 
+        <service id="ice.forms.course_registration.marketing_information_factory"
+                 class="Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation\MarketingInformationTypeFactory">
+            <argument type="service" id="ice.forms.course_registration.marketing_information.booking_code_handler_manager"/>
+        </service>
+
         <service id="ice.forms.course_registration.step_director" class="Ice\FormBundle\Process\CourseRegistration\StepDirector">
             <argument type="service" id="ice.forms.course_registration.default_step_factory" />
             <call method="setStepFactory">
                 <argument type="string">weekendAccommodation</argument>
                 <argument type="service" id="ice.forms.course_registration.weekend_accommodation_factory" />
             </call>
+            <call method="setStepFactory">
+                <argument type="string">marketingInformation</argument>
+                <argument type="service" id="ice.forms.course_registration.marketing_information_factory" />
+            </call>
+        </service>
+
+        <service id="ice.forms.course_registration.booking_code_handler.booking_item"
+                 class="Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation\BookingCodeHandler\BookingItemCodeHandler" />
+
+        <service id="ice.forms.course_registration.marketing_information.booking_code_handler_manager"
+                 class="Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation\BookingCodeHandler\BookingCodeHandlerManager">
+            <call method="addBookingCodeHandler">
+                <argument type="service" id="ice.forms.course_registration.booking_code_handler.booking_item" />
+            </call>
+        </service>
+
+        <service id="ice.forms.course_registration.marketing_information.booking_code_validator"
+                 class="Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation\BookingCodeValidator">
+            <tag name="validator.constraint_validator" alias="booking_code_validator" />
+            <argument type="service" id="ice.forms.course_registration.marketing_information.booking_code_handler_manager" />
         </service>
     </services>
 </container>
