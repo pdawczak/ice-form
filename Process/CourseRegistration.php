@@ -158,6 +158,7 @@ class CourseRegistration extends AbstractProcess
                     $this->getMinervaClient()->setRegistrationStep($this->getRegistrantId(), $this->getCourseId(), array(
                         'stepName' => $step->getStepName(),
                         'order' => $step->getOrder(),
+                        'stepVersion' => $step->getStepVersion(),
                         'description' => $step->getDescription()
                     ));
                 }
