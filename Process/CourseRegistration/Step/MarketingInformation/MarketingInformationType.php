@@ -122,7 +122,7 @@ class MarketingInformationType extends AbstractRegistrationStep
                 $user
             );
 
-            if($bookingCodeHandler->updateBooking(
+            if ($bookingCodeHandler && $bookingCodeHandler->updateBooking(
                 $entity->getBookingCode(),
                 $booking,
                 $course,
