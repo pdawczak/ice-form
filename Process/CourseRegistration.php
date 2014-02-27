@@ -552,6 +552,7 @@ class CourseRegistration extends AbstractProcess
             $stepHandler = $this->createStepByReference($req->getCode(), $req->getVersion());
             $stepProgress->setStepName($stepHandler->getReference());
             $stepProgress->setDescription($stepHandler->getTitle());
+            $stepProgress->setStepVersion($req->getVersion());
             $stepProgress->setOrder($i + 1);
             $stepHandler->setStepProgress($stepProgress);
             $progress->addStepProgress($stepProgress);
