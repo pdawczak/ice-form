@@ -149,9 +149,9 @@ class LlbSubjectChoicesType extends AbstractRegistrationStep
             new Choice(array(
                 'choices' => $enabledChoiceKeys,
                 'multiple' => true,
-                'min' => 2,
+                'min' => 1,
                 'max' => 4,
-                'minMessage' => 'You must select at least {{ limit }} subjects.',
+                'minMessage' => 'You must select at least {{ limit }} subject.',
                 'maxMessage' => 'You may not select more than {{ limit }} subjects.',
                 'multipleMessage' => 'One or more of your chosen subjects is no longer available.'
             ))
