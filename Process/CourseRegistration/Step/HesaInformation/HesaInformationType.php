@@ -139,7 +139,7 @@ class HesaInformationType extends AbstractRegistrationStep
 
     public function getTitle()
     {
-        return 'HESA information';
+        return 'Identity and background';
     }
 
     /**
