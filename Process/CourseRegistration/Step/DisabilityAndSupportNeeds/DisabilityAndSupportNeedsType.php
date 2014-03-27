@@ -99,6 +99,10 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
         return 'DisabilityAndSupportNeeds.js.twig';
     }
 
+    public function getTitle()
+    {
+        return 'Disability and support requirements';
+    }
 
     public function prepare()
     {
