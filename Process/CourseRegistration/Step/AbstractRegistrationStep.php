@@ -45,6 +45,9 @@ abstract class AbstractRegistrationStep extends AbstractType
     /** @var bool */
     private $continueClicked = false;
 
+    /** @var int */
+    protected $version = null;
+
     /**
      * Maps a child form to a specific step order
      *
@@ -80,10 +83,11 @@ abstract class AbstractRegistrationStep extends AbstractType
      * @param CourseRegistration $parentProcess
      * @param string|null $reference
      */
-    public function __construct(CourseRegistration $parentProcess, $reference = null)
+    public function __construct(CourseRegistration $parentProcess, $reference = null, $version = null)
     {
         $this->parentProcess = $parentProcess;
         $this->reference = $reference;
+        $this->version = $version;
     }
 
     public function getTitle()

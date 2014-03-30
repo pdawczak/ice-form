@@ -21,15 +21,8 @@ class WeekendAccommodationType extends AbstractRegistrationStep
 {
     protected $childFormOrder;
 
-    /**
-     * @var int
-     */
-    private $version;
-
-    public function __construct(CourseRegistration $parentProcess, $reference = null, $version)
+    public function __construct(CourseRegistration $parentProcess, $reference, $version)
     {
-        $this->version = intval($version);
-
         $this->childFormOrder = array(
             1 => 'accommodation',
             2 => 'accommodationSharingWith',
@@ -43,7 +36,7 @@ class WeekendAccommodationType extends AbstractRegistrationStep
             $this->childFormOrder[8] = 'platterOption';
         }
 
-        parent::__construct($parentProcess, $reference);
+        parent::__construct($parentProcess, $reference, $version);
     }
 
     /**

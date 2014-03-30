@@ -15,6 +15,6 @@ class DefaultStepFactory implements StepFactoryInterface
     public function getStep(CourseRegistration $registration, $reference, $version)
     {
         $className = 'Ice\\FormBundle\\Process\\CourseRegistration\\Step\\' . ucwords($reference) . '\\' . ucwords($reference) . 'Type';
-        return new $className($registration, $reference);
+        return new $className($registration, $reference, $version);
     }
 }
