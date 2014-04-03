@@ -1,10 +1,12 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
+    {% if form.disabilityListed is defined %}
     <p>
         Under the Equality Act 2010, a disability is any physical or mental impairment which has a substantial and long
         term adverse effect on an individual’s ability to carry out normal day to day activities.
     </p>
+    {% endif %}
 
     <p>
         We invite disclosure from anyone who feels they may have a disability or other condition which is likely to
@@ -12,27 +14,45 @@
     </p>
 
     <p>
-        By supplying this information you may be put in contact with our Disability Advisor to establish what support,
+        By supplying this information you may be put in contact with our adviser to establish what support,
         if any, is required to enable you to study effectively. Please contact
-        <a href="mailto:studentsupport@ice.cam.ac.uk">studentsupport@ice.cam.ac.uk</a> if you have any questions.
+        <a href="mailto:da@ice.cam.ac.uk">da@ice.cam.ac.uk</a> if you have any questions.
     </p>
 
-    <p>
-    {{ form_row(form.disabilityListed) }}
-    </p>
+    {% if form.disabilityListed is defined %}
+        <p>
+        {{ form_row(form.disabilityListed) }}
+        </p>
+    {% endif %}
 
-    {{ form_row(form.inReceiptOfDisabledStudentsAllowance, {'form_type':'horizontal'}) }}
+    {% if form.inReceiptOfDisabledStudentsAllowance is defined %}
+        {{ form_row(form.inReceiptOfDisabledStudentsAllowance, {'form_type':'horizontal'}) }}
+    {% endif %}
     {{ form_row(form.additionalNeeds, {'form_type':'horizontal'}) }}
 
-    <div id="whenAdditionalNeedsYes">{{ form_row(form.additionalNeedsDetail, {'form_type':'horizontal'}) }}</div>
+    <div id="whenAdditionalNeedsYes">
+    {% if form.additionalNeedsDetail is defined %}
+        {% if form.shareSupportNeeds is defined %}
+            <p></p>
+        {% endif %}
+        {{ form_row(form.additionalNeedsDetail, {'form_type':'horizontal'}) }}
+    {% else %}
+        <p>We will contact you shortly to discuss your requirements.</p>
+    {% endif %}
+    </div>
 
-    <p>Madingley Hall is a Grade 1 listed building with a limited number of ground floor teaching rooms. When it is
-        known that students with reduced mobility are attending courses every effort is made to ensure ground floor
-        teaching rooms are used. Should this not prove possible students will be notified in advance.
-    </p>
+    {% if form.firstFloorAccess is defined %}
+        <p>Madingley Hall is a Grade 1 listed building with a limited number of ground floor teaching rooms. When it is
+            known that students with reduced mobility are attending courses every effort is made to ensure ground floor
+            teaching rooms are used. Should this not prove possible students will be notified in advance.
+        </p>
 
-    {{ form_row(form.firstFloorAccess, {'form_type':'horizontal'}) }}
-    {{ form_row(form.shareSupportNeeds, {'form_type':'horizontal'}) }}
+        {{ form_row(form.firstFloorAccess, {'form_type':'horizontal'}) }}
+    {% endif %}
+
+    {% if form.shareSupportNeeds is defined %}
+        {{ form_row(form.shareSupportNeeds, {'form_type':'horizontal'}) }}
+    {% endif %}
 
     {{ form_rest(form, {'form_type':'horizontal'}) }}
 {% endblock %}

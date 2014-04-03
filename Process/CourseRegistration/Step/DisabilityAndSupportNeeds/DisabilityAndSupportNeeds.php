@@ -9,13 +9,13 @@ class DisabilityAndSupportNeeds
 {
     /**
      * @var string
-     * @Assert\NotBlank(groups={"Default"})
+     * @Assert\NotBlank(groups={"enable_hesa"})
      */
     private $disabilityListed;
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"Default"})
+     * @Assert\NotBlank(groups={"enable_hesa"})
      */
     private $inReceiptOfDisabledStudentsAllowance;
 
@@ -27,7 +27,7 @@ class DisabilityAndSupportNeeds
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"has_additional_needs"})
+     * @Assert\NotBlank(groups={"enable_additional_needs_detail"})
      */
     private $additionalNeedsDetail;
 
@@ -39,7 +39,7 @@ class DisabilityAndSupportNeeds
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"Default"})
+     * @Assert\NotBlank(groups={"enable_share_support_needs"})
      */
     private $shareSupportNeeds;
 

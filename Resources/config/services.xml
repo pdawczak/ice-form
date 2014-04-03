@@ -55,6 +55,9 @@
         <service id="ice.forms.course_registration.weekend_accommodation_factory"
                  class="Ice\FormBundle\Process\CourseRegistration\Step\WeekendAccommodation\WeekendAccommodationTypeFactory" />
 
+        <service id="ice.forms.course_registration.support_factory"
+                 class="Ice\FormBundle\Process\CourseRegistration\Step\DisabilityAndSupportNeeds\SupportTypeFactory" />
+
         <service id="ice.forms.course_registration.marketing_information_factory"
                  class="Ice\FormBundle\Process\CourseRegistration\Step\MarketingInformation\MarketingInformationTypeFactory">
             <argument type="service" id="ice.forms.course_registration.marketing_information.booking_code_handler_manager"/>
@@ -69,6 +72,22 @@
             <call method="setStepFactory">
                 <argument type="string">marketingInformation</argument>
                 <argument type="service" id="ice.forms.course_registration.marketing_information_factory" />
+            </call>
+            <call method="setStepFactory">
+                <argument type="string">disabilityAndSupportNeeds</argument>
+                <argument type="service" id="ice.forms.course_registration.support_factory" />
+            </call>
+            <call method="setStepFactory">
+                <argument type="string">nonMadingleyDisabilityAndSupportNeeds</argument>
+                <argument type="service" id="ice.forms.course_registration.support_factory" />
+            </call>
+            <call method="setStepFactory">
+                <argument type="string">supportNeeds</argument>
+                <argument type="service" id="ice.forms.course_registration.support_factory" />
+            </call>
+            <call method="setStepFactory">
+                <argument type="string">madingleySupportNeeds</argument>
+                <argument type="service" id="ice.forms.course_registration.support_factory" />
             </call>
         </service>
 
