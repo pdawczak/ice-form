@@ -34,10 +34,28 @@ function onChangeHesaMostRecentEducationInstitutionType(){
     }
 }
 
+function onChangeHesaFeeSource(){
+    var control = $('select[name=hesaFeeSource]'),
+            val;
+    if (!control) {
+        return;
+    }
+    val = control.val();
+    if(val == '81'){
+        $('#whenFeeSourceIsEmployer').show();
+    }
+    else {
+        $('#whenFeeSourceIsEmployer').hide();
+    }
+}
+
 $('select[name=disabilityListed]').change(onChangeDisability);
 $('select[name=hesaMostRecentEducationInstitutionType]').change(onChangeHesaMostRecentEducationInstitutionType);
+$('select[name=hesaFeeSource]').change(onChangeHesaFeeSource);
 
 onChangeDisability();
 onChangeHesaMostRecentEducationInstitutionType();
+onChangeHesaFeeSource();
+
 </script>
 {% endblock %}

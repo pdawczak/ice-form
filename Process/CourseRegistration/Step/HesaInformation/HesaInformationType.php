@@ -211,6 +211,9 @@ class HesaInformationType extends AbstractRegistrationStep
                 if (intval($data->getHesaMostRecentEducationInstitutionType()) === 4941) {
                     $groups[] = 'uk_higher_ed';
                 }
+                if (intval($data->getHesaFeeSource()) === 81) {
+                    $groups[] = 'fee_source_employer';
+                }
                 if ($this->enableDisabilityQuestions()) {
                     $groups[] = 'ask_disability';
                     if (!in_array(intval($data->getDisabilityListed()), [0, 97])) {

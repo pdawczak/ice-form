@@ -58,6 +58,7 @@ class HesaInformation
 
     /**
      * @var string
+     * @Assert\NotBlank(groups={"fee_source_employer"})
      */
     private $hesaFeesEmployerType;
 
