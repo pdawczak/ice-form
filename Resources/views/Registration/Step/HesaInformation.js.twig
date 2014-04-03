@@ -19,8 +19,25 @@ else {
     }
 }
 
+function onChangeHesaMostRecentEducationInstitutionType(){
+    var control = $('select[name=hesaMostRecentEducationInstitutionType]'),
+            val;
+    if (!control) {
+        return;
+    }
+    val = control.val();
+    if(val == '4941'){
+        $('#whenMostRecentEducationIsHE').show();
+    }
+    else {
+        $('#whenMostRecentEducationIsHE').hide();
+    }
+}
+
 $('select[name=disabilityListed]').change(onChangeDisability);
+$('select[name=hesaMostRecentEducationInstitutionType]').change(onChangeHesaMostRecentEducationInstitutionType);
 
 onChangeDisability();
+onChangeHesaMostRecentEducationInstitutionType();
 </script>
 {% endblock %}
