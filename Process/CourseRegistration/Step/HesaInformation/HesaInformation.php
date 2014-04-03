@@ -4,9 +4,22 @@ namespace Ice\FormBundle\Process\CourseRegistration\Step\HesaInformation;
 use Ice\JanusClientBundle\Entity\User;
 use Ice\MinervaClientBundle\Entity\StepProgress;
 use Ice\MinervaClientBundle\Exception\NotFoundException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class HesaInformation
 {
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"ask_disability"})
+     */
+    private $disabilityListed;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(groups={"ask_dsa"})
+     */
+    private $inReceiptOfDisabledStudentsAllowance;
+
     /**
      * @var string
      */
@@ -190,6 +203,42 @@ class HesaInformation
     public function getHesaMostRecentEducationInstitutionType()
     {
         return $this->hesaMostRecentEducationInstitutionType;
+    }
+
+    /**
+     * @param string $disabilityListed
+     * @return HesaInformation
+     */
+    public function setDisabilityListed($disabilityListed)
+    {
+        $this->disabilityListed = $disabilityListed;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisabilityListed()
+    {
+        return $this->disabilityListed;
+    }
+
+    /**
+     * @param string $inReceiptOfDisabledStudentsAllowance
+     * @return HesaInformation
+     */
+    public function setInReceiptOfDisabledStudentsAllowance($inReceiptOfDisabledStudentsAllowance)
+    {
+        $this->inReceiptOfDisabledStudentsAllowance = $inReceiptOfDisabledStudentsAllowance;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInReceiptOfDisabledStudentsAllowance()
+    {
+        return $this->inReceiptOfDisabledStudentsAllowance;
     }
 
     /**

@@ -1,0 +1,26 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+{{ parent() }}
+<script type="text/javascript">
+function onChangeDisability(){
+    var control = $('select[name=disabilityListed]'),
+            val;
+    if (!control) {
+        return;
+    }
+
+    val = control.val();
+    if(!val || val == '00' || val == '97'){
+        $('#whenHasDisability').hide();
+    }
+else {
+        $('#whenHasDisability').show();
+    }
+}
+
+$('select[name=disabilityListed]').change(onChangeDisability);
+
+onChangeDisability();
+</script>
+{% endblock %}
