@@ -3,6 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\HesaInformation;
 
 use Ice\FormBundle\Process\CourseRegistration;
+use Ice\FormBundle\Type\CareOrderType;
 use Ice\FormBundle\Type\DisabilityType;
 use Ice\FormBundle\Type\EducationInstitutionType;
 use Ice\FormBundle\Type\EmployerTypeType;
@@ -43,6 +44,10 @@ class HesaInformationType extends AbstractRegistrationStep
         if ($this->enableDisabilityQuestions()) {
             $fieldNames[] = 'disabilityListed';
             $fieldNames[] = 'inReceiptOfDisabledStudentsAllowance';
+        }
+
+        if ($this->enableCareOrderQuestion()) {
+            $fieldNames[] = 'hesaCareOrder';
         }
 
         $order = 1;
@@ -141,6 +146,17 @@ class HesaInformationType extends AbstractRegistrationStep
                 'constraints' => array()
             ));
 
+        if ($this->enableCareOrderQuestion()) {
+            $builder->add('hesaCareOrder', new CareOrderType(), array(
+                'expanded' => false,
+                'multiple' => false,
+                'required' => true,
+                'empty_value' => '',
+                'label' => 'Please indicate if you have ever been the subject of a UK local authority Care Order.',
+                'constraints' => array(new NotBlank())
+            ));
+        }
+
         if ($this->enableDisabilityQuestions()) {
             $builder
                 ->add('disabilityListed', new DisabilityType(), array(
@@ -193,6 +209,11 @@ class HesaInformationType extends AbstractRegistrationStep
     }
 
     private function enableDisabilityQuestions()
+    {
+        return $this->version != 1;
+    }
+
+    private function enableCareOrderQuestion()
     {
         return $this->version != 1;
     }

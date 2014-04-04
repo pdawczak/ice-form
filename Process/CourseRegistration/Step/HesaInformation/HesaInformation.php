@@ -63,6 +63,11 @@ class HesaInformation
     private $hesaFeesEmployerType;
 
     /**
+     * @var string
+     */
+    private $hesaCareOrder;
+
+    /**
      * @param string $hesaEthnicOrigin
      * @return HesaInformation
      */
@@ -240,6 +245,24 @@ class HesaInformation
     public function getInReceiptOfDisabledStudentsAllowance()
     {
         return $this->inReceiptOfDisabledStudentsAllowance;
+    }
+
+    /**
+     * @param string $hesaCareOrder
+     * @return HesaInformation
+     */
+    public function setHesaCareOrder($hesaCareOrder)
+    {
+        $this->hesaCareOrder = $hesaCareOrder;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHesaCareOrder()
+    {
+        return $this->hesaCareOrder;
     }
 
     /**

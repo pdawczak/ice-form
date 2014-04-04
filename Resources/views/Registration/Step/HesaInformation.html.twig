@@ -43,5 +43,8 @@
         </div>
     {% endif %}
 
+    {% if form.hesaCareOrder is defined %}
+        {{ form_row(form.hesaCareOrder, {'form_type':'horizontal'}) }}
+    {% endif %}
     {{ form_rest(form) }}
 {% endblock %}
