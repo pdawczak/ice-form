@@ -62,6 +62,11 @@ class NationalityAndResidence
 
     /**
      * @var string
+     */
+    private $grantedHumanitarianProtectionStatus;
+
+    /**
+     * @var string
      * @Assert\NotBlank()
      */
     private $requireVisa;
@@ -269,6 +274,23 @@ class NationalityAndResidence
         return $this->visaStatus;
     }
 
+    /**
+     * @param string $grantedHumanitarianProtectionStatus
+     * @return NationalityAndResidence
+     */
+    public function setGrantedHumanitarianProtectionStatus($grantedHumanitarianProtectionStatus)
+    {
+        $this->grantedHumanitarianProtectionStatus = $grantedHumanitarianProtectionStatus;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGrantedHumanitarianProtectionStatus()
+    {
+        return $this->grantedHumanitarianProtectionStatus;
+    }
 
     /**
      * @param StepProgress $stepProgress

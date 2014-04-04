@@ -10,10 +10,17 @@
     {{ form_row(form.familyMemberEuNational, {form_type:'horizontal'}) }}
     {{ form_row(form.settledInUk, {form_type:'horizontal'}) }}
     {{ form_row(form.grantedRefugeeStatus, {form_type:'horizontal'}) }}
-    {{ form_row(form.requireVisa, {form_type:'horizontal'}) }}
+    {% if form.grantedHumanitarianProtectionStatus is defined %}
+        {{ form_row(form.grantedHumanitarianProtectionStatus, {form_type:'horizontal'}) }}
+    {% endif %}
+    {% if form.requireVisa is defined %}
+        {{ form_row(form.requireVisa, {form_type:'horizontal'}) }}
+    {% endif %}
     <p>
         If yes, please see our <a target="_blank" href="http://www.ice.cam.ac.uk/studying-with-us/international-students">information for international students</a> for further information.
     </p>
-    {{ form_row(form.visaStatus, {form_type:'horizontal'}) }}
+    {% if form.visaStatus is defined %}
+        {{ form_row(form.visaStatus, {form_type:'horizontal'}) }}
+    {% endif %}
     {{ form_rest(form) }}
 {% endblock %}

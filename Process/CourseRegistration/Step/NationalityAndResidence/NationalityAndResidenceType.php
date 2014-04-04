@@ -2,6 +2,7 @@
 
 namespace Ice\FormBundle\Process\CourseRegistration\Step\NationalityAndResidence;
 
+use Ice\FormBundle\Process\CourseRegistration;
 use Ice\FormBundle\Type\CamsisCountryType;
 use Ice\FormBundle\Type\CountryType;
 use Ice\JanusClientBundle\Exception\ValidationException;
@@ -18,19 +19,39 @@ use Ice\JanusClientBundle\Entity\User;
 
 class NationalityAndResidenceType extends AbstractRegistrationStep
 {
-    protected $childFormOrder = [
-        1 => 'countryOfResidence',
-        2 => 'countryOfBirth',
-        3 => 'primaryNationality',
-        4 => 'secondaryNationality',
-        5 => 'ordinarilyResident',
-        6 => 'eeaOrSwissNational',
-        7 => 'familyMemberEuNational',
-        8 => 'settledInUk',
-        9 => 'grantedRefugeeStatus',
-        10 => 'requireVisa',
-        11 => 'visaStatus',
-    ];
+    protected $childFormOrder;
+
+    public function __construct(CourseRegistration $registration, $reference, $version)
+    {
+        $fieldNames = [
+            'countryOfResidence',
+            'countryOfBirth',
+            'primaryNationality',
+            'secondaryNationality',
+            'ordinarilyResident',
+            'eeaOrSwissNational',
+            'familyMemberEuNational',
+            'settledInUk',
+            'grantedRefugeeStatus'
+        ];
+
+        if ($this->enableHumanitarianProtectionQuestion()) {
+            $fieldNames[] = 'grantedHumanitarianProtectionStatus';
+        }
+
+        $fieldNames[] = 'requireVisa';
+
+        if ($this->enableVisaQuestion()) {
+            $fieldNames[] = 'visaStatus';
+        }
+
+        $order = 1;
+        foreach ($fieldNames as $fieldName) {
+            $this->childFormOrder[$order] = $fieldName;
+            $order++;
+        }
+        parent::__construct($registration, $reference, $version);
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -51,7 +72,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('primaryNationality', new CountryType(), array(
-                    'label' => 'Nationality. If you have more than one nationality you should enter the nationality that you consider to be your primary nationality.',
+                    'label' => 'Please select your nationality. If you have more than one nationality please select your primary nationality.',
                     'empty_value'=>'',
                 )
             )
@@ -62,7 +83,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('ordinarilyResident', 'choice', array(
-                    'label' => 'Have you been ordinarily resident in any of the following for at least 3 full years (not for the main purpose of education) prior to the start date of your course? If more than one applies, please select the most recent.',
+                    'label' => 'Have you been resident in any of the following for at least 3 full years prior to the first day of your course? (If you have, but the purpose of your residency was to receive full-time education at any point in the 3-year period, please select NO). If more than one applies, please select the most recent.',
                     'empty_value'=>'',
                     'required'=>false,
                     'expanded'=>false,
@@ -122,7 +143,23 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                         'N' => 'No',
                     )
                 )
-            )
+            );
+
+        if ($this->enableHumanitarianProtectionQuestion()) {
+            $builder->add('grantedHumanitarianProtectionStatus', 'choice', array(
+                    'label' => 'Have you been granted Humanitarian Protection?',
+                    'expanded'=>true,
+                    'multiple'=>false,
+                    'choices'=>array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                    'constraints'=>array(new NotBlank())
+                )
+            );
+        }
+
+        $builder
             ->add('requireVisa', 'choice', array(
                     'label' => 'Do you require a visa to study in the UK? ',
                     'expanded'=>true,
@@ -133,34 +170,48 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                     )
                 )
             )
-            ->add('visaStatus', 'choice', array(
-                    'label' => 'Please enter your current UK visa status, if applicable.',
-                    'required'=>false,
-                    'expanded'=>true,
-                    'multiple'=>false,
-                    'choices'=>array(
-                        'Academic Visitor Visa',
-                        'British Overseas Territories',
-                        'Business Visitor Visa',
-                        'General Visitor Visa',
-                        'Indefinite Leave to Enter',
-                        'Indefinite Leave to Remain',
-                        'No UK Visa',
-                        'Other',
-                        'Refugee Status',
-                        'Resident by Right',
-                        'Tier 1 Visa',
-                        'Tier 2 Visa',
-                        'Tier 3 Visa',
-                        'Tier 4 Visa (for Cambridge)',
-                        'Tier 4 Visa (not Cambridge)',
-                        'Tier 5 Visa',
+        ;
+        if ($this->enableVisaQuestion()) {
+            $builder
+                ->add('visaStatus', 'choice', array(
+                        'label' => 'Please enter your current UK visa status, if applicable.',
+                        'required'=>false,
+                        'expanded'=>true,
+                        'multiple'=>false,
+                        'choices'=>array(
+                            'Academic Visitor Visa',
+                            'British Overseas Territories',
+                            'Business Visitor Visa',
+                            'General Visitor Visa',
+                            'Indefinite Leave to Enter',
+                            'Indefinite Leave to Remain',
+                            'No UK Visa',
+                            'Other',
+                            'Refugee Status',
+                            'Resident by Right',
+                            'Tier 1 Visa',
+                            'Tier 2 Visa',
+                            'Tier 3 Visa',
+                            'Tier 4 Visa (for Cambridge)',
+                            'Tier 4 Visa (not Cambridge)',
+                            'Tier 5 Visa',
+                        )
                     )
                 )
-            )
-        ;
+            ;
+        }
 
         parent::buildForm($builder, $options);
+    }
+
+    public function enableHumanitarianProtectionQuestion()
+    {
+        return $this->version != 1;
+    }
+
+    public function enableVisaQuestion()
+    {
+        return $this->version == 1;
     }
 
     public function getHtmlTemplate()
