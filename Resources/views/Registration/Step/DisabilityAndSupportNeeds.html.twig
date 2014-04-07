@@ -8,16 +8,6 @@
     </p>
     {% endif %}
 
-    <p>
-        We invite disclosure from anyone who feels they may have a disability or other condition which is likely to
-        require additional support during their studies.
-    </p>
-
-    <p>
-        By supplying this information you may be put in contact with our adviser to establish what support,
-        if any, is required to enable you to study effectively. Please contact
-        <a href="mailto:da@ice.cam.ac.uk">da@ice.cam.ac.uk</a> if you have any questions.
-    </p>
 
     {% if form.disabilityListed is defined %}
         <p>
@@ -48,7 +38,13 @@
         </p>
 
         {{ form_row(form.firstFloorAccess, {'form_type':'horizontal'}) }}
+
     {% endif %}
+
+    <p>If you would like to discuss your requirements in more detail please contact
+        <a href="mailto:da@ice.cam.ac.uk">da@ice.cam.ac.uk</a> with brief details so that we can forward your
+        request to the right person.
+    </p>
 
     {% if form.shareSupportNeeds is defined %}
         {{ form_row(form.shareSupportNeeds, {'form_type':'horizontal'}) }}
