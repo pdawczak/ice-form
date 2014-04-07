@@ -33,7 +33,7 @@ class DisabilityAndSupportNeeds
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"Default"})
+     * @Assert\NotBlank(groups={"enable_first_floor_access"})
      */
     private $firstFloorAccess;
 
