@@ -1,6 +1,12 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
+    <p>
+        We are required to ask the following questions which are shared with the
+        <a target="_blank" href="http://www.hesa.ac.uk/content/view/131/180/">Higher Education Statistics Agency (HESA)</a>
+        in line with legal and government requirements.
+    </p>
+
     {{ form_row(form.countryOfResidence, {form_type:'horizontal'}) }}
     {{ form_row(form.countryOfBirth, {form_type:'horizontal'}) }}
     {{ form_row(form.primaryNationality, {form_type:'horizontal'}) }}
