@@ -97,7 +97,7 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
         if ($this->enableAdditionalNeedsDetail()) {
             $builder
                 ->add('additionalNeedsDetail', 'textarea', array(
-                        'label' => 'Please specify your additional needs, e.g. induction loop, large print, braille, wheelchair access',
+                        'label' => 'Please specify your requirements, e.g. induction loop, large print, braille, wheelchair access',
                         'required' => false,
                     )
                 )
