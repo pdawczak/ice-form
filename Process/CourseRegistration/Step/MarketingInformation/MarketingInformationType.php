@@ -30,6 +30,13 @@ class MarketingInformationType extends AbstractRegistrationStep
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options){
+
+        $marketingOptIn = false;
+        if ($this->getParentProcess()->getRegistrantId()) {
+            $marketingOptIn = $this->getParentProcess()->getRegistrant()->getAttributeByName('marketingOptIn');
+            $marketingOptIn = $marketingOptIn ? (bool)$marketingOptIn->getValue() : false;
+        }
+
         $builder
             ->add('marketingHowHeard', 'choice', array(
                 'expanded'=>true,
@@ -50,14 +57,17 @@ class MarketingInformationType extends AbstractRegistrationStep
             ->add('marketingDetail', 'textarea', array(
                 'required'=>false,
                 'label'=>'Please give details of how/where you found our advert, article, brochure, event, flyer or website, as applicable.'
-            ))
-            ->add('marketingOptIn', 'checkbox', array(
+            ));
+
+        $builder->add('marketingOptIn', 'checkbox', array(
                 'label'=>'Please tick if you would like to receive occasional emails about upcoming courses, events and
                     other activities at the Institute',
-                'required'=>false
-                )
+                'required'=>false,
+                'data' => $marketingOptIn
             )
-            ->add('bookingCode', 'text', array(
+        );
+
+        $builder->add('bookingCode', 'text', array(
                     'label'=>'If you have been given a booking code, please enter it here',
                     'required'=>false,
                     'constraints'=>[
@@ -76,6 +86,7 @@ class MarketingInformationType extends AbstractRegistrationStep
                 }
             })
         ;
+
         parent::buildForm($builder, $options);
     }
 
@@ -111,6 +122,8 @@ class MarketingInformationType extends AbstractRegistrationStep
         );
 
         if($this->getForm()->isValid()){
+
+            $this->persistRegistrantAttributes(['marketingOptIn']);
 
             $course = $this->getParentProcess()->getCourse();
             $user = $this->getParentProcess()->getRegistrant();
