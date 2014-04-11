@@ -454,4 +454,32 @@ abstract class AbstractRegistrationStep extends AbstractType
     {
         return false;
     }
+
+    /**
+     * Adds/Persist registrant attributes
+     * @param array $fieldNames form field names to add as registrant attributes
+     */
+    public function persistRegistrantAttributes(array $fieldNames)
+    {
+
+        $entity = $this->getEntity();
+
+        $attributes = [];
+        foreach ($fieldNames as $fieldName) {
+
+            $getter = 'get' . ucfirst($fieldName);
+            $value = $entity->$getter();
+
+            if (!$value) {
+                $value = '';
+            }
+
+            $attributes[$fieldName] = (string)$value;
+        }
+
+        $iceId = $this->getParentProcess()->getRegistrantId();
+        $this->getParentProcess()
+            ->getJanusClient()
+            ->setAttributes($iceId, $iceId, $attributes);
+    }
 }

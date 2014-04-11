@@ -23,6 +23,8 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
 
     public function __construct(CourseRegistration $parentProcess, $reference = null, $version = null)
     {
+        parent::__construct($parentProcess, $reference, $version);
+
         $fieldNames = [];
 
         if ($this->enableHesaDisabilityQuestions()) {
@@ -50,7 +52,7 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
             $order++;
         }
 
-        parent::__construct($parentProcess, $reference, $version);
+
     }
 
 
@@ -208,6 +210,36 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
                 return $groups;
             }
         ));
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function processRequest(Request $request = null)
+    {
+        if ($request) {
+            $this->getForm()->bind($request);
+        }
+
+        /** @var $entity DisabilityAndSupportNeeds */
+        $entity = $this->getEntity();
+
+        $this->setStepProgressValues(
+            $entity,
+            $this->childFormOrder,
+            $this->getForm(),
+            $this->getStepProgress()
+        );
+
+        if ($this->getForm()->isValid()) {
+            $this->persistRegistrantAttributes(['additionalNeeds']);
+
+            $this->setComplete();
+        } else {
+            $this->setComplete(false);
+        }
+        $this->setUpdated();
+        $this->save();
     }
 
 
