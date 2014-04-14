@@ -37,8 +37,10 @@
         </div>
     {% endif %}
 
-    {% if form.hesaCareOrder is defined %}
-        {{ form_row(form.hesaCareOrder, {'form_type':'horizontal'}) }}
+    {% if form.careLeaver is defined %}
+        <p>A <strong>Care Leaver</strong> is someone who has been in the care of a UK local authority, health trust or social care trust
+        for at least 13 weeks since the age of 14, and who was in care on their 16th birthday.</p>
+        <p>{{ form_row(form.careLeaver, {'form_type':'horizontal'}) }}</p>
     {% endif %}
     {{ form_rest(form) }}
 {% endblock %}

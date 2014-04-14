@@ -3,7 +3,7 @@
 namespace Ice\FormBundle\Process\CourseRegistration\Step\HesaInformation;
 
 use Ice\FormBundle\Process\CourseRegistration;
-use Ice\FormBundle\Type\CareOrderType;
+use Ice\FormBundle\Type\CareLeaverType;
 use Ice\FormBundle\Type\DisabilityType;
 use Ice\FormBundle\Type\EducationInstitutionType;
 use Ice\FormBundle\Type\EmployerTypeType;
@@ -46,8 +46,8 @@ class HesaInformationType extends AbstractRegistrationStep
             $fieldNames[] = 'inReceiptOfDisabledStudentsAllowance';
         }
 
-        if ($this->enableCareOrderQuestion()) {
-            $fieldNames[] = 'hesaCareOrder';
+        if ($this->enableCareLeaverQuestion()) {
+            $fieldNames[] = 'careLeaver';
         }
 
         $order = 1;
@@ -146,13 +146,13 @@ class HesaInformationType extends AbstractRegistrationStep
                 'constraints' => array()
             ));
 
-        if ($this->enableCareOrderQuestion()) {
-            $builder->add('hesaCareOrder', new CareOrderType(), array(
+        if ($this->enableCareLeaverQuestion()) {
+            $builder->add('careLeaver', new CareLeaverType(), array(
                 'expanded' => false,
                 'multiple' => false,
                 'required' => true,
                 'empty_value' => '',
-                'label' => 'Please indicate if you have ever been the subject of a UK local authority Care Order.',
+                'label' => 'Are you a Care Leaver by this definition?',
                 'constraints' => array(new NotBlank())
             ));
         }
@@ -213,7 +213,7 @@ class HesaInformationType extends AbstractRegistrationStep
         return $this->version != 1;
     }
 
-    private function enableCareOrderQuestion()
+    private function enableCareLeaverQuestion()
     {
         return $this->version != 1;
     }

@@ -65,7 +65,7 @@ class HesaInformation
     /**
      * @var string
      */
-    private $hesaCareOrder;
+    private $careLeaver;
 
     /**
      * @param string $hesaEthnicOrigin
@@ -251,18 +251,18 @@ class HesaInformation
      * @param string $hesaCareOrder
      * @return HesaInformation
      */
-    public function setHesaCareOrder($hesaCareOrder)
+    public function setCareLeaver($hesaCareOrder)
     {
-        $this->hesaCareOrder = $hesaCareOrder;
+        $this->careLeaver = $hesaCareOrder;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getHesaCareOrder()
+    public function getCareLeaver()
     {
-        return $this->hesaCareOrder;
+        return $this->careLeaver;
     }
 
     /**
