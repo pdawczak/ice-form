@@ -10,6 +10,11 @@
         <service id="ice.forms.symfony.transformer.multi"
                  class="Ice\FormBundle\Infrastructure\SymfonyForm\SymfonyNativeTransformer">
             <argument type="service" id="ice.forms.form.form_wrapper_factory" />
+            <argument type="service" id="ice.forms.symfony.transformer.options_symfony_to_native" />
+        </service>
+
+        <service id="ice.forms.symfony.transformer.options_symfony_to_native"
+                 class="Ice\FormBundle\Infrastructure\SymfonyForm\SymfonyOptionsToNativeOptionsTransformer">
         </service>
 
         <service id="ice.forms.form.form_builder_factory" class="Ice\FormBundle\Infrastructure\SymfonyForm\FormBuilderFactory">

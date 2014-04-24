@@ -37,11 +37,20 @@ class SymfonyNativeTransformer implements
     private $symfonyFormWrapperFactory;
 
     /**
+     * @var SymfonyOptionsToNativeOptionsTransformerInterface
+     */
+    private $optionsTransfomer;
+
+    /**
      * @param SymfonyFormWrapperFactoryInterface $symfonyFormWrapperFactory
      */
-    public function __construct(SymfonyFormWrapperFactoryInterface $symfonyFormWrapperFactory)
+    public function __construct(
+        SymfonyFormWrapperFactoryInterface $symfonyFormWrapperFactory,
+        SymfonyOptionsToNativeOptionsTransformerInterface $optionsTransformer
+    )
     {
         $this->symfonyFormWrapperFactory = $symfonyFormWrapperFactory;
+        $this->optionsTransformer = $optionsTransformer;
     }
 
     /**
@@ -59,6 +68,6 @@ class SymfonyNativeTransformer implements
      */
     public function transformToSymfonyType(FormTypeInterface $nativeType)
     {
-        return new SymfonyFormTypeFacade($nativeType, $this);
+        return new SymfonyFormTypeFacade($nativeType, $this, $this->optionsTransformer);
     }
 }

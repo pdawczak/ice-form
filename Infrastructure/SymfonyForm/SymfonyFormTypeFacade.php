@@ -20,16 +20,23 @@ class SymfonyFormTypeFacade extends AbstractType
     private $builderTransformer;
 
     /**
+     * @var SymfonyOptionsToNativeOptionsTransformerInterface
+     */
+    private $optionsTransformer;
+
+    /**
      * @param FormTypeInterface $nativeFormType
      * @param SymfonyFormBuilderToNativeFormBuilderTransformerInterface $builderTransformer
      */
     public function __construct(
         FormTypeInterface $nativeFormType,
-        SymfonyFormBuilderToNativeFormBuilderTransformerInterface $builderTransformer
+        SymfonyFormBuilderToNativeFormBuilderTransformerInterface $builderTransformer,
+        SymfonyOptionsToNativeOptionsTransformerInterface $optionsTransformer
     )
     {
         $this->nativeFormType = $nativeFormType;
         $this->builderTransformer = $builderTransformer;
+        $this->optionsTransformer = $optionsTransformer;
     }
 
     /**
@@ -52,6 +59,8 @@ class SymfonyFormTypeFacade extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $symfonyOptionsResolver)
     {
-        $this->nativeFormType->configureOptions(new OptionsResolverFacade($symfonyOptionsResolver));
+        $this->nativeFormType->configureOptions(
+            $this->optionsTransformer->transformToNativeOptions($symfonyOptionsResolver)
+        );
     }
 }

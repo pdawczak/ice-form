@@ -5,7 +5,7 @@ namespace Ice\FormBundle\Infrastructure\SymfonyForm;
 use Ice\FormBundle\Form\Options\FormOptionsConfigurationInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class OptionsResolverFacade implements FormOptionsConfigurationInterface
+class SymfonyOptionsResolverWrapper implements SymfonyOptionsResolverWrapperInterface
 {
     /**
      * @var \Symfony\Component\OptionsResolver\OptionsResolverInterface
@@ -32,6 +32,12 @@ class OptionsResolverFacade implements FormOptionsConfigurationInterface
         return $this;
     }
 
+    /**
+     * An array of optionName=>defaultValue pairs. This replaces the set of previously configured defaults
+     *
+     * @param array $defaultOptionValues
+     * @return mixed
+     */
     public function setDefaults(array $defaultOptionValues = array())
     {
         $this->symfonyOptionsResolver->setDefaults($defaultOptionValues);
