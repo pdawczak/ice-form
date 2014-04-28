@@ -1,0 +1,130 @@
+<html>
+<head>
+{% stylesheets 'bundles/iceformtest/css/*' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+    {% javascripts 'bundles/iceformtest/js/*' %}
+    <script type="text/javascript" src="{{ asset_url }}" ></script>
+    {% endjavascripts %}
+    <style type="text/css">
+        #registrationProgress
+        {
+            width: 20%;
+            float: left;
+        }
+        #registrationStepOuter
+        {
+            float: left;
+            width: 80%;
+        }
+
+        #registrationStepOuter .formContainer
+        {
+            width: 742px;
+            border: 1px solid #6699FF;
+            background-color: #EDF1F8;
+        }
+
+        #registrationStepOuter .formContainer h2
+        {
+            display: block;
+            background-color: #0092DF;
+            color: #FFF;
+            margin: 0;
+            font-size: 16px;
+            line-height: 20px;
+            padding: 5px;
+        }
+
+        .formBody .btn {
+            background-color: #6cb33f;
+            border: 2px solid #6cb33f;
+            padding: 8px 18px;
+            margin: 0;
+            margin-top: 20px;
+            margin-left: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            background-image: none;
+            text-shadow: none;
+            border-radius: 0;
+            box-shadow: none;
+            line-height: 20px;
+        }
+
+        .formBody .btn:active{
+            border: 2px solid #006400;
+        }
+
+        .formBody .btn:hover{
+            border: 2px solid #5CA626;
+            background-color: #5CA626;
+            color: white;
+            text-decoration: none;
+        }
+
+        input[type=text]
+        {
+            height:22px !important;
+        }
+
+        #registrationStepOuter .formBody
+        {
+            margin: 10px;
+        }
+
+        #registrationStepOuter .form-horizontal .control-group{
+            margin-bottom: 15px;
+        }
+
+        #registrationStepOuter textarea{
+            width: 437px;
+            height: 65px;
+        }
+
+        #registrationStepOuter fieldset legend{
+            font-size: 16px;
+        }
+
+        #registrationStepOuter li{
+            font-size: 14px;
+        }
+
+        #side-nav-left .menu li span.unavailable{
+            display: block;
+            padding: 0.5em 0 0.5em 0.5em;
+            text-decoration: none;
+            color: #888;
+            background-color: #edf1f8;
+            border-bottom: 1px solid #d9e1f0;
+            margin-right: 24px;
+            border-left: 4px solid #DDD !important;
+        }
+
+        #box-overlay, #overlay-message {
+            display:none;
+        }
+
+        #box-overlay.visible {
+            display:block;
+            background-color: #000;
+            opacity: 0.5;
+        }
+
+        #overlay-message.visible {
+            padding-top: 100px;
+            color: white;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

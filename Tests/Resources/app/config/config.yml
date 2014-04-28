@@ -1,0 +1,42 @@
+imports:
+    - { resource: parameters.yml }
+
+framework:
+    secret: test
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: "%kernel.debug%"
+    form:            true
+    templating:      { engines: ['twig'] }
+
+ice_veritas_client:
+    base_url: "%veritas_api_base_url%"
+    username: "%veritas_api_username%"
+    password: "%veritas_api_password%"
+
+ice_mercury_client:
+    base_url: "%mercury_api_base_url%"
+    username: "%mercury_api_username%"
+    password: "%mercury_api_password%"
+    gateway_secret: "%mercury_gateway_secret%"
+    gateway_account: "%mercury_gateway_account%"
+
+ice_minerva_client:
+    base_url: "%minerva_api_base_url%"
+    username: "%minerva_api_username%"
+    password: "%minerva_api_password%"
+
+ice_janus_client:
+    base_url: "%janus_api_base_url%"
+    username: "%janus_api_username%"
+    password: "%janus_api_password%"
+
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    filters:
+        cssrewrite: ~
+twig:
+    form:
+        resources:
+            - 'IceFormTestBundle::bootstrap_form_layout.html.twig'

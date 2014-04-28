@@ -20,19 +20,25 @@
         }
     ],
     "require": {
-        "ice/minervaclient-bundle": ">=1.7.0",
+        "ice/minervaclient-bundle": ">=1.7.0@dev",
         "ice/janusclient-bundle": ">=0.3",
         "ice/mercuryclient-bundle": ">=2.0.0",
         "ice/veritasclient-bundle": ">=0.2.0",
         "misd/guzzle-bundle": "@stable"
     },
     "require-dev": {
-        "symfony/form": "2.2.*",
-        "symfony/validator": "2.2.*"
+        "symfony/symfony": "2.1.*",
+        "symfony/form": "2.1.*",
+        "symfony/assetic-bundle": "2.1.*",
+        "symfony/monolog-bundle": "2.1.*",
+        "symfony/validator": "2.1.*",
+        "symfony/console": "2.1.*",
+        "twig/extensions": "1.0.*@dev"
     },
     "autoload": {
         "psr-0": {
-            "Ice\\FormBundle": ""
+            "Ice\\FormBundle": "",
+            "Ice\\FormTestBundle": "Tests/Resources/src"
         }
     },
     "target-dir": "Ice/FormBundle"

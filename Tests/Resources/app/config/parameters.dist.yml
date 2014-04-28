@@ -1,0 +1,18 @@
+parameters:
+    janus_api_base_url:     https://janus.dev.ice.internal.admin.cam.ac.uk/app_dev.php/api
+    janus_api_username:     janus
+    janus_api_password:     ~
+
+    mercury_api_base_url:   https://mercury.dev.ice.internal.admin.cam.ac.uk/app_dev.php/api
+    mercury_api_username:   mercury
+    mercury_api_password:   ~
+    mercury_gateway_secret: ~
+    mercury_gateway_account: ~
+
+    minerva_api_base_url:   https://minerva.dev.ice.internal.admin.cam.ac.uk/app_dev.php
+    minerva_api_username:   minerva
+    minerva_api_password:   ~
+
+    veritas_api_base_url:   https://veritas.uat.ice.internal.admin.cam.ac.uk/api
+    veritas_api_username:   veritas
+    veritas_api_password:   ~
