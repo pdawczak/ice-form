@@ -2,7 +2,9 @@
 
 namespace Ice\FormBundle\Form;
 
-interface FormInterface
+use Ice\FormBundle\Form\Validation\ValidatableInterface;
+
+interface FormInterface extends ValidatableInterface
 {
     /**
      * Bind submitted data to this form.
@@ -12,9 +14,10 @@ interface FormInterface
     public function bind($request);
 
     /**
-     * Checks whether the bound data is valid, and sets any validation errors on this form and any children.
+     * Returns the instance of a child form specified by reference
      *
-     * @return bool
+     * @param string $childName
+     * @return FormInterface
      */
-    public function isValid();
+    public function get($childName);
 }
