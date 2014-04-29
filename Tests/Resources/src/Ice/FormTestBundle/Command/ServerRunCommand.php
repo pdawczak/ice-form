@@ -14,8 +14,6 @@ use Symfony\Component\Process\ProcessBuilder;
  *
  * Overrides the default implementation to provide the -xdebug configuration option, enabling the setting of an xdebug
  * remote host. Useful when we need to tunnel to the server, which breaks remote_connect_back.
- *
- * @author Michał Pipa <michal.pipa.xsolve@gmail.com>
  */
 class ServerRunCommand extends ContainerAwareCommand
 {
@@ -57,6 +55,11 @@ To change default bind address and port use the <info>address</info> argument:
 To change default docroot directory use the <info>--docroot</info> option:
 
   <info>%command.full_name% --docroot=htdocs/</info>
+
+To set an xdebug.remote_host, enable autostart and disable
+remote_connect_back, use the <info>--xdebug</info> option:
+
+  <info>%command.full_name% --xdebug=10.1.2.3/</info>
 
 If you have custom docroot directory layout, you can specify your own
 router script using <info>--router</info> option:
