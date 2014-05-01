@@ -1,0 +1,16 @@
+{% extends "CourseApplication/Step/default.js.twig" %}
+
+{% block javascript %}
+<script type="text/javascript">
+    function onChangeSponsor(){
+        if(jQuery('input:radio[name="sponsor[sponsorPayment]"]:checked').val() === 'Y'){
+            jQuery('#whenSponsorPayment').show();
+        }
+        else {
+            jQuery('#whenSponsorPayment').hide();
+        }
+    }
+    onChangeSponsor();
+    jQuery('input:radio[name="sponsor[sponsorPayment]"]').on('change', onChangeSponsor);
+</script>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        If your application is accepted you may intend for your course fee to be paid by a third party sponsor,
+        such as your employer.
+    </p>
+    <p>
+        If this is the case, it would help us to issue the necessary invoice more quickly if you are able to provide your
+        sponsor organisation's full name and address now. No action will be taken unless your application is approved.
+    </p>
+    {{ form_row(form.sponsor.sponsorPayment, {'form_type':'horizontal'}) }}
+
+    <div id="whenSponsorPayment">
+        <p>Please provide your sponsor's details.</p>
+        {{ form_row(form.sponsor.sponsorName, {'form_type':'horizontal'}) }}
+        {{ form_row(form.sponsor.sponsorAddress, {'form_type':'horizontal'}) }}
+    </div>
+    {{ form_rest(form) }}
+{% endblock %}

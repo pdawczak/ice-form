@@ -34,7 +34,8 @@ class VeritasClientCourseAdapter
         $courseApplicationRequirements[] = new CourseApplicationRequirement('cppaStatement', '1.0.0', 'CPPA Statement', 6);
         $courseApplicationRequirements[] = new CourseApplicationRequirement('englishLanguage', '1.0.0', 'English proficiency', 7);
         $courseApplicationRequirements[] = new CourseApplicationRequirement('studentLoan', '1.0.0', 'Student Loan', 8);
-        $courseApplicationRequirements[] = new CourseApplicationRequirement('bursary', '1.0.0', 'Bursary', 9);
+        $courseApplicationRequirements[] = new CourseApplicationRequirement('sponsor', '1.0.0', 'Sponsorship', 9);
+        $courseApplicationRequirements[] = new CourseApplicationRequirement('bursary', '1.0.0', 'Bursary', 10);
 
         $course = (new Course($vcCourse->getId()))
             ->setCourseApplicationRequirements($courseApplicationRequirements)
