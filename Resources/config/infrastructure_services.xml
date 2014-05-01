@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="ice.forms.infrastructure.configuration" class="Ice\FormBundle\Infrastructure\Configuration">
+            <call method="setCourseRepository">
+                <argument type="service" id="ice.forms.infrastructure.veritas.veritas_client_account_repository" />
+            </call>
+            <call method="setCourseApplicationRepository">
+                <argument type="service" id="ice.forms.infrastructure.minerva.minerva_client_course_application_repository" />
+            </call>
+        </service>
+
+        <service id="ice.forms.repository.course"
+                 factory-service="ice.forms.infrastructure.configuration"
+                 factory-method="getCourseRepository"
+                 class="Ice\FormBundle\Repository\CourseRepositoryInterface"/>
+
+        <service id="ice.forms.repository.course_application"
+                 factory-service="ice.forms.infrastructure.configuration"
+                 factory-method="getCourseApplicationRepository"
+                 class="Ice\FormBundle\Repository\CourseApplicationRepositoryInterface"/>
+
+        <service id="ice.forms.renderer" class="Ice\FormBundle\Rendering\TwigRenderer">
+            <argument type="service" id="templating" />
+        </service>
+
+
+
+        <service id="ice.forms.infrastructure.janus.janus_account_adapter" class="Ice\FormBundle\Infrastructure\Janus\JanusClientUserToAccountAdapter" />
+        <service id="ice.forms.infrastructure.janus.janus_validation_adapter" class="Ice\FormBundle\Infrastructure\Janus\JanusClientValidationExceptionAdapter" />
+        <service id="ice.forms.infrastructure.veritas.veritas_course_adapter" class="Ice\FormBundle\Infrastructure\Veritas\VeritasClientCourseAdapter" />
+        <service id="ice.forms.infrastructure.minerva.minerva_client_course_application_adapter" class="Ice\FormBundle\Infrastructure\Minerva\MinervaClientCourseApplicationAdapter" />
+
+        <service id="ice.forms.infrastructure.janus.janus_client_account_repository" class="Ice\FormBundle\Infrastructure\Janus\JanusClientAccountRepository">
+            <argument type="service" id="janus.client" />
+            <argument type="service" id="ice.forms.infrastructure.janus.janus_account_adapter" />
+            <argument type="service" id="ice.forms.infrastructure.janus.janus_validation_adapter" />
+        </service>
+
+        <service id="ice.forms.infrastructure.janus.janus_client_account_command_handler" class="Ice\FormBundle\Infrastructure\Janus\JanusClientAccountCommandHandler">
+            <argument type="service" id="janus.client" />
+            <argument type="service" id="ice.forms.infrastructure.janus.janus_validation_adapter" />
+        </service>
+
+        <service id="ice.forms.infrastructure.veritas.veritas_client_account_repository" class="Ice\FormBundle\Infrastructure\Veritas\VeritasClientCourseRepository">
+            <argument type="service" id="veritas.client" />
+            <argument type="service" id="ice.forms.infrastructure.veritas.veritas_course_adapter" />
+        </service>
+
+        <service id="ice.forms.infrastructure.minerva.minerva_client_course_application_repository" class="Ice\FormBundle\Infrastructure\Minerva\MinervaClientCourseApplicationRepository">
+            <argument type="service" id="minerva.client" />
+            <argument type="service" id="ice.forms.infrastructure.minerva.minerva_client_course_application_adapter" />
+        </service>
+    </services>
+</container>

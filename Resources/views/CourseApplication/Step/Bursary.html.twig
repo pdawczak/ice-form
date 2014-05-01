@@ -1,0 +1,36 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>The Institute offers a number of bursaries, please see the <a href="http://www.ice.cam.ac.uk/studying-with-us/information-for-students/financial-support#loans" target="_blank">Financial Support</a> section for further information.</p>
+
+    <p>The following bursaries are available for this course:</p>
+    <p>
+        <ul>
+            <li>
+                <strong>Ivy Rose Hood Memorial Bursary (&pound;500)</strong> – if you are over 22 and applying to study at university level for the first time.
+            </li>
+            <li>
+                <strong>James Stuart Bursary (&pound;125)</strong> – if you are applying to study at the Institute of Continuing Education for the first time.
+            </li>
+            <li>
+                <strong>Cambridge University Press (CUP) Bursary (&pound;200)</strong> – if you teach at a UK state school or state-funded further education institution.
+            </li>
+        </ul>
+    </p>
+    {{ form_row(form.bursary.bursaryWishToApply, {'form_type':'horizontal'}) }}
+
+    <div id="whenBursaryWishToApply">
+        {{ form_row(form.bursary.previousICEStudy, {'form_type':'horizontal'}) }}
+        {{ form_row(form.bursary.ukSchoolTeaching, {'form_type':'horizontal'}) }}
+        <div id="whenUkSchool">
+            {{ form_row(form.bursary.schoolContact) }}
+        </div>
+        {{ form_row(form.bursary.previousUniStudy, {'form_type':'horizontal'}) }}
+        <div id="whenIRH">
+            {{ form_row(form.bursary.irhStatement) }}
+        </div>
+    </div>
+
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+{% endblock %}

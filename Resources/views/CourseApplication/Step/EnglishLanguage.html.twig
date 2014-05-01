@@ -1,0 +1,31 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+
+    {{ form_row(form.englishLanguage.englishFirstLanguage, {'form_type' : 'horizontal'}) }}
+
+    <div id="whenNotEFL">
+        <p>
+            All teaching and assessment on this course is in English. To participate fully, you will need near-native
+            fluency in both spoken and written English. We ask for recent certification as part of the admissions process.
+            Further information regarding the required level can be found in the
+            <a target="_blank" href="http://www.ice.cam.ac.uk/studying-with-us/international-students">International Students section</a>.
+        </p>
+        {{ form_row(form.englishLanguage.englishTest, {'form_type' : 'horizontal'}) }}
+        <div id="whenIELTS">
+            {{ form_row(form.englishLanguage.trfNumber, {'form_type' : 'horizontal'}) }}
+        </div>
+        <div id="whenTOEFL">
+            {{ form_row(form.englishLanguage.toeflNumber, {'form_type' : 'horizontal'}) }}
+        </div>
+        <div id="whenCAECPA">
+            {{ form_row(form.englishLanguage.caeCpaIdNumber, {'form_type' : 'horizontal'}) }}
+            {{ form_row(form.englishLanguage.caeCpaSecret, {'form_type' : 'horizontal'}) }}
+        </div>
+        <div id="whenNoTest">
+            {{ form_row(form.englishLanguage.noTestAgreement, {'form_type' : 'horizontal'}) }}
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+{% endblock %}

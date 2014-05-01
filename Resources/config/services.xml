@@ -3,9 +3,15 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <imports>
+        <import resource="infrastructure_services.xml"/>
+        <import resource="symfony_form_services.xml"/>
+        <import resource="course_application_services.xml"/>
+    </imports>
     <services>
         <service id="ice.forms" class="Ice\FormBundle\Service\FormService">
             <argument type="service" id="ice.forms.course_registration_factory" />
+            <argument type="service" id="ice.forms.course_application_process_factory" />
             <call method="setFormFactory">
                 <argument type="service" id="form.factory" />
             </call>

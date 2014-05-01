@@ -1,0 +1,38 @@
+{% extends "CourseApplication/Step/default.js.twig" %}
+
+{% block javascript %}
+<script type="text/javascript">
+    function onBursaryWishToApply(){
+        if(jQuery('input:radio[name="bursary[bursaryWishToApply]"]:checked').val() === 'Y'){
+            jQuery('#whenBursaryWishToApply').show();
+        }
+        else {
+            jQuery('#whenBursaryWishToApply').hide();
+        }
+    }
+    onBursaryWishToApply();
+    jQuery('input:radio[name="bursary[bursaryWishToApply]"]').on('change', onBursaryWishToApply);
+
+    function onUkSchool(){
+        if(jQuery('input:radio[name="bursary[ukSchoolTeaching]"]:checked').val() === 'Y'){
+            jQuery('#whenUkSchool').show();
+        }
+        else {
+            jQuery('#whenUkSchool').hide();
+        }
+    }
+    onUkSchool();
+    jQuery('input:radio[name="bursary[ukSchoolTeaching]"]').on('change', onUkSchool);
+
+    function onIRH(){
+        if(jQuery('input:radio[name="bursary[previousUniStudy]"]:checked').val() === 'Y'){
+            jQuery('#whenIRH').show();
+        }
+        else {
+            jQuery('#whenIRH').hide();
+        }
+    }
+    onIRH();
+    jQuery('input:radio[name="bursary[previousUniStudy]"]').on('change', onIRH);
+</script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "CourseApplication/Step/default.js.twig" %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        function onEFL(){
+            if(jQuery('input:radio[name="englishLanguage[englishFirstLanguage]"]:checked').val() === 'N'){
+                jQuery('#whenNotEFL').show();
+            }
+            else {
+                jQuery('#whenNotEFL').hide();
+            }
+        }
+        onEFL();
+        jQuery('input:radio[name="englishLanguage[englishFirstLanguage]"]').on('change', onEFL);
+
+        function onEnglishTest()
+        {
+            var val = jQuery('input:radio[name="englishLanguage[englishTest]"]:checked').val();
+            if (val === 'ielts'){
+                jQuery('#whenIELTS').show();
+                jQuery('#whenTOEFL').hide();
+                jQuery('#whenCAECPA').hide();
+                jQuery('#whenNoTest').hide();
+            }
+            else if (val === 'toefl') {
+                jQuery('#whenIELTS').hide();
+                jQuery('#whenTOEFL').show();
+                jQuery('#whenCAECPA').hide();
+                jQuery('#whenNoTest').hide();
+            }
+            else if (val === 'cae_cpa') {
+                jQuery('#whenIELTS').hide();
+                jQuery('#whenTOEFL').hide();
+                jQuery('#whenCAECPA').show();
+                jQuery('#whenNoTest').hide();
+            }
+            else if (val === 'none') {
+                jQuery('#whenIELTS').hide();
+                jQuery('#whenTOEFL').hide();
+                jQuery('#whenCAECPA').hide();
+                jQuery('#whenNoTest').show();
+            }
+            else {
+                jQuery('#whenIELTS').hide();
+                jQuery('#whenTOEFL').hide();
+                jQuery('#whenCAECPA').hide();
+                jQuery('#whenNoTest').hide();
+            }
+        }
+        onEnglishTest();
+        jQuery('input:radio[name="englishLanguage[englishTest]"]').on('change', onEnglishTest);
+    </script>
+{% endblock %}

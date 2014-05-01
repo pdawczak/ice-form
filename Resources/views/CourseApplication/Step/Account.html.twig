@@ -1,0 +1,8 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    {{ form_widget(form) }}
+   {# {{ form_row(form.account.emailAddress, {'form_type': 'horizontal'}) }}
+    {{ form_row(form.account.plainPassword, {'form_type': 'horizontal'}) }} #}
+    {{ form_rest(form) }}
+{% endblock %}

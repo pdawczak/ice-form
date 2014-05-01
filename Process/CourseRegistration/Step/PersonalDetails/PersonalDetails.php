@@ -21,13 +21,13 @@ class PersonalDetails{
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a first name")
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a first reference")
      */
     private $firstNames;
 
     /**
      * @var string
-     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a last name")
+     * @Assert\NotBlank(groups={"new_user"}, message="Please provide a last reference")
      */
     private $lastNames;
 

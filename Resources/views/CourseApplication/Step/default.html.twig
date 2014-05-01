@@ -1,0 +1,22 @@
+{% set form = form.symfonyFormView %}
+
+{% form_theme form 'fields.html.twig' %}
+
+<form action="{{ url|e }}" method="post" class="form-horizontal application_step_form">
+    {% block form_content %}
+        {{ form_widget(form, {form_type: 'horizontal'}) }}
+    {% endblock %}
+    {{ form_rest(form) }}
+    <div class="pull-right">
+        {% if secondaryButtonLabel is defined %}
+            {% if secondaryButtonUrl is defined %}
+                <a href="{{ secondaryButtonUrl }}" class="btn" >{{ secondaryButtonLabel }}</a>
+            {% else %}
+                <input type="submit" class="btn" value="{{ secondaryButtonLabel }}"
+                       name="{{ secondaryButtonName | default('back') }}" />
+            {% endif %}
+        {% endif %}
+        <input type="submit" class="btn btn-primary" value="{{ primaryButtonLabel | default('Continue') }}"
+               name="{{ primaryButtonName | default('continue') }}" />
+    </div>
+</form>

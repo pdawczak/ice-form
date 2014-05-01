@@ -2,6 +2,7 @@
 
 namespace Ice\FormBundle\Service;
 
+use Ice\FormBundle\Process\CourseApplicationProcessFactoryInterface;
 use Ice\FormBundle\Process\CourseRegistration;
 use Ice\FormBundle\Process\CourseRegistrationFactoryInterface;
 use Ice\FormBundle\Process\PlaceOrder;
@@ -49,11 +50,21 @@ class FormService
     private $courseRegistrationFactory;
 
     /**
-     * @param CourseRegistrationFactoryInterface $courseRegistrationFactory
+     * @var CourseApplicationProcessFactoryInterface
      */
-    public function __construct(CourseRegistrationFactoryInterface $courseRegistrationFactory)
+    private $courseApplicationProcessFactory;
+
+    /**
+     * @param CourseRegistrationFactoryInterface $courseRegistrationFactory
+     * @param CourseApplicationProcessFactoryInterface $courseApplicationProcessFactory
+     */
+    public function __construct(
+        CourseRegistrationFactoryInterface $courseRegistrationFactory,
+        CourseApplicationProcessFactoryInterface $courseApplicationProcessFactory
+    )
     {
         $this->courseRegistrationFactory = $courseRegistrationFactory;
+        $this->courseApplicationProcessFactory = $courseApplicationProcessFactory;
     }
 
     /**
@@ -79,6 +90,14 @@ class FormService
     public function getCourseRegistrationProcess($courseId, $registrantId = null)
     {
         return $this->courseRegistrationFactory->getCourseRegistrationProcess($courseId, $registrantId);
+    }
+
+    /**
+     * @return CourseApplicationProcessFactoryInterface
+     */
+    public function getCourseApplicationProcessFactory()
+    {
+        return $this->courseApplicationProcessFactory;
     }
 
     /**

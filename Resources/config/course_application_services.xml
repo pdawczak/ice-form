@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="ice.forms.course_application_process_factory" class="Ice\FormBundle\Process\CourseApplicationProcessFactory">
+            <argument type="service" id="ice.forms.course_application_factory" />
+            <argument type="service" id="ice.forms.repository.course_application" />
+            <argument type="service" id="ice.forms.course_application_process.step_handler_list_builder" />
+            <argument type="service" id="ice.forms.course_application.step_form_factory" />
+            <argument type="service" id="ice.forms.course_application.process_view_factory" />
+            <argument type="service" id="ice.forms.course_application.submission_handler" />
+            <call method="setCourseRepository">
+                <argument type="service" id="ice.forms.repository.course" />
+            </call>
+        </service>
+
+        <service id="ice.forms.course_application_factory" class="Ice\FormBundle\Process\CourseApplication\CourseApplicationFactory">
+            <call method="setCourseRepository">
+                <argument type="service" id="ice.forms.repository.course" />
+            </call>
+        </service>
+
+        <service id="ice.forms.course_application.step_renderer" class="Ice\FormBundle\Process\CourseApplication\Rendering\DefaultStepRenderer">
+            <argument type="service" id="ice.forms.renderer" />
+        </service>
+
+        <service id="ice.forms.course_application.step_form_factory" class="Ice\FormBundle\Process\CourseApplication\Form\StepFormFactory">
+            <argument type="service" id="ice.forms.form.form_builder_factory" />
+        </service>
+
+        <service id="ice.forms.course_application.process_view_factory" class="Ice\FormBundle\Process\CourseApplication\View\ProcessViewFactory">
+            <argument type="service" id="ice.forms.course_application.step_renderer" />
+            <argument type="service" id="ice.forms.form.view.form_view_factory" />
+        </service>
+
+        <service id="ice.forms.course_application_process.default_step_factory"
+                 class="Ice\FormBundle\Process\CourseApplication\DefaultStepFactory">
+            <argument type="service" id="ice.forms.course_application_process.version_parser"/>
+            <argument type="service" id="ice.forms.course_application_process.step_dependency_injector"/>
+        </service>
+
+        <service id="ice.forms.course_application_process.step_handler_list_builder"
+                 class="Ice\FormBundle\Process\CourseApplication\StepHandlerListBuilder">
+            <argument type="service" id="ice.forms.course_application_process.step_director" />
+        </service>
+
+        <service id="ice.forms.course_application_process.version_parser"
+                 class="Ice\FormBundle\Process\CourseApplication\VersionParser" />
+
+        <service id="ice.forms.course_application_process.step_dependency_injector" class="Ice\FormBundle\Process\CourseApplication\StepDependencyInjector">
+            <call method="setAccountRepository">
+                <argument type="service" id="ice.forms.infrastructure.janus.janus_client_account_repository" />
+            </call>
+            <call method="setFormFactory">
+                <argument type="service" id="form.factory" />
+            </call>
+            <call method="setAccountCommandHandler">
+                <argument type="service" id="ice.forms.infrastructure.janus.janus_client_account_command_handler" />
+            </call>
+        </service>
+
+        <service id="ice.forms.course_application_process.step_director" class="Ice\FormBundle\Process\CourseApplication\StepDirector">
+            <argument type="service" id="ice.forms.course_application_process.default_step_factory" />
+        </service>
+
+        <service id="ice.forms.course_application.submission_handler"
+                 class="Ice\FormBundle\Process\CourseApplication\Submission\SubmissionHandler" >
+            <argument type="service" id="ice.forms.course_application.step_initialiser" />
+            <argument type="service" id="ice.forms.course_application.data_to_state_converter" />
+        </service>
+
+        <service id="ice.forms.course_application.step_initialiser"
+                 class="Ice\FormBundle\Process\CourseApplication\Initialisation\StepInitialiser" >
+            <argument type="service" id="ice.forms.course_application.state_to_data_converter" />
+        </service>
+
+        <service id="ice.forms.course_application.state_to_data_converter"
+                 class="Ice\FormBundle\Process\CourseApplication\Persistence\StateToDataConverter" />
+
+        <service id="ice.forms.course_application.data_to_state_converter"
+                 class="Ice\FormBundle\Process\CourseApplication\Persistence\DataToStateConverter" />
+    </services>
+</container>

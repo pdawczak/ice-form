@@ -300,7 +300,7 @@ abstract class AbstractRegistrationStep extends AbstractType
     /**
      * The entity that the form will be bound to.
      *
-     * @throws \RuntimeException if the entity has not yet been prepared
+     * @throws \RuntimeException if the entity has not yet been initialised
      * @return \stdClass
      */
     public function getEntity()

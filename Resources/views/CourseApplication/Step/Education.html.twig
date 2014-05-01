@@ -1,0 +1,11 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        {{ form_row(form.education.highestQualification) }}
+    </p>
+    <p>
+        {{ form_row(form.education.recentInvolvement) }}
+    </p>
+    {{ form_rest(form) }}
+{% endblock %}
