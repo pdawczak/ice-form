@@ -25,7 +25,7 @@
     jQuery('input:radio[name="bursary[ukSchoolTeaching]"]').on('change', onUkSchool);
 
     function onIRH(){
-        if(jQuery('input:radio[name="bursary[previousUniStudy]"]:checked').val() === 'Y'){
+        if(jQuery('input:radio[name="bursary[previousUniStudy]"]:checked').val() === 'N'){
             jQuery('#whenIRH').show();
         }
         else {
