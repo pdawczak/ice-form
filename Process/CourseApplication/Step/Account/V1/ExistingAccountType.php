@@ -11,10 +11,6 @@ class ExistingAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->add('title', 'text');
-        $builder->add('firstNames', 'text');
-        $builder->add('lastName', 'text');
-        $builder->add('emailAddress', 'text');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

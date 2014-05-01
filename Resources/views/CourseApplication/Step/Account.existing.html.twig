@@ -1,0 +1,8 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>Please contact <a href="mailto:ice.admissions@ice.cam.ac.uk">ice.admissions@ice.cam.ac.uk</a> if any of the following information is incorrect, otherwise please click 'Continue'.</p>
+    <p>Name: {{ account.lastNames }}, {{ account.title }} {{ account.firstNames }}</p>
+    <p>Email address: {{ account.emailAddress }}</p>
+    {{ form_rest(form) }}
+{% endblock %}

@@ -34,6 +34,16 @@ class AccountData
     private $plainPassword;
 
     /**
+     * @var string
+     */
+    private $dob;
+
+    /**
+     * @var string
+     */
+    private $sex;
+
+    /**
      * @param string $lastName
      * @return AccountData
      */
@@ -121,5 +131,41 @@ class AccountData
     public function getEmailAddress()
     {
         return $this->emailAddress;
+    }
+
+    /**
+     * @param string $dob
+     * @return AccountData
+     */
+    public function setDob($dob)
+    {
+        $this->dob = $dob;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDob()
+    {
+        return $this->dob;
+    }
+
+    /**
+     * @param string $sex
+     * @return AccountData
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
     }
 }

@@ -12,17 +12,34 @@ class RegistrationType implements FormTypeInterface
     {
         //parent::buildForm($builder, $options);
         $builder
-            ->add('title', 'text')
-            ->add('firstNames', 'text',
-                [
-                    'constraints' => [
-                        'length' => [
-                            'min' => 3
-                        ]
-                    ]
+            ->add('title', 'choice', [
+                'label' => 'Title',
+                'multiple' => false,
+                'expanded' => false,
+                'choices' => array(
+                    'Mr' => 'Mr',
+                    'Mrs' => 'Mrs',
+                    'Miss' => 'Miss',
+                    'Ms' => 'Ms',
+                    'Dr' => 'Dr',
+                    'Prof' => 'Prof',
+                    'Revd' => 'Revd',
+                    'Misc' => 'Misc',
+                    'Mx' => 'Mx',
+                )
+            ])
+            ->add('firstNames', 'text', [
+                'label' => 'First name(s)',
+                'constraints' => [
+                    'not_blank'
                 ]
-            )
-            ->add('lastName', 'text')
+            ])
+            ->add('lastName', 'text', [
+                'label' => 'Last name',
+                'constraints' => [
+                    'not_blank'
+                ]
+            ])
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
                 'invalid_message' => 'The password fields must match',
@@ -31,12 +48,34 @@ class RegistrationType implements FormTypeInterface
                 'constraints' => [
                     'not_blank',
                     'length' => [
-                        'min' => 3
+                        'min' => 6
                     ]
                 ]
             ))
+            ->add('dob', 'birthday', array(
+                'label' => 'Date of birth',
+                'input' => "datetime",
+                'widget' => "choice",
+                'format' => 'd MMM yyyy',
+                'constrains' => ['not_blank'],
+                'empty_value' => array(
+                    'day' => 'Day',
+                    'month' => 'Month',
+                    'year' => 'Year',
+                ),
+            ))
+            ->add('sex', 'choice', array(
+                'label' => 'Sex',
+                'multiple' => false,
+                'expanded' => true,
+                'required' => false,
+                'choices' => array(
+                    'm' => 'Male',
+                    'f' => 'Female'
+                ),
+            ))
         ;
-        $builder->add('emailAddress', 'text', ['label'=>'Email address']);
+        $builder->add('emailAddress', 'text', ['label'=>'Email address', 'constraints'=>['not_blank']]);
     }
 
     /**

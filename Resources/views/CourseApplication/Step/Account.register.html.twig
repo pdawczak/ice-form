@@ -1,0 +1,16 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        After providing these details an account will be created for you. You may log in with this account at any time
+        to resume an incomplete application.
+    </p>
+    {{ form_row(form.account.title, {'form_type':'horizontal'}) }}
+    {{ form_row(form.account.firstNames, {'form_type':'horizontal'}) }}
+    {{ form_row(form.account.lastName, {'form_type':'horizontal'}) }}
+    {{ form_row(form.account.emailAddress, {'form_type':'horizontal'}) }}
+    {{ form_row(form.account.plainPassword, {'form_type':'horizontal'}) }}
+    {{ form_row(form.account.dob, {'form_type':'horizontal'}) }}
+    {{ form_row(form.account.sex, {'form_type':'horizontal'}) }}
+    {{ form_rest(form) }}
+{% endblock %}

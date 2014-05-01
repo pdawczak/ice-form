@@ -200,4 +200,22 @@ class AccountStep extends AbstractFormStep implements
         $this->accountCommandHandler = $accountCommandHandler;
         return $this;
     }
+
+    public function getHtmlTemplatePath()
+    {
+        if ($this->iceId) {
+            return 'CourseApplication/Step/Account.existing.html.twig';
+        } else {
+            return 'CourseApplication/Step/Account.register.html.twig';
+        }
+    }
+
+    public function getTemplateVars()
+    {
+        $vars = parent::getTemplateVars();
+        if ($this->iceId) {
+            $vars['account'] = $this->accountRepository->find($this->iceId);
+        }
+        return $vars;
+    }
 }
