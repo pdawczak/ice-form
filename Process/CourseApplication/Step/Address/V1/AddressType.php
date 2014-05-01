@@ -25,6 +25,7 @@ class AddressType implements FormTypeInterface
         $builder->add('county', 'text', ['constraints' => ['not_blank']]);
         $builder->add('postcode', 'text', ['label' => 'Post code','constraints' => ['not_blank']]);
         $builder->add('country', new CountryType(), ['constraints' => ['not_blank']]);
+        $builder->add('telephone', 'text', ['constraints' => ['not_blank']]);
     }
 
     /**

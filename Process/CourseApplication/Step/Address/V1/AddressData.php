@@ -11,6 +11,7 @@ class AddressData
     private $county;
     private $postcode;
     private $country;
+    private $telephone;
 
     /**
      * @param mixed $address1
@@ -136,5 +137,23 @@ class AddressData
     public function getTown()
     {
         return $this->town;
+    }
+
+    /**
+     * @param mixed $telephone
+     * @return AddressData
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
     }
 }

@@ -34,4 +34,9 @@ class AddressStep extends AbstractFormStep implements
         }
         return $this->data;
     }
+
+    public function getTitle()
+    {
+        return 'Contact';
+    }
 }
