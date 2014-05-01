@@ -170,71 +170,8 @@ class CourseApplicationProcess
             }
 
             $this->reinitialiseSteps();
-
-            $this->currentStepHandler = $flow->getCurrentStepHandler();
-
-/**
-            if (null !== ($stepReference = $request->get('stepReference', null))) {
-                $request->attributes->remove('stepReference');
-                $submittedStep = $this->getStepList()->getStepByReference($stepReference);
-                $this->setCurrentStep($submittedStep);
-                $this->initialiseStep($submittedStep);
-
-                $stepState = $this->courseApplication->getStep($submittedStep->getReference());
-
-                $form = $this->formFactory->getForm($submittedStep);
-                $form->bind($request);
-
-                if($submittedStep instanceof ApplicantSourceInterface) {
-                    if (
-                        !$this->courseApplication->getApplicantId() &&
-                        $submittedStep->getAccountIceId()
-                    ) {
-                        $this->courseApplication->setApplicantId($submittedStep->getAccountIceId());
-                    }
-                }
-
-                if ($form->isValid()) {
-                    $data = $submittedStep->getData();
-                    if ($data instanceof FieldValueSourceInterface) {
-                        $data->setFieldValues($stepState);
-                    }
-                }
-
-                $stepState->setComplete($submittedStep->isComplete());
-
-                if ($this->courseApplicationRepository->canPersist($this->courseApplication)) {
-                    $this->courseApplicationRepository->persistAndFlush($this->courseApplication);
-                }
-
-                if ($submittedStep->isComplete()) {
-                    $firstIncompleteStep = null;
-                    $wholeProcessComplete = true;
-                    foreach ($this->getSteps() as $firstIncompleteStep) {
-                        if (!$firstIncompleteStep->isComplete()) {
-                            $wholeProcessComplete = false;
-                            break;
-                        }
-                    }
-                    if ($wholeProcessComplete) {
-                        if ($this->getProgress()->getCompleted() === null) {
-                            $this->getProgress()->setCompleted(new \DateTime());
-                        }
-                        return;
-                    } else {
-                        try {
-                            $this->setCurrentStepByIndex($submittedStep->getIndex() + 1);
-                        } catch (\OutOfBoundsException $e) {
-                            $this->setCurrentStep($firstIncompleteStep);
-                        }
-                    }
-                } else {
-                    $this->setCurrentStep($submittedStep);
-                }
-            }**/
         } else {
             $stepInitialiser->initialiseStep($flow->getCurrentStepHandler(), $this->courseApplication);
-            $this->currentStepHandler = $flow->getCurrentStepHandler();
         }
     }
 
@@ -265,22 +202,12 @@ class CourseApplicationProcess
     }
 
     /**
-     * @param \Ice\FormBundle\Process\CourseRegistration\Step\AbstractRegistrationStep $currentStep
-     * @return CourseRegistration
-     */
-    public function setCurrentStep($currentStep)
-    {
-        $this->currentStepHandler = $currentStep;
-        return $this;
-    }
-
-    /**
      * @param string $reference
      * @return CourseRegistration
      */
     public function setCurrentStepByReference($reference)
     {
-        $this->currentStepHandler = $this->getStepList()->getStepByReference($reference);
+        $this->getFlow()->setCurrentStepHandler($this->getStepList()->getStepByReference($reference));
         return $this;
     }
 
@@ -288,8 +215,7 @@ class CourseApplicationProcess
     {
         $flow = $this->getFlow();
         $stepList = $this->getStepList()->getHandlers();
-        $this->currentStepHandler = reset($stepList);
-        $flow->setCurrentStepHandler($this->currentStepHandler);
+        $flow->setCurrentStepHandler(reset($stepList));
         for ($i=1; $i<$index; $i++) {
             $flow->setCurrentStepHandler($this->getStepList()->getHandlerAfter($flow->getCurrentStepHandler()));
         }
@@ -302,7 +228,8 @@ class CourseApplicationProcess
     public function getCurrentStep()
     {
         $this->ensureApplicationLoaded();
-        if (null === $this->currentStepHandler) {
+        return $this->getFlow()->getCurrentStepHandler();
+        /* if (null === $this->currentStepHandler) {
             foreach ($this->courseApplication->getSteps() as $step) {
                 if (!$step->isComplete()) {
                     $stepHandler = $this->stepHandlerListBuilder->buildStep($step->getName(), $step->getVersion());
@@ -324,7 +251,7 @@ class CourseApplicationProcess
                 throw new \RuntimeException("No available course application steps");
             }
         }
-        return $this->currentStepHandler;
+        return $this->currentStepHandler;**/
     }
 
     /**
@@ -336,8 +263,8 @@ class CourseApplicationProcess
             $this->view = $this->viewFactory->getProcessView(
                 $this,
                 $this->getStepList(),
-                $this->currentStepHandler,
-                $this->formFactory->getForm($this->currentStepHandler)
+                $this->getFlow()->getCurrentStepHandler(),
+                $this->formFactory->getForm($this->getFlow()->getCurrentStepHandler())
             );
         }
         return $this->view;

@@ -39,19 +39,26 @@ class ProcessView implements ProcessViewInterface
     private $currentStepHandler;
 
     /**
+     * @var string
+     */
+    private $formUrl;
+
+    /**
      * @param \Ice\FormBundle\Process\CourseApplication\StepList $stepList
      */
     public function __construct(
         StepList $stepList,
         StepRendererInterface $stepRenderer,
         ViewableInterface $currentStep,
-        FormViewInterface $formView = null
+        FormViewInterface $formView = null,
+        $formUrl = null
     )
     {
         $this->stepList = $stepList;
         $this->currentStepHandler = $currentStep;
         $this->stepRenderer = $stepRenderer;
         $this->formView = $formView;
+        $this->formUrl = $formUrl;
 
         foreach ($this->stepList->getHandlers() as $handler) {
             if ($handler instanceof ViewableInterface) {
@@ -91,6 +98,7 @@ class ProcessView implements ProcessViewInterface
     public function getCurrentStepHtml()
     {
         $defaults['form'] = $this->formView;
+        $defaults['url'] = $this->getUrl();
         return $this->stepRenderer->renderStepHtml($this->getCurrentStep(), $defaults);
     }
 
@@ -105,5 +113,10 @@ class ProcessView implements ProcessViewInterface
     public function getCourseApplication()
     {
         return $this->stepList->getCourseApplication();
+    }
+
+    public function getUrl()
+    {
+        return $this->formUrl;
     }
 }

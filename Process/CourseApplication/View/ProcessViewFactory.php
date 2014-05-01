@@ -48,6 +48,6 @@ class ProcessViewFactory implements ProcessViewFactoryInterface
         ViewableInterface $currentStep,
         FormInterface $form = null
     ) {
-        return new ProcessView($stepList, $this->renderer, $currentStep, $this->formViewFactory->getView($form));
+        return new ProcessView($stepList, $this->renderer, $currentStep, $this->formViewFactory->getView($form), $process->getUrl());
     }
 }
