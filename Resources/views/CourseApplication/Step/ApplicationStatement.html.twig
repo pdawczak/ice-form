@@ -1,0 +1,19 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>Please tell us your reasons for applying to enrol on this course (1,000 word limit).  In your response include:
+    </p>
+
+    <ul>
+        <li>
+            the skills and attributes you have and how you would be able to use these on the course;
+        </li>
+        <li>
+            how you, your employer and the wider assessment community would benefit from your  participation in the course.
+        </li>
+    </ul>
+    <p>
+        {{ form_row(form.applicationStatement.applicationStatement) }}
+    </p>
+    {{ form_rest(form) }}
+{% endblock %}
