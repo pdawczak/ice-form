@@ -135,7 +135,16 @@ class CourseApplication
         }
 
         $this->ensureLoaded();
-        return $this->completed !== null;
+
+        if ($this->completed !== null) {
+            return true;
+        }
+        foreach ($this->steps as $step) {
+            if (!$step->isComplete()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
