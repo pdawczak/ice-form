@@ -64,9 +64,10 @@ class MinervaClientCourseApplicationAdapter
 
             $steps[] = $step;
         }
-        $application = (new CourseApplication($steps, $courseId, $applicantId))
-            ->setId($mcApplication->getId())
-        ;
+
+        $application =
+            new CourseApplication($steps, $courseId, $applicantId, $mcApplication->getId(), $mcApplication->getCompleted());
+
         return $application;
     }
 

@@ -361,17 +361,10 @@ class CourseApplicationProcess
      */
     public function isComplete()
     {
-        if (!$this->courseApplication->isComplete()) {
-            return false;
+        if ($this->courseApplication->getId()) {
+            $this->ensureApplicationLoaded();
         }
-
-        foreach ($this->courseApplication->getSteps() as $stepState) {
-            if (!$stepState->isComplete()) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->courseApplication->isComplete();
     }
 
     /**

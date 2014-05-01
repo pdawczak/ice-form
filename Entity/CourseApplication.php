@@ -31,12 +31,13 @@ class CourseApplication
      */
     private $completed;
 
-    public function __construct(array $steps = null, $courseId, $applicantId = null, $applicationId = null)
+    public function __construct(array $steps = null, $courseId, $applicantId = null, $applicationId = null, $completed = null)
     {
         $this->steps = $steps;
         $this->courseId = $courseId;
         $this->applicantId = $applicantId;
         $this->id = $applicationId;
+        $this->completed = $completed;
     }
 
     /**
@@ -129,6 +130,11 @@ class CourseApplication
      */
     public function isComplete()
     {
+        if (!$this->getId()) {
+            return false;
+        }
+
+        $this->ensureLoaded();
         return $this->completed !== null;
     }
 
