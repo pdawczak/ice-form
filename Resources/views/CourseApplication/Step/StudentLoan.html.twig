@@ -1,0 +1,21 @@
+{% extends "CourseApplication/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        You may be eligible for a tuition fee loan from Student Finance England, please see the <a href="http://www.ice.cam.ac.uk/studying-with-us/information-for-students/financial-support#loans" target="_blank">Financial Support section</a> for further information.
+    </p>
+
+    <p>
+        If you wish to apply for a loan, please do so <strong>before</strong> submitting your application for a place on the course as your means to fund the course will need to be established prior to a place on the course being offered.
+    </p>
+
+    {{ form_widget(form) }}
+
+    <p>
+        Please note that applying for a student loan does not preclude you from also applying for a bursary if you are eligible.
+    </p>
+
+    <p><strong>If you have applied for a student loan and have received your Student Entitlement Letter from Student Finance England please e-mail a copy of this letter to <a href="mailto:ice.admissions@ice.cam.ac.uk">ice.admissions@ice.cam.ac.uk</a>.</strong></p>
+    <p><strong>Your application cannot be considered until we are in receipt of your Student Entitlement Letter.</strong></p>
+    {{ form_rest(form) }}
+{% endblock %}
