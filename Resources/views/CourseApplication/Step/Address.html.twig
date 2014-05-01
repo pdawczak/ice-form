@@ -1,6 +1,14 @@
 {% extends "CourseApplication/Step/default.html.twig" %}
 
 {% block form_content %}
-    {{ form_widget(form) }}
+    <p>Please provide your home address below.</p>
+
+    {{ form_row(form.address.address1, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address.address2, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address.address3, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address.town, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address.county, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address.postcode, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address.country, {'form_type':'horizontal'}) }}
     {{ form_rest(form) }}
 {% endblock %}

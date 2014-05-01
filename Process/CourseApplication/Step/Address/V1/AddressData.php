@@ -7,6 +7,10 @@ class AddressData
     private $address1;
     private $address2;
     private $address3;
+    private $town;
+    private $county;
+    private $postcode;
+    private $country;
 
     /**
      * @param mixed $address1
@@ -60,5 +64,77 @@ class AddressData
     public function getAddress3()
     {
         return $this->address3;
+    }
+
+    /**
+     * @param mixed $country
+     * @return AddressData
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $county
+     * @return AddressData
+     */
+    public function setCounty($county)
+    {
+        $this->county = $county;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCounty()
+    {
+        return $this->county;
+    }
+
+    /**
+     * @param mixed $postcode
+     * @return AddressData
+     */
+    public function setPostcode($postcode)
+    {
+        $this->postcode = $postcode;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostcode()
+    {
+        return $this->postcode;
+    }
+
+    /**
+     * @param mixed $town
+     * @return AddressData
+     */
+    public function setTown($town)
+    {
+        $this->town = $town;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTown()
+    {
+        return $this->town;
     }
 }

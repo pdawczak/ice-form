@@ -5,6 +5,7 @@ namespace Ice\FormBundle\Process\CourseApplication\Step\Address\V1;
 use Ice\FormBundle\Form\Builder\FormBuilderInterface;
 use Ice\FormBundle\Form\Options\FormOptionsConfigurationInterface;
 use Ice\FormBundle\Form\Type\FormTypeInterface;
+use Ice\FormBundle\Type\CountryType;
 
 class AddressType implements FormTypeInterface
 {
@@ -17,9 +18,13 @@ class AddressType implements FormTypeInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('address1');
-        $builder->add('address2');
-        $builder->add('address3');
+        $builder->add('address1', 'text', ['label' => 'Address line 1', 'constraints' => ['not_blank']]);
+        $builder->add('address2', 'text', ['label' => 'Address line 2','required' => false]);
+        $builder->add('address3', 'text', ['label' => 'Address line 3','required' => false]);
+        $builder->add('town', 'text', ['constraints' => ['not_blank']]);
+        $builder->add('county', 'text', ['constraints' => ['not_blank']]);
+        $builder->add('postcode', 'text', ['label' => 'Post code','constraints' => ['not_blank']]);
+        $builder->add('country', new CountryType(), ['constraints' => ['not_blank']]);
     }
 
     /**
