@@ -5,27 +5,18 @@ namespace Ice\FormBundle\Process\CourseApplication\Step\Account\V1;
 use Ice\FormBundle\Command\NewAccountCommand;
 use Ice\FormBundle\CommandHandler\AccountCommandHandlerInterface;
 use Ice\FormBundle\Entity\Account;
-use Ice\FormBundle\Entity\CourseApplication;
 use Ice\FormBundle\Exception\ValidationException;
 use Ice\FormBundle\Form\Validation\ValidatableInterface;
 use Ice\FormBundle\Process\CourseApplication\AbstractFormStep;
-use Ice\FormBundle\Process\CourseApplication\Exception\StepNotDefinedException;
 use Ice\FormBundle\Process\CourseApplication\Exception\StepNotReadyException;
 use Ice\FormBundle\Process\CourseApplication\Feature\AccountCommandHandlerAwareInterface;
 use Ice\FormBundle\Process\CourseApplication\Feature\AnonymousSupportInterface;
 use Ice\FormBundle\Process\CourseApplication\Feature\ExistingApplicationSupportInterface;
-use Ice\FormBundle\Process\CourseApplication\Feature\FormFactoryAwareInterface;
 use Ice\FormBundle\Process\CourseApplication\Feature\KnownUserWithoutApplicationSupportInterface;
 use Ice\FormBundle\Process\CourseApplication\Feature\ApplicantSourceInterface;
 use Ice\FormBundle\Process\CourseApplication\StepInterface;
 use Ice\FormBundle\Repository\AccountRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Ice\FormBundle\Process\CourseApplication\Feature\AccountRepositoryAwareInterface;
 
@@ -55,11 +46,6 @@ class AccountStep extends AbstractFormStep implements
     public function isAvailable()
     {
         return $this->isInitialised();
-    }
-
-    public function isComplete()
-    {
-        return true;
     }
 
     /**
