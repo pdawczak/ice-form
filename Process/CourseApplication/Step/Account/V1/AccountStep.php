@@ -158,6 +158,8 @@ class AccountStep extends AbstractFormStep implements
                     }
                 }
             }
+        } else {
+            $this->getOwnState()->setComplete(true);
         }
     }
 
