@@ -34,11 +34,4 @@ class StudentLoanStep extends AbstractFormStep implements
         }
         return $this->data;
     }
-
-    public function getJavaScriptTemplatePath()
-    {
-        return 'CourseApplication/Step/EnglishLanguage.js.twig';
-    }
-
-
 }
