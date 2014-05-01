@@ -95,11 +95,13 @@ class MinervaClientCourseApplicationRepository implements CourseApplicationRepos
                 }
             }
         } else {
-            $this->client->beginCourseApplication(
+            $returnedApplication = $this->client->beginCourseApplication(
                 $courseApplication->getApplicantId(),
                 $courseApplication->getCourseId(),
                 $mcApplication
             );
+
+            $courseApplication->setId($returnedApplication->getId());
         }
     }
 
