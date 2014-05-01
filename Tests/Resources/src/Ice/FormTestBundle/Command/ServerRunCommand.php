@@ -89,7 +89,7 @@ EOF
 
         if ($xDebugHost = $input->getOption('xdebug')) {
             $commandLineOptions = array_merge($commandLineOptions, [
-                '-d', 'xdebug.remote_host=10.1.1.48',
+                '-d', 'xdebug.remote_host='.$xDebugHost,
                 '-d', 'xdebug.remote_connect_back=0',
                 '-d', 'xdebug.remote_autostart=1'
             ]);
