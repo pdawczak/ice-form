@@ -57,7 +57,7 @@ class RegistrationType implements FormTypeInterface
                 'input' => "datetime",
                 'widget' => "choice",
                 'format' => 'd MMM yyyy',
-                'constrains' => ['not_blank'],
+                'constraints' => ['not_blank'],
                 'empty_value' => array(
                     'day' => 'Day',
                     'month' => 'Month',
