@@ -127,6 +127,14 @@ class CourseApplicationProcess
         return $this->stepList;
     }
 
+    private function reinitialiseSteps()
+    {
+        foreach ($this->stepList->getHandlers() as $handler) {
+            $stepInitialiser = new StepInitialiser(new StateToDataConverter());
+            $stepInitialiser->initialiseStep($handler, $this->courseApplication);
+        }
+    }
+
     public function getFlow()
     {
         if (!isset($this->flow)) {
@@ -160,6 +168,8 @@ class CourseApplicationProcess
             if ($this->courseApplicationRepository->canPersist($this->courseApplication)) {
                 $this->courseApplicationRepository->persistAndFlush($this->courseApplication);
             }
+
+            $this->reinitialiseSteps();
 
             $this->currentStepHandler = $flow->getCurrentStepHandler();
 
