@@ -143,6 +143,7 @@ class AccountStep extends AbstractFormStep implements
                 );
 
                 $this->iceId = $account->getIceId();
+                $this->getOwnState()->setComplete(true);
 
             } catch (ValidationException $validationException) {
                 $errors = $validationException->getErrorsAsArray();

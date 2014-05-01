@@ -93,6 +93,7 @@ class MinervaClientCourseApplicationAdapter
                 ->setStepName($step->getName())
                 ->setStepVersion($step->getVersion())
                 ->setOrder($step->getOrder())
+                ->setCompleted($step->isComplete() ? new \DateTime() : null)
                 ->setDescription($step->getDescription())
                 ->setFieldValues($mcValues)
             ;

@@ -70,10 +70,6 @@ class SubmissionHandler
             $state = $courseApplication->getStep($step->getReference());
 
             $this->dataToStateConverter->setStateFromData($data, $state);
-            if ($step->isComplete()) {
-                $state->setComplete(true);
-            }
-
         }
 
         if($step instanceof ApplicantSourceInterface) {

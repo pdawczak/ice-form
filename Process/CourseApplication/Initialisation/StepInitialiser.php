@@ -36,6 +36,8 @@ class StepInitialiser implements StepInitialiserInterface
      */
     public function initialiseStep(StepInterface $step, CourseApplication $courseApplication)
     {
+        $step->setApplication($courseApplication);
+
         if ($courseApplication->getId()) {
             if ($step instanceof ExistingApplicationSupportInterface) {
                 $step->initialiseWithApplication(
@@ -43,8 +45,6 @@ class StepInitialiser implements StepInitialiserInterface
                     $courseApplication->getApplicantId(),
                     $courseApplication->getId()
                 );
-
-                $step->setApplication($courseApplication);
 
                 $converter = new StateToDataConverter();
                 if ($stepState = $courseApplication->getStep($step->getReference())) {
