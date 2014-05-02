@@ -1,1 +1,10 @@
-{% block javascript %}{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    jQuery('.word-count').each(function(index, el){
+        var target = jQuery('#'+jQuery(el).attr('data-target'));
+        target.on('change keyup', function(){
+            jQuery(el).text('Word count: '+(target.val().split(' ').length));
+        });
+    });
+</script>
+{% endblock %}
