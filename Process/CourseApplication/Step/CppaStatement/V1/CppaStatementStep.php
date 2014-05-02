@@ -24,7 +24,7 @@ class CppaStatementStep extends AbstractFormStep implements
 
     public function getTitle()
     {
-        return 'CPPA statement';
+        return 'Application part 2';
     }
 
     public function getFormType()

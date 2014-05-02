@@ -27,6 +27,11 @@ class ApplicationStatementStep extends AbstractFormStep implements
         return new ApplicationStatementType();
     }
 
+    public function getTitle()
+    {
+        return 'Application part 1';
+    }
+
     public function getData()
     {
         if (!$this->data) {
