@@ -1,13 +1,15 @@
 {% extends "CourseApplication/Step/default.html.twig" %}
 
 {% block form_content %}
-
+    <p>
+        All teaching and assessment on this course is in English. To participate fully, you will need near-native
+        fluency in both spoken and written English.
+    </p>
     {{ form_row(form.englishLanguage.englishFirstLanguage, {'form_type' : 'horizontal'}) }}
 
     <div id="whenNotEFL">
         <p>
-            All teaching and assessment on this course is in English. To participate fully, you will need near-native
-            fluency in both spoken and written English. We ask for recent certification as part of the admissions process.
+            We ask for recent certification as part of the admissions process.
             Further information regarding the required level can be found in the
             <a target="_blank" href="http://www.ice.cam.ac.uk/studying-with-us/international-students">International Students section</a>.
         </p>
