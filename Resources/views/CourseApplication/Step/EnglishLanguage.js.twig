@@ -18,31 +18,21 @@
             var val = jQuery('input:radio[name="englishLanguage[englishTest]"]:checked').val();
             if (val === 'ielts'){
                 jQuery('#whenIELTS').show();
-                jQuery('#whenTOEFL').hide();
-                jQuery('#whenCAECPA').hide();
-                jQuery('#whenNoTest').hide();
-            }
-            else if (val === 'toefl') {
-                jQuery('#whenIELTS').hide();
-                jQuery('#whenTOEFL').show();
                 jQuery('#whenCAECPA').hide();
                 jQuery('#whenNoTest').hide();
             }
             else if (val === 'cae_cpa') {
                 jQuery('#whenIELTS').hide();
-                jQuery('#whenTOEFL').hide();
                 jQuery('#whenCAECPA').show();
                 jQuery('#whenNoTest').hide();
             }
             else if (val === 'none') {
                 jQuery('#whenIELTS').hide();
-                jQuery('#whenTOEFL').hide();
                 jQuery('#whenCAECPA').hide();
                 jQuery('#whenNoTest').show();
             }
             else {
                 jQuery('#whenIELTS').hide();
-                jQuery('#whenTOEFL').hide();
                 jQuery('#whenCAECPA').hide();
                 jQuery('#whenNoTest').hide();
             }

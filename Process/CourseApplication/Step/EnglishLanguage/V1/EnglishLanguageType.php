@@ -33,7 +33,6 @@ class EnglishLanguageType implements FormTypeInterface
             'expanded' => true,
             'choices' => [
                 'ielts' => 'IELTS',
-                'toefl' => 'TOEFL',
                 'cae_cpa' => 'CAE or CPA',
                 'none' => 'No current language proficiency test'
             ],
@@ -51,16 +50,6 @@ class EnglishLanguageType implements FormTypeInterface
                 'not_blank' => [
                     'message' => 'Please enter a TRF number',
                     'groups' => ['enable_ielts']
-                ]
-            ]
-        ]);
-        $builder->add('toeflNumber', 'text', [
-            'label' => 'Please enter your registration number',
-            'required' => false,
-            'constraints' => [
-                'not_blank' => [
-                    'message' => 'Please enter your registration number',
-                    'groups' => ['enable_toefl']
                 ]
             ]
         ]);
@@ -117,8 +106,6 @@ class EnglishLanguageType implements FormTypeInterface
 
                     if ($data->getEnglishTest() === 'ielts') {
                        $groups[] = 'enable_ielts';
-                    } else if ($data->getEnglishTest() === 'toefl') {
-                        $groups[] = 'enable_toefl';
                     } else if ($data->getEnglishTest() === 'cae_cpa') {
                         $groups[] = 'enable_caecpa';
                     } else if ($data->getEnglishTest() === 'none') {

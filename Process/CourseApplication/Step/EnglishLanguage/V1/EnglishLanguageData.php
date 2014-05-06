@@ -5,11 +5,8 @@ namespace Ice\FormBundle\Process\CourseApplication\Step\EnglishLanguage\V1;
 class EnglishLanguageData
 {
     private $englishFirstLanguage;
-
     private $englishTest;
-
     private $trfNumber;
-    private $toeflNumber;
     private $caeCpaIdNumber;
     private $caeCpaSecret;
     private $noTestAgreement;
@@ -120,23 +117,5 @@ class EnglishLanguageData
     public function getNoTestAgreement()
     {
         return $this->noTestAgreement;
-    }
-
-    /**
-     * @param mixed $toeflNumber
-     * @return EnglishLanguageData
-     */
-    public function setToeflNumber($toeflNumber)
-    {
-        $this->toeflNumber = $toeflNumber;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getToeflNumber()
-    {
-        return $this->toeflNumber;
     }
 }
