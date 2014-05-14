@@ -30,12 +30,12 @@ class PropertyResearchOptionsType extends AbstractRegistrationStep
         $accomOptions = [
             ['NONE' => 'No additional accommodation']
         ];
-        foreach ($course->getBookingItems() as $items) {
-            if (substr($items->getCode(), 0, 12)==='DISCOUNT-SPR') {
-                $discountOptions[$items->getCode()] = $items->getTitle();
+        foreach ($course->getBookingItems() as $item) {
+            if (substr($item->getCode(), 0, 12)==='DISCOUNT-SPR') {
+                $discountOptions[$item->getCode()] = sprintf("%s", $item->getTitle());
             }
-            if (substr($items->getCode(), 0, 15)==='ACCOM-SPECIAL-A') {
-                $accomOptions[$items->getCode()] = $items->getTitle();
+            if (substr($item->getCode(), 0, 15)==='ACCOM-SPECIAL-A') {
+                $accomOptions[$item->getCode()] = sprintf("%s (£%.2f)", $item->getTitle(), $item->getPrice() / 100);
             }
         }
         $builder
