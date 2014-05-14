@@ -9,6 +9,7 @@ class CourseApplicationController extends Controller
 {
     public function getGuestApplyAction($courseId)
     {
+        $courseId = intval($courseId);
         return $this->getApplyAction(null, $courseId);
     }
 

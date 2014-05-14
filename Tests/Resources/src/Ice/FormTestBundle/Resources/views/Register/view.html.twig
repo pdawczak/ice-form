@@ -1,0 +1,50 @@
+{% extends "IceFormTestBundle::base.html.twig" %}
+
+{% block content %}
+
+    <h1>Course registration</h1>
+
+    <div id="registrationProgress">
+        <div id="side-nav-left">
+            <ul class="menu">
+                {% for step in process.steps %}
+                    <li>
+                        {% set classes = [] %}
+                        {% if process.currentStep.reference == step.reference %}
+                            {% set classes = classes|merge(['current']) %}
+                        {% endif %}
+                        {% if step.available %}
+                            {% if step.complete %}
+                                {% set classes = classes|merge(['complete']) %}
+                            {% endif %}
+                            <a href="{{ path('register', {'courseId':course_id, 'username':username, 'stepNumber':loop.index}) }}"
+                               class="{{ classes | join(' ') }}"><span>{{ step.title }}</span></a>
+
+                        {% else %}
+                            {% set classes = classes|merge(['unavailable']) %}
+                            <span class="{{ classes | join(' ') }}">{{ step.title }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id="registrationStepOuter">
+        <div class="formContainer overlay-target">
+            <h2>Step {{ process.currentStep.index + 1 }} of {{ process.steps | length }} {{ process.currentStep.title }}</h2>
+            <div class="formBody">
+                <div>
+                    {{ process.renderStepHtml | raw}}
+                </div>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+    </div>
+    <div id="box-overlay" class="course-registration-overlay">
+
+    </div>
+    <div id="overlay-message" class="course-registration-overlay" >
+        Loading, please wait...
+    </div>
+    {{ process.renderStepJavascript | raw}}
+{% endblock %}

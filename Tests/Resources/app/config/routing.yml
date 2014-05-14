@@ -1,10 +1,10 @@
-apply:
-    pattern:      /apply/{username}/{courseId}
-    defaults:  { _controller: IceFormTestBundle:CourseApplication:getApply }
-
 guest_apply:
     pattern:      /apply/{courseId}/guest
     defaults:  { _controller: IceFormTestBundle:CourseApplication:getGuestApply }
+
+apply:
+    pattern:      /apply/{username}/{courseId}
+    defaults:  { _controller: IceFormTestBundle:CourseApplication:getApply }
 
 resume_apply:
     pattern:      /apply/{username}/{courseId}/{applicationId}
@@ -17,3 +17,7 @@ course_apply_user_step:
 course_apply_user_step_resume:
     pattern:      /apply/{username}/{courseId}/{applicationId}
     defaults:  { _controller: IceFormTestBundle:CourseApplication:getResumeApply }
+
+register:
+    pattern:      /register/{username}/{courseId}
+    defaults:  { _controller: IceFormTestBundle:CourseRegistration:getRegister }

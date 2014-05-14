@@ -13,6 +13,6 @@ parameters:
     minerva_api_username:   minerva
     minerva_api_password:   ~
 
-    veritas_api_base_url:   https://veritas.uat.ice.internal.admin.cam.ac.uk/api
+    veritas_api_base_url:   https://veritas.dev.ice.internal.admin.cam.ac.uk/app_dev.php/api
     veritas_api_username:   veritas
     veritas_api_password:   ~
