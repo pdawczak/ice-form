@@ -105,6 +105,7 @@ class PropertyResearchOptionsType extends AbstractRegistrationStep
     public function renderHtml(array $vars = array())
     {
         $vars['courseFee'] = $this->getParentProcess()->getCourse()->getTuitionFee();
+        $vars['courseStartDate'] = $this->getParentProcess()->getCourse()->getStartDate();
         return parent::renderHtml($vars);
     }
 

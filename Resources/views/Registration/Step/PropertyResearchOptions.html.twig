@@ -12,7 +12,7 @@
 
     {{ form_row(form.propertyResearchDiscount, {form_type:'horizontal'}) }}
 
-    <p>The course fee includes accommodation for the duration of the course. There are also a limited number rooms
+    <p>The course fee includes accommodation for night of {{ courseStartDate | date('l, j F Y') }}. There are also a limited number rooms
        available at Madingley Hall for the preceding night, with breakfast included.</p>
     {{ form_row(form.accommodationBefore, {form_type:'horizontal'}) }}
     {{ form_rest(form) }}
