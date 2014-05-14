@@ -1,0 +1,28 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    {{ form_row(form.propertyResearchExperience) }}
+
+    <br/>
+    <br/>
+
+    <p>We require a copy of your curriculum vitae to give us a fuller understanding of your experience. This can be sent either by post or email to:</p>
+
+    <p>
+        University of Cambridge Public & Professional Programmes<br/>
+        Institute of Continuing Education<br/>
+        Madingley Hall<br/>
+        Madingley<br/>
+        CB23 8AQ<br/>
+    </p>
+    <p>
+        <a href="mailto:cpd@ice.cam.ac.uk">cpd@ice.cam.ac.uk</a>
+    </p>
+
+
+    {{ form_row(form.cvMethod, {form_type:'horizontal'}) }}
+
+    {{ form_row(form.confirmPropertyResearchExperience, {form_type:'horizontal'}) }}
+
+    {{ form_rest(form) }}
+{% endblock %}
