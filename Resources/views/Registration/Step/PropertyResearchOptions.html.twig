@@ -1,0 +1,17 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+<p>The tuition fee for this course is &pound;{{ (courseFee / 100) | number_format(2) }}</p>
+
+    <ul>
+        <li>A discounted fee of £770 is available to applicants who have been members of the Society of Property Researchers (SPR) for a minimum of one year. The 30% SPR members discount is subsidised by the SPR</li>
+        <li>A discounted fee of £990 is available to members of SPR affiliates (SLA, APL)</li>
+    </ul>
+
+    {{ form_row(form.propertyResearchDiscount, {form_type:'horizontal'}) }}
+
+    <p>The course fee includes accommodation for the duration of the course. There are also a limited number rooms (with breakfast included)
+        available at Madingley Hall for the night before the course.</p>
+    {{ form_row(form.accommodationBefore, {form_type:'horizontal'}) }}
+    {{ form_rest(form) }}
+{% endblock %}
