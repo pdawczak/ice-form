@@ -34,7 +34,7 @@ class DisabilityAndSupportNeedsType extends AbstractRegistrationStep
 
         $fieldNames[] = 'additionalNeeds';
 
-        if ($this->enableShareSupportNeeds()) {
+        if ($this->enableAdditionalNeedsDetail()) {
             $fieldNames[] = 'additionalNeedsDetail';
         }
 
