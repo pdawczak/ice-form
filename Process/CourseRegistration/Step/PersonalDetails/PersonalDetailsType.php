@@ -99,15 +99,15 @@ class PersonalDetailsType extends AbstractRegistrationStep
                     'multiple' => false,
                     'expanded' => false,
                     'choices' => array(
+                        'Dr' => 'Dr',
+                        'Misc' => 'Misc',
+                        'Miss' => 'Miss',
                         'Mr' => 'Mr',
                         'Mrs' => 'Mrs',
-                        'Miss' => 'Miss',
                         'Ms' => 'Ms',
-                        'Dr' => 'Dr',
+                        'Mx' => 'Mx',
                         'Prof' => 'Prof',
                         'Revd' => 'Revd',
-                        'Misc' => 'Misc',
-                        'Mx' => 'Mx',
                     )
                 ))
                 ->add('firstNames', 'text', array(
