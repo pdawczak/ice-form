@@ -98,7 +98,9 @@ class PersonalDetailsType extends AbstractRegistrationStep
                     'label' => 'Title',
                     'multiple' => false,
                     'expanded' => false,
+                    'required' => true,
                     'choices' => array(
+                        '' => 'Please select',
                         'Dr' => 'Dr',
                         'Misc' => 'Misc',
                         'Miss' => 'Miss',
