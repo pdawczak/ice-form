@@ -68,7 +68,7 @@ class MarketingInformationType extends AbstractRegistrationStep
         );
 
         $builder->add('bookingCode', 'text', array(
-                    'label'=>'If you have been given a booking code, please enter it here',
+                    'label'=>'If you have a booking code or Friends of Madingley number, please enter it here',
                     'required'=>false,
                     'constraints'=>[
                         new BookingCodeConstraint([
