@@ -169,18 +169,4 @@ class MarketingInformationType extends AbstractRegistrationStep
     {
         parent::setDefaultOptions($resolver);
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function isAvailable()
-    {
-        //This step is only available if no orders have been placed, because it requires an order amendment which we can't
-        //deal with yet.
-        return $this->areRegistrantAndCourseKnown() &&
-        $this->getParentProcess()->getBooking(false) &&
-        !$this->getParentProcess()->getBooking(false)->getOrderReference();
-    }
 }
