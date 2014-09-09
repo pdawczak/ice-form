@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "f6a4a90b331afde67290a733d59b0ee3",
+    "hash": "40e9aba07404030a79fd3724bf5ce35a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -539,12 +540,17 @@
         },
         {
             "name": "ice/mercuryclient-bundle",
-            "version": "2.15.0",
-            "target-dir": "Ice/MercuryClientBundle",
+            "version": "2.19.1",
             "source": {
-                "type": "svn",
-                "url": "http://repositories.internal.admin.cam.ac.uk/svn/ice-mercuryclient",
-                "reference": "/tags/2.15.0/@226"
+                "type": "git",
+                "url": "https://github.com/cambridgeuniversity/ice-mercuryclient.git",
+                "reference": "ac27cdf664cf771cb78d7bfa03bc4068d0e67ba4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-mercuryclient/zipball/ac27cdf664cf771cb78d7bfa03bc4068d0e67ba4",
+                "reference": "ac27cdf664cf771cb78d7bfa03bc4068d0e67ba4",
+                "shasum": ""
             },
             "require": {
                 "ice/janusclient-bundle": ">=0.2",
@@ -556,36 +562,45 @@
             "require-dev": {
                 "liip/functional-test-bundle": "dev-master"
             },
+            "suggest": {
+                "ice/patchpatch": "Helps processing Patch REST requests."
+            },
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "Ice\\MercuryClientBundle": ""
+                    "": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Rob Hogan",
-                    "email": "rob.hogan@admin.cam.ac.uk"
-                },
-                {
                     "name": "Stuart Chapman",
                     "email": "stuart.chapman@admin.cam.ac.uk"
+                },
+                {
+                    "name": "Rob Hogan",
+                    "email": "rob.hogan@admin.cam.ac.uk"
                 }
             ],
             "description": "Client for the ICE Mercury API",
-            "time": "2014-04-07 20:39:34"
+            "time": "2014-09-02 13:17:32"
         },
         {
             "name": "ice/minervaclient-bundle",
-            "version": "dev-trunk",
-            "target-dir": "Ice/MinervaClientBundle",
+            "version": "dev-master",
             "source": {
-                "type": "svn",
-                "url": "http://repositories.internal.admin.cam.ac.uk/svn/ice-minervaclient",
-                "reference": "/trunk/@126"
+                "type": "git",
+                "url": "https://github.com/cambridgeuniversity/ice-minervaclient.git",
+                "reference": "5a6e839cb6b4ab493834265e70e651e4d2c0f469"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-minervaclient/zipball/5a6e839cb6b4ab493834265e70e651e4d2c0f469",
+                "reference": "5a6e839cb6b4ab493834265e70e651e4d2c0f469",
+                "shasum": ""
             },
             "require": {
                 "jms/serializer-bundle": ">=0.12.0@dev",
@@ -594,59 +609,78 @@
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "Ice\\MinervaClientBundle": ""
+                    "": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Rob Hogan",
-                    "email": "rob.hogan@admin.cam.ac.uk"
-                },
-                {
                     "name": "Stuart Chapman",
                     "email": "stuart.chapman@admin.cam.ac.uk"
+                },
+                {
+                    "name": "Rob Hogan",
+                    "email": "rob.hogan@admin.cam.ac.uk"
                 }
             ],
             "description": "Client for the ICE Minerva API",
-            "time": "2014-05-01 01:12:27"
+            "time": "2014-08-23 13:58:32"
         },
         {
             "name": "ice/veritasclient-bundle",
-            "version": "1.0.2",
-            "target-dir": "Ice/VeritasClientBundle",
+            "version": "1.7.0",
             "source": {
-                "type": "svn",
-                "url": "http://repositories.internal.admin.cam.ac.uk/svn/ice-veritasclient",
-                "reference": "/tags/1.0.2/@52"
+                "type": "git",
+                "url": "https://github.com/cambridgeuniversity/ice-veritasclient.git",
+                "reference": "0fe3f57e5f029fcccb65429e83ddd360c269dfe5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/0fe3f57e5f029fcccb65429e83ddd360c269dfe5",
+                "reference": "0fe3f57e5f029fcccb65429e83ddd360c269dfe5",
+                "shasum": ""
             },
             "require": {
                 "jms/serializer-bundle": ">=0.12.0@dev",
                 "misd/guzzle-bundle": "@stable"
             },
+            "require-dev": {
+                "liip/functional-test-bundle": "dev-master",
+                "symfony/assetic-bundle": "2.1.*",
+                "symfony/console": "2.1.*",
+                "symfony/form": "2.1.*",
+                "symfony/monolog-bundle": "2.1.*",
+                "symfony/symfony": "2.1.*",
+                "symfony/validator": "2.1.*",
+                "twig/extensions": "1.0.*@dev"
+            },
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "Ice\\VeritasClientBundle": ""
+                    "Ice\\VeritasClientTestBundle": "tests/Resources/src",
+                    "tests": "",
+                    "": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Rob Hogan",
-                    "email": "rob.hogan@admin.cam.ac.uk"
-                },
-                {
                     "name": "Stuart Chapman",
                     "email": "stuart.chapman@admin.cam.ac.uk"
+                },
+                {
+                    "name": "Rob Hogan",
+                    "email": "rob.hogan@admin.cam.ac.uk"
                 }
             ],
             "description": "Client for the ICE Veritas API",
-            "time": "2013-07-10 16:01:18"
+            "time": "2014-08-15 16:35:19"
         },
         {
             "name": "jms/metadata",
@@ -1547,6 +1581,7 @@
         "misd/guzzle-bundle": 0,
         "twig/extensions": 20
     },
+    "prefer-stable": false,
     "platform": [
 
     ],
