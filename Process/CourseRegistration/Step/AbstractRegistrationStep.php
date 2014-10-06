@@ -474,6 +474,10 @@ abstract class AbstractRegistrationStep extends AbstractType
                 $value = '';
             }
 
+            if (is_array($value)) {
+                $value = serialize($value);
+            }
+
             $attributes[$fieldName] = (string)$value;
         }
 
