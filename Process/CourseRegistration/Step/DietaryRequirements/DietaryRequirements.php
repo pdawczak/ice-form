@@ -31,12 +31,6 @@ class DietaryRequirements{
 
 
         if(null !== $step) {
-            // Add or overwrite based on set StepProgress FieldValues.
-            //
-            // The values are keyed the same as the property values
-            //
-            // I think there's a possibility that an end-user could add HTML inputs into the page to set values
-            // that we don't want them to, but tests haven't been able to confirm this is the case.
             foreach($step->getFieldValues() as $field) {
                 if (property_exists($instance, $field->getFieldName())) {
                     $name = $field->getFieldName();
