@@ -316,6 +316,7 @@ class PlaceOrder extends AbstractProcess
                 ($ai->getPaymentStatusCode() === null) &&
                 $ai->getCourse($this->getVeritasClient())->isInStock() &&
                 !$ai->getCourse($this->getVeritasClient())->isCancelled() &&
+                ($ai->getApplicationStatusCode() === null || $ai->isApplicationAccepted()) &&
                 ($booking = $ai->getActiveBooking())
             ) {
                 $bookings[] = $booking;

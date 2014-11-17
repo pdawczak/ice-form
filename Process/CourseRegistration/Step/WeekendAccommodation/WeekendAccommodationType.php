@@ -202,20 +202,6 @@ class WeekendAccommodationType extends AbstractRegistrationStep
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function isAvailable()
-    {
-         //This step is only available if no orders have been placed, because it requires an order amendment which we can't
-         //deal with yet.
-        return $this->areRegistrantAndCourseKnown() &&
-            $this->getParentProcess()->getBooking(false) &&
-            !$this->getParentProcess()->getBooking(false)->getOrderReference();
-    }
-
-    /**
      * Disable radio buttons for items which are out of stock
      *
      * @param FormView $view

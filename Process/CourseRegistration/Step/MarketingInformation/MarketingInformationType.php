@@ -68,7 +68,7 @@ class MarketingInformationType extends AbstractRegistrationStep
         );
 
         $builder->add('bookingCode', 'text', array(
-                    'label'=>'If you have been given a booking code, please enter it here',
+                    'label'=>'If you have a booking code or Friends of Madingley Hall number, please enter it here',
                     'required'=>false,
                     'constraints'=>[
                         new BookingCodeConstraint([
@@ -168,19 +168,5 @@ class MarketingInformationType extends AbstractRegistrationStep
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         parent::setDefaultOptions($resolver);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function isAvailable()
-    {
-        //This step is only available if no orders have been placed, because it requires an order amendment which we can't
-        //deal with yet.
-        return $this->areRegistrantAndCourseKnown() &&
-        $this->getParentProcess()->getBooking(false) &&
-        !$this->getParentProcess()->getBooking(false)->getOrderReference();
     }
 }

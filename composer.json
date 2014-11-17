@@ -13,15 +13,9 @@
             "email": "stuart.chapman@admin.cam.ac.uk"
         }
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://satis.internal.admin.cam.ac.uk"
-        }
-    ],
     "require": {
         "ice/minervaclient-bundle": ">=1.7.0@dev",
-        "ice/janusclient-bundle": ">=0.3",
+        "ice/janusclient-bundle": ">=1.4.1",
         "ice/mercuryclient-bundle": ">=2.0.0",
         "ice/veritasclient-bundle": ">=0.2.0",
         "misd/guzzle-bundle": "@stable"

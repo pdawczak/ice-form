@@ -2,6 +2,7 @@
 
 namespace Ice\FormBundle\Process\CourseRegistration\Step\DietaryRequirements;
 
+use Ice\JanusClientBundle\Entity\User;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,6 +69,11 @@ class DietaryRequirementsType extends AbstractRegistrationStep{
         }
 
         if($this->getForm()->isValid()){
+            $this->persistRegistrantAttributes([
+                'dietaryRequirementsListed',
+                'dietaryRequirementsSpecific'
+            ]);
+
             $this->setComplete();
         }
         else{
@@ -86,7 +92,13 @@ class DietaryRequirementsType extends AbstractRegistrationStep{
     }
 
     public function prepare(){
-        $this->setEntity(new DietaryRequirements());
+        if (!$user = $this->getParentProcess()->getRegistrant()) {
+            $user = new User();
+        }
+
+        $requirements = DietaryRequirements::fromUserAndStepProgress($user, $this->getStepProgress());
+
+        $this->setEntity($requirements);
         $this->setPrepared();
     }
 
