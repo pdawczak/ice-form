@@ -4,8 +4,52 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1eec5107217ae77f4f34056a10441ca8",
+    "hash": "c13aa2b94ffece4b3435d1d90b1c2287",
     "packages": [
+        {
+            "name": "cambridgeuniversity/ice-paymentplan",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cambridgeuniversity/ice-paymentplan.git",
+                "reference": "0ead374d9db52a74c45d549b453acd5ae14ce0f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-paymentplan/zipball/0ead374d9db52a74c45d549b453acd5ae14ce0f9",
+                "reference": "0ead374d9db52a74c45d549b453acd5ae14ce0f9",
+                "shasum": ""
+            },
+            "require": {
+                "mathiasverraes/money": "~1.1"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "~2.1@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Ice\\PaymentPlan": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Hogan",
+                    "email": "rob.hogan@admin.cam.ac.uk"
+                }
+            ],
+            "description": "Calculate payment plans",
+            "time": "2014-10-22 10:31:19"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -635,19 +679,21 @@
         },
         {
             "name": "ice/veritasclient-bundle",
-            "version": "1.7.0",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cambridgeuniversity/ice-veritasclient.git",
-                "reference": "0fe3f57e5f029fcccb65429e83ddd360c269dfe5"
+                "reference": "a66a9d5a1e4d0da24839a38bad1f8aa59ecc24c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/0fe3f57e5f029fcccb65429e83ddd360c269dfe5",
-                "reference": "0fe3f57e5f029fcccb65429e83ddd360c269dfe5",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/a66a9d5a1e4d0da24839a38bad1f8aa59ecc24c9",
+                "reference": "a66a9d5a1e4d0da24839a38bad1f8aa59ecc24c9",
                 "shasum": ""
             },
             "require": {
+                "cambridgeuniversity/ice-paymentplan": "~1.0",
+                "guzzle/guzzle": ">=3.9",
                 "jms/serializer-bundle": ">=0.12.0@dev",
                 "misd/guzzle-bundle": "@stable"
             },
@@ -684,7 +730,7 @@
                 }
             ],
             "description": "Client for the ICE Veritas API",
-            "time": "2014-08-15 16:35:19"
+            "time": "2014-11-18 12:22:18"
         },
         {
             "name": "jms/metadata",
@@ -912,6 +958,61 @@
                 "xml"
             ],
             "time": "2013-12-05 14:36:11"
+        },
+        {
+            "name": "mathiasverraes/money",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mathiasverraes/money.git",
+                "reference": "b9e258119041fed20e4704f72e3ebb94ed10bea2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mathiasverraes/money/zipball/b9e258119041fed20e4704f72e3ebb94ed10bea2",
+                "reference": "b9e258119041fed20e4704f72e3ebb94ed10bea2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "Sylius/SyliusMoneyBundle": "Sylius' Symfony2 integration with Money library",
+                "TheBigBrainsCompany/TbbcMoneyBundle": "Very complete Symfony2 bundle with support for Twig, Doctrine, Forms, ...",
+                "pink-tie/money-bundle": "Pink-Tie's Symfony2 integration with Money library"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Money": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathias Verraes",
+                    "email": "mathias@verraes.net"
+                }
+            ],
+            "description": "PHP implementation of Fowler's Money pattern",
+            "homepage": "http://verraes.net/2011/04/fowler-money-pattern-in-php/",
+            "keywords": [
+                "Generic Sub-domain",
+                "Value Object",
+                "money"
+            ],
+            "time": "2014-10-07 12:54:10"
         },
         {
             "name": "misd/guzzle-bundle",
@@ -1576,9 +1677,7 @@
             "time": "2014-03-01 02:53:07"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "ice/minervaclient-bundle": 20,
@@ -1586,10 +1685,6 @@
         "twig/extensions": 20
     },
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }

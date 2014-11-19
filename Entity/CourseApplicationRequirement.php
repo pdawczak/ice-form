@@ -30,7 +30,7 @@ class CourseApplicationRequirement
      * @param $description
      * @param $order
      */
-    public function __construct($name, $version, $description, $order)
+    public function __construct($name, $version, $description, $order = null)
     {
         $this->reference = $name;
         $this->version = $version;
