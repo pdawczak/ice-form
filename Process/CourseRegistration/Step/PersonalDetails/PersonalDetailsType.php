@@ -78,12 +78,13 @@ class PersonalDetailsType extends AbstractRegistrationStep
 
             if (null === ($sex = $this->getParentProcess()->getRegistrant()->getAttributeValueByName('sex',null))) {
                 $builder->add('sex', 'choice', array(
-                    'label' => 'Sex',
+                    'label' => 'Gender',
                     'multiple' => false,
                     'expanded' => true,
                     'choices' => array(
                         'm' => 'Male',
-                        'f' => 'Female'
+                        'f' => 'Female',
+                        'o' => 'Other'
                     ),
                 ));
             } else {
