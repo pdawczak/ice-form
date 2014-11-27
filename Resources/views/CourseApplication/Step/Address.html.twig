@@ -1,7 +1,7 @@
 {% extends "CourseApplication/Step/default.html.twig" %}
 
 {% block form_content %}
-    <p>Please provide your home address below.</p>
+    <p>Please provide your permanent home address below. If you are accepted we will ask separately for a term time mailing address.</p>
 
     {{ form_row(form.address.address1, {'form_type':'horizontal'}) }}
     {{ form_row(form.address.address2, {'form_type':'horizontal'}) }}
