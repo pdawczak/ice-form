@@ -4,8 +4,7 @@
     <p>
         We are required to ask the following questions which are shared with the
         <a target="_blank" href="http://www.hesa.ac.uk/content/view/131/180/">Higher Education Statistics Agency (HESA)</a>
-        in line with legal and government requirements. Please note that we may need to contact you for further information
-        in order to complete our statutory returns.</p>
+        in line with legal and government requirements. Please note that we may need to contact you for further information.</p>
 
     {{ form_row(form.hesaEthnicOrigin, {form_type:'horizontal'}) }}
     {{ form_row(form.hesaPreviouslyStudiedAtDegreeLevel, {form_type:'horizontal'}) }}
@@ -20,17 +19,6 @@
     {{ form_row(form.hesaFeesEmployerType, {form_type:'horizontal'}) }}
     </div>
 
-    {% if form.disabilityListed is defined %}
-        <p>
-            Under the Equality Act 2010, a disability is any physical or mental impairment which has a substantial and long
-            term adverse effect on an individual’s ability to carry out normal day to day activities.
-        </p>
-
-        <p>
-            {{ form_row(form.disabilityListed) }}
-        </p>
-    {% endif %}
-
     {% if form.inReceiptOfDisabledStudentsAllowance is defined %}
         <div id="whenHasDisability">
             {{ form_row(form.inReceiptOfDisabledStudentsAllowance, {'form_type':'horizontal'}) }}
@@ -41,6 +29,17 @@
         <p>A <strong>Care Leaver</strong> is someone who has been in the care of a UK local authority, health trust or social care trust
         for at least 13 weeks since the age of 14, and who was in care on their 16th birthday.</p>
         <p>{{ form_row(form.careLeaver, {'form_type':'horizontal'}) }}</p>
+    {% endif %}
+
+    {% if form.disabilityListed is defined %}
+        <p>
+            Under the Equality Act 2010, a disability is any physical or mental impairment which has a substantial and long
+            term adverse effect on an individual’s ability to carry out normal day to day activities.
+        </p>
+
+        <p>
+            {{ form_row(form.disabilityListed) }}
+        </p>
     {% endif %}
     {{ form_rest(form) }}
 {% endblock %}
