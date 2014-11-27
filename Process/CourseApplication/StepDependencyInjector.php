@@ -4,8 +4,10 @@ namespace Ice\FormBundle\Process\CourseApplication;
 
 use Ice\FormBundle\Process\CourseApplication\Feature\AccountCommandHandlerAwareInterface;
 use Ice\FormBundle\Process\CourseApplication\Feature\AccountRepositoryAwareInterface;
+use Ice\FormBundle\Process\CourseApplication\Feature\CourseRepositoryAwareInterface;
 use Ice\FormBundle\Process\CourseApplication\Feature\FormFactoryAwareInterface;
 use Ice\FormBundle\Repository\AccountRepositoryInterface;
+use Ice\FormBundle\Repository\CourseRepositoryInterface;
 use Ice\FormBundle\CommandHandler\AccountCommandHandlerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -15,6 +17,11 @@ class StepDependencyInjector
      * @var AccountRepositoryInterface
      */
     private $accountRepository;
+
+    /**
+     * @var CourseRepositoryInterface
+     */
+    private $courseRepository;
 
     /**
      * @var AccountCommandHandlerInterface
@@ -67,6 +74,22 @@ class StepDependencyInjector
         return $this->formFactory;
     }
 
+    /**
+     * @return CourseRepositoryInterface
+     */
+    public function getCourseRepository()
+    {
+        return $this->courseRepository;
+    }
+
+    /**
+     * @param CourseRepositoryInterface $courseRepository
+     */
+    public function setCourseRepository($courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
+    }
+
     public function setAccountCommandHandler($accountCommandHandler)
     {
         $this->accountCommandHandler = $accountCommandHandler;
@@ -79,6 +102,10 @@ class StepDependencyInjector
     {
         if ($step instanceof AccountRepositoryAwareInterface) {
             $step->setAccountRepository($this->accountRepository);
+        }
+
+        if ($step instanceof CourseRepositoryAwareInterface) {
+            $step->setCourseRepository($this->courseRepository);
         }
 
         if ($step instanceof FormFactoryAwareInterface) {

@@ -53,6 +53,9 @@
             <call method="setAccountRepository">
                 <argument type="service" id="ice.forms.infrastructure.janus.janus_client_account_repository" />
             </call>
+            <call method="setCourseRepository">
+                <argument type="service" id="ice.forms.repository.course" />
+            </call>
             <call method="setFormFactory">
                 <argument type="service" id="form.factory" />
             </call>
