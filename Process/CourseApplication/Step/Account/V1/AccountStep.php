@@ -34,7 +34,7 @@ class AccountStep extends AbstractFormStep implements
      */
     private $accountRepository;
 
-    private $iceId;
+    protected $iceId;
 
     private $data;
 

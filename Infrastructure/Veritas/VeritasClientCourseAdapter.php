@@ -2,6 +2,7 @@
 
 namespace Ice\FormBundle\Infrastructure\Veritas;
 
+use Ice\FormBundle\Entity\AvailableBursary;
 use Ice\FormBundle\Entity\CourseApplicationRequirement;
 use Ice\VeritasClientBundle\Entity\Course as VeritasClientCourse;
 use Ice\FormBundle\Entity\Course;
@@ -31,8 +32,26 @@ class VeritasClientCourseAdapter
             );
         }
 
+        $bursariesAvailable = [];
+
+        foreach ($vcCourse->getBookingItems() as $vcBookingItem)
+        {
+            if (strpos($vcBookingItem->getCode(), 'BURSARY-') !== 0) {
+                continue;
+            }
+
+            $bursariesAvailable[] = new AvailableBursary(
+                $vcBookingItem->getCode(),
+                $vcBookingItem->getTitle(),
+                $vcBookingItem->getPrice(),
+                $vcBookingItem->getAvailableInBackend(),
+                $vcBookingItem->getAvailableInFrontend()
+            );
+        }
+
         $course = (new Course($vcCourse->getId()))
             ->setCourseApplicationRequirements($courseApplicationRequirements)
+            ->setAvailableBursaries($bursariesAvailable)
         ;
         return $course;
     }

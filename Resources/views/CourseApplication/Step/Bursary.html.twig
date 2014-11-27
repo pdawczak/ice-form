@@ -6,15 +6,21 @@
     <p>The following bursaries are available for this course:</p>
     <p>
         <ul>
+            {% if bursaries.irh is defined %}
             <li>
-                <strong>Ivy Rose Hood Memorial Bursary (&pound;500)</strong> – if you are over 22 and applying to study at university level for the first time.
+                <strong>{{ bursaries.irh.title }} (&pound;{{ bursaries.irh.value }})</strong> – if you are over 22 and applying to study at university level for the first time.
             </li>
+            {% endif %}
+            {% if bursaries.js is defined %}
             <li>
-                <strong>James Stuart Bursary (&pound;125)</strong> – if you are applying to study at the Institute of Continuing Education for the first time.
+                <strong>{{ bursaries.js.title }} (&pound;{{ bursaries.js.value }})</strong> – if you are applying to study at the Institute of Continuing Education for the first time.
             </li>
+            {% endif %}
+            {% if bursaries.cup is defined %}
             <li>
-                <strong>Cambridge University Press (CUP) Bursary (&pound;200)</strong> – if you teach at a UK state school or state-funded further education institution.
+                <strong>{{ bursaries.cup.title }} (&pound;{{ bursaries.cup.value }})</strong> – if you teach at a UK state school or state-funded further education institution.
             </li>
+            {% endif %}
         </ul>
     </p>
 
@@ -22,16 +28,25 @@
     {{ form_row(form.bursary.bursaryWishToApply, {'form_type':'horizontal'}) }}
 
     <div id="whenBursaryWishToApply">
-        <p><em>Please note that bursaries are awarded at the Institute’s discretion. Answering the questions below does not automatically guarantee a bursary place.</em></p>
+        <p><em>Please note that bursaries are awarded at the Institute’s discretion on a first-come, first-served basis. Answering the questions below does not automatically guarantee a bursary place.</em></p>
+
+        {%  if form.bursary.previousICEStudy is defined  %}
         {{ form_row(form.bursary.previousICEStudy, {'form_type':'horizontal'}) }}
+        {% endif %}
+
+        {%  if form.bursary.ukSchoolTeaching is defined  %}
         {{ form_row(form.bursary.ukSchoolTeaching, {'form_type':'horizontal'}) }}
         <div id="whenUkSchool">
             {{ form_row(form.bursary.schoolContact) }}
         </div>
+        {% endif %}
+
+        {%  if form.bursary.previousUniStudy is defined  %}
         {{ form_row(form.bursary.previousUniStudy, {'form_type':'horizontal'}) }}
         <div id="whenIRH">
             {{ form_row(form.bursary.irhStatement) }}
         </div>
+        {% endif %}
     </div>
 
     {{ form_widget(form) }}
