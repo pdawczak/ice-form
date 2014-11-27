@@ -83,7 +83,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('ordinarilyResident', 'choice', array(
-                    'label' => 'Have you been resident in any of the following for at least 3 full years prior to the first day of your course? (If you have, but the purpose of your residency was to receive full-time education at any point in the 3-year period, please select NO). If more than one applies, please select the most recent.',
+                    'label' => 'Will you have been resident in any of the following for at least 3 full years prior to the first day of your course? (If you have, but the purpose of your residency was to receive full-time education at any point in the 3-year period, please select NO). If more than one applies, please select the most recent.',
                     'empty_value'=>'',
                     'required'=>false,
                     'expanded'=>false,
@@ -103,7 +103,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('eeaOrSwissNational', 'choice', array(
-                    'label' => 'Are you an EEA (European Economic Area) or Swiss national living and working in the UK?',
+                    'label' => 'Are you a British, EEA (European Economic Area) or Swiss national living and working in the UK?',
                     'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
@@ -114,7 +114,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('familyMemberEuNational', 'choice', array(
-                    'label' => 'Are you a non-UK/EU national who is a family member of an EU national?',
+                    'label' => 'Are you a non-EU or non-UK citizen national who is a family member of an EU national?',
                     'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
@@ -159,18 +159,20 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
             );
         }
 
-        $builder
-            ->add('requireVisa', 'choice', array(
-                    'label' => 'Do you require a visa to study in the UK? ',
-                    'expanded'=>true,
-                    'multiple'=>false,
-                    'choices'=>array(
-                        'Y' => 'Yes',
-                        'N' => 'No',
+        if ($this->enableVisaRequiredQuestion()) {
+            $builder
+                ->add('requireVisa', 'choice', array(
+                        'label' => 'Do you require a visa to study in the UK? ',
+                        'expanded'=>true,
+                        'multiple'=>false,
+                        'choices'=>array(
+                            'Y' => 'Yes',
+                            'N' => 'No',
+                        )
                     )
                 )
-            )
-        ;
+            ;
+        }
         if ($this->enableVisaQuestion()) {
             $builder
                 ->add('visaStatus', 'choice', array(
@@ -223,5 +225,10 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
     {
         $this->setEntity(NationalityAndResidence::fromStepProgress($this->getStepProgress()));
         $this->setPrepared();
+    }
+
+    private function enableVisaRequiredQuestion()
+    {
+        return $this->version < 3;
     }
 }
