@@ -1,9 +1,11 @@
 {% extends "CourseApplication/Step/default.html.twig" %}
 
 {% block form_content %}
-    <p>
-        {{ form_row(form.education.highestQualification) }}
-    </p>
+    {% if form.education.highestQualification is defined %}
+        <p>
+            {{ form_row(form.education.highestQualification) }}
+        </p>
+    {% endif %}
     <p>
         {{ form_row(form.education.recentInvolvement) }}
     </p>

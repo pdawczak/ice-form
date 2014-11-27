@@ -8,6 +8,11 @@ use Ice\FormBundle\Form\Type\FormTypeInterface;
 
 class EducationType implements FormTypeInterface
 {
+    public function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     /**
      * Called when we're building a form instance of this type with given options. Use the builder to add any children,
      * etc as necessary.
@@ -17,11 +22,13 @@ class EducationType implements FormTypeInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('highestQualification', 'textarea', [
-            'label'=>'If you have an academic qualification please indicate the highest that you currently hold. If degree, please state: Degree, Subject, Class, University/Institution and Year awarded. If other qualification: Level, Subject, Class or Mark and Institution. '
-        ]);
+        if ($this->enableHighestQualificationQuestion()) {
+            $builder->add('highestQualification', 'textarea', [
+                'label' => 'If you have an academic qualification please indicate the highest that you currently hold. If degree, please state: Degree, Subject, Class, University/Institution and Year awarded. If other qualification: Level, Subject, Class or Mark and Institution. '
+            ]);
+        }
         $builder->add('recentInvolvement', 'textarea', [
-            'label'=>'Please describe briefly your recent involvement in the subject area, if any, e.g. courses attended (title/level/date), practical work undertaken, qualifications gained (subject/level/date) etc.'
+            'label'=>'Please describe briefly your recent involvement in the subject area, if any, e.g. courses attended (title/level/date), practical work undertaken, qualifications gained (subject/level/date) etc. and other information in support of your application.'
         ]);
     }
 
@@ -43,5 +50,12 @@ class EducationType implements FormTypeInterface
     public function getName()
     {
         return 'education';
+    }
+
+    private function enableHighestQualificationQuestion()
+    {
+        list($first, $second, $third) = explode('.', $this->version);
+
+        return $second < 1;
     }
 }
