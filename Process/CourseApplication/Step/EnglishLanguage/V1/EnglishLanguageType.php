@@ -6,9 +6,15 @@ use Ice\FormBundle\Form\Builder\FormBuilderInterface;
 use Ice\FormBundle\Form\Options\FormOptionsConfigurationInterface;
 use Ice\FormBundle\Form\Type\FormTypeInterface;
 use Symfony\Component\Form\FormInterface as SymfonyFormInterface;
+use Ice\FormBundle\Type\CountryType;
 
 class EnglishLanguageType implements FormTypeInterface
 {
+    public function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     /**
      * Called when we're building a form instance of this type with given options. Use the builder to add any children,
      * etc as necessary.
@@ -83,6 +89,18 @@ class EnglishLanguageType implements FormTypeInterface
                 ]
             ]
         ]);
+
+        if ($this->enableNationalityQuestion()) {
+            $builder->add('nationality', new CountryType(), array(
+                'empty_value' => 'Information refused'
+            ));
+        }
+
+        if ($this->enableQualificationsQuestion()) {
+            $builder->add('qualifications', 'textarea', array(
+                'label' => 'Qualifications that you hold at degree level or above. Include start and end years of study, where you studied and grade.'
+            ));
+        }
     }
 
     /**
@@ -121,5 +139,20 @@ class EnglishLanguageType implements FormTypeInterface
     public function getName()
     {
         return 'education';
+    }
+
+
+    private function enableNationalityQuestion()
+    {
+        list($first, $second, $third) = explode('.', $this->version);
+
+        return $second > 0;
+    }
+
+    private function enableQualificationsQuestion()
+    {
+        list($first, $second, $third) = explode('.', $this->version);
+
+        return $second > 0;
     }
 }

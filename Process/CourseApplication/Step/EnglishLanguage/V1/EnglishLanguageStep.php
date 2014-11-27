@@ -24,7 +24,7 @@ class EnglishLanguageStep extends AbstractFormStep implements
 
     public function getFormType()
     {
-        return new EnglishLanguageType();
+        return new EnglishLanguageType($this->getVersion());
     }
 
     public function getData()
