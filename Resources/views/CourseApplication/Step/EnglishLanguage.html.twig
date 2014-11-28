@@ -24,6 +24,18 @@
         <div id="whenNoTest">
             {{ form_row(form.englishLanguage.noTestAgreement, {'form_type' : 'horizontal'}) }}
         </div>
+
+        {% if form.englishLanguage.nationality is defined %}
+            <div>
+                {{ form_row(form.englishLanguage.nationality, {'form_type' : 'horizontal'}) }}
+            </div>
+        {% endif %}
+
+        {% if form.englishLanguage.qualifications is defined %}
+            <div>
+                {{ form_row(form.englishLanguage.qualifications, {'form_type' : 'horizontal'}) }}
+            </div>
+        {% endif %}
     </div>
 
     {{ form_rest(form) }}

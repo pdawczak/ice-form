@@ -1,0 +1,23 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function onChangeTermTimeAddressTheSame(){
+            var val = $('input:checkbox[name=termTimeAddressTheSame]:checked').val(),
+                termTimeAddressFormFields = $('.term-time-address');
+
+            if (val == 1) {
+                termTimeAddressFormFields.hide();
+            } else {
+                termTimeAddressFormFields.show();
+            }
+        }
+
+        $('input:checkbox[name=termTimeAddressTheSame]').each(function(index, domElement){
+            $(domElement).change(onChangeTermTimeAddressTheSame);
+        });
+
+        onChangeTermTimeAddressTheSame();
+    </script>
+{% endblock %}

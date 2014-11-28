@@ -90,7 +90,7 @@ class HesaInformationType extends AbstractRegistrationStep
                 'expanded' => false,
                 'multiple' => false,
                 'empty_value' => '',
-                'label' => 'Do any of your parents (natural or adoptive), step-parents or guardians have any higher education qualifications?',
+                'label' => 'Do any of your parents (natural or adoptive), step-parents or guardians have any higher education qualifications (higher than A-level)?',
                 'choices' => array(
                     '1' => 'Yes',
                     '2' => 'No',

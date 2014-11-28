@@ -1,6 +1,33 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
-    <p>Please enter your address</p>
-    {{ parent() }}
+    <p>Please enter your permanent address</p>
+
+    {{ form_row(form.address1, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address2, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address3, {'form_type':'horizontal'}) }}
+    {{ form_row(form.town, {'form_type':'horizontal'}) }}
+    {{ form_row(form.county, {'form_type':'horizontal'}) }}
+    {{ form_row(form.postCode, {'form_type':'horizontal'}) }}
+    {{ form_row(form.country, {'form_type':'horizontal'}) }}
+    {{ form_row(form.telephone, {'form_type':'horizontal'}) }}
+
+    {% if form.termTimeAddressTheSame is defined %}
+        {{ form_row(form.termTimeAddressTheSame, {'form_type':'horizontal'}) }}
+
+        <div class="term-time-address">
+            <p>Please enter your term time address</p>
+
+            {{ form_row(form.termTimeAddress1, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimeAddress2, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimeAddress3, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimeTown, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimeCounty, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimePostCode, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimeCountry, {'form_type':'horizontal'}) }}
+            {{ form_row(form.termTimeTelephone, {'form_type':'horizontal'}) }}
+        </div>
+    {% endif %}
+
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
 {% endblock %}
