@@ -114,7 +114,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('familyMemberEuNational', 'choice', array(
-                    'label' => 'Are you a non-EU or non-UK citizen national who is a family member of an EU national?',
+                    'label' => 'Are you a non-EU or non-UK citizen who is a family member of an EU national?',
                     'required'=>false,
                     'expanded'=>true,
                     'multiple'=>false,
