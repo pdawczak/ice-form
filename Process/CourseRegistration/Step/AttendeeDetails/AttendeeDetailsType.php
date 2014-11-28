@@ -132,7 +132,7 @@ class AttendeeDetailsType extends AbstractRegistrationStep
         if ($this->getForm()->isValid()) {
             $this->setComplete();
             if (array_keys($attributes, 'termTimeAddressTheSame')) {
-                $attributes['termTimeAddressTheSame'] = $attributes['termTimeAddressTheSame'] ? 'T' : 'F';
+                $attributes['termTimeAddressTheSame'] = $attributes['termTimeAddressTheSame'] ? 'Y' : 'N';
             }
             $this->getParentProcess()->getJanusClient()->setAttributes($iceId, $iceId, $attributes);
         } else {

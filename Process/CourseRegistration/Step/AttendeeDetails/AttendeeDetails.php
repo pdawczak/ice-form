@@ -243,8 +243,8 @@ class AttendeeDetails{
         $instance->setCountry($user->getAttributeValueByName('country'));
         $instance->setTelephone($user->getAttributeValueByName('telephone'));
 
-        // Converting values 'T'/'F' to boolean => true/false
-        $instance->setTermTimeAddressTheSame($user->getAttributeValueByName('termTimeAddressTheSame') == 'T');
+        // Converting values 'Y'/'N' to boolean => true/false
+        $instance->setTermTimeAddressTheSame($user->getAttributeValueByName('termTimeAddressTheSame') == 'Y');
         $instance->setTermTimeAddress1($user->getAttributeValueByName('termTimeAddress1'));
         $instance->setTermTimeAddress2($user->getAttributeValueByName('termTimeAddress2'));
         $instance->setTermTimeAddress3($user->getAttributeValueByName('termTimeAddress3'));
