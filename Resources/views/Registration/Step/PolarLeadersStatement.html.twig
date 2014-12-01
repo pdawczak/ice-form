@@ -1,0 +1,11 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+    <p>
+        {{ form_row(form.polarExperience) }}
+    </p>
+    <p>
+        {{ form_row(form.hopeToGain) }}
+    </p>
+    {{ form_rest(form) }}
+{% endblock %}
