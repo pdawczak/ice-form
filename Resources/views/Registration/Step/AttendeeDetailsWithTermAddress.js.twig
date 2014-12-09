@@ -3,14 +3,38 @@
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-        function onChangeTermTimeAddressTheSame(){
-            var val = $('input:checkbox[name=termTimeAddressTheSame]:checked').val(),
-                termTimeAddressFormFields = $('.term-time-address');
+        function capitaliseFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
 
-            if (val == 1) {
-                termTimeAddressFormFields.hide();
-            } else {
-                termTimeAddressFormFields.show();
+        function isTermTimeAddressTheSameChecked() {
+            return $('input:checkbox[name=termTimeAddressTheSame]:checked').val() == 1;
+        }
+
+        function uncheckTermTimeAddressTheSame() {
+            $('input:checkbox[name=termTimeAddressTheSame]').prop('checked', false);
+        }
+
+        function copyValues() {
+            var fields = [
+                'address1',
+                'address2',
+                'address3',
+                'county',
+                'postCode',
+                'country',
+                'telephone'
+            ];
+
+            for (var i = 0; i < fields.length; i++) {
+                var val = $('#' + fields[i]).val();
+                $('#termTime' + capitaliseFirstLetter(fields[i])).val(val);
+            }
+        }
+
+        function onChangeTermTimeAddressTheSame(){
+            if (isTermTimeAddressTheSameChecked()) {
+                copyValues();
             }
         }
 
@@ -18,6 +42,10 @@
             $(domElement).change(onChangeTermTimeAddressTheSame);
         });
 
-        onChangeTermTimeAddressTheSame();
+        $('.term-time-address input').on('change', function () {
+            if (isTermTimeAddressTheSameChecked()) {
+                uncheckTermTimeAddressTheSame();
+            }
+        });
     </script>
 {% endblock %}
