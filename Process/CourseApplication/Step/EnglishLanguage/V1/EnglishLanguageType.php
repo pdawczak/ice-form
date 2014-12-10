@@ -92,13 +92,21 @@ class EnglishLanguageType implements FormTypeInterface
 
         if ($this->enableNationalityQuestion()) {
             $builder->add('nationality', new CountryType(), array(
-                'empty_value' => 'Information refused'
+                'empty_value' => 'Information refused',
+                'required' => false
             ));
         }
 
         if ($this->enableQualificationsQuestion()) {
             $builder->add('qualifications', 'textarea', array(
-                'label' => 'Qualifications that you hold at degree level or above. Include start and end years of study, where you studied and grade.'
+                'label' => 'Qualifications that you hold at degree level or above. Include start and end years of study, where you studied and grade.',
+                'required' => false,
+                'constraints' => [
+                    'not_blank' => [
+                        'message' => 'Please specify any qualifications, or type \'None\'',
+                        'groups' => ['enable_english_test']
+                    ]
+                ]
             ));
         }
     }
