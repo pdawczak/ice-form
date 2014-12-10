@@ -65,13 +65,14 @@ class RegistrationType implements FormTypeInterface
                 ),
             ))
             ->add('sex', 'choice', array(
-                'label' => 'Sex',
+                'label' => 'Gender',
                 'multiple' => false,
                 'expanded' => true,
                 'required' => false,
                 'choices' => array(
                     'm' => 'Male',
-                    'f' => 'Female'
+                    'f' => 'Female',
+                    'o' => 'Other'
                 ),
             ))
         ;
