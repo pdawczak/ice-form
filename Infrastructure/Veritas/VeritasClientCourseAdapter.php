@@ -23,13 +23,16 @@ class VeritasClientCourseAdapter
     {
         $courseApplicationRequirements = [];
 
+        $i = 1;
         foreach ($vcCourse->getCourseApplicationRequirements() as $vcRequirement)
         {
             $courseApplicationRequirements[] = new CourseApplicationRequirement(
                 $vcRequirement->getCode(),
                 $vcRequirement->getVersion(),
-                $vcRequirement->getDescription()
+                $vcRequirement->getDescription(),
+                $i
             );
+            $i++;
         }
 
         $bursariesAvailable = [];
