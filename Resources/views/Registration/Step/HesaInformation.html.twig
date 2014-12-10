@@ -19,12 +19,6 @@
     {{ form_row(form.hesaFeesEmployerType, {form_type:'horizontal'}) }}
     </div>
 
-    {% if form.inReceiptOfDisabledStudentsAllowance is defined %}
-        <div id="whenHasDisability">
-            {{ form_row(form.inReceiptOfDisabledStudentsAllowance, {'form_type':'horizontal'}) }}
-        </div>
-    {% endif %}
-
     {% if form.careLeaver is defined %}
         <p>A <strong>Care Leaver</strong> is someone who has been in the care of a UK local authority, health trust or social care trust
         for at least 13 weeks since the age of 14, and who was in care on their 16th birthday.</p>
@@ -40,6 +34,12 @@
         <p>
             {{ form_row(form.disabilityListed) }}
         </p>
+    {% endif %}
+
+    {% if form.inReceiptOfDisabledStudentsAllowance is defined %}
+        <div id="whenHasDisability">
+            {{ form_row(form.inReceiptOfDisabledStudentsAllowance, {'form_type':'horizontal'}) }}
+        </div>
     {% endif %}
     {{ form_rest(form) }}
 {% endblock %}

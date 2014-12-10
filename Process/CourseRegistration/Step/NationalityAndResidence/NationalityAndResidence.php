@@ -67,7 +67,6 @@ class NationalityAndResidence
 
     /**
      * @var string
-     * @Assert\NotBlank()
      */
     private $requireVisa;
 

@@ -59,7 +59,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $address1
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setAddress1($address1)
     {
@@ -77,7 +77,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $address2
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setAddress2($address2)
     {
@@ -95,7 +95,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $address3
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setAddress3($address3)
     {
@@ -113,7 +113,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $county
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setCounty($county)
     {
@@ -131,7 +131,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $town
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setTown($town)
     {
@@ -149,7 +149,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $country
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setCountry($country)
     {
@@ -167,7 +167,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $postCode
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setPostCode($postCode)
     {
@@ -185,7 +185,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param string $telephone
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public function setTelephone($telephone)
     {
@@ -203,7 +203,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param StepProgress $stepProgress
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public static function fromStepProgress(StepProgress $stepProgress){
         $instance = new self();
@@ -230,7 +230,7 @@ class AttendeeDetailsWithTermAddress {
 
     /**
      * @param User $user
-     * @return AttendeeDetails
+     * @return AttendeeDetailsWithTermAddress
      */
     public static function fromUser(User $user){
         $instance = new self();
