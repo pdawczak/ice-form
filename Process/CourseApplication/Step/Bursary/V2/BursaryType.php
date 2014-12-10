@@ -34,22 +34,6 @@ class BursaryType implements FormTypeInterface
             ]
         ]);
 
-        $builder->add('ukSchoolTeaching', 'choice', [
-            'label' => 'Do you teach at a UK state school or state-funded FE institution?',
-            'multiple' => false,
-            'expanded' => true,
-            'required' => false,
-            'choices' => [
-                'Y' => 'Yes',
-                'N' => 'No'
-            ],
-            'constraints' => [
-                'not_blank' => [
-                    'groups' => ['wish_to_apply']
-                ]
-            ]
-        ]);
-
         if (isset($options['bursaries']['irh'])) {
             $builder->add('previousUniStudy', 'choice', [
                 'label' => 'Have you previously studied at university level?',
@@ -74,6 +58,23 @@ class BursaryType implements FormTypeInterface
         }
 
         if (isset($options['bursaries']['cup'])) {
+
+            $builder->add('ukSchoolTeaching', 'choice', [
+                'label' => 'Do you teach at a UK state school or state-funded FE institution?',
+                'multiple' => false,
+                'expanded' => true,
+                'required' => false,
+                'choices' => [
+                    'Y' => 'Yes',
+                    'N' => 'No'
+                ],
+                'constraints' => [
+                    'not_blank' => [
+                        'groups' => ['wish_to_apply']
+                    ]
+                ]
+            ]);
+
             $builder->add('schoolContact', 'textarea', [
                 'label' => 'Please provide the name and address of your institution, along with a contact name and email address. By providing this information you consent to the Institute of Continuing Education contacting your school/FE institution to confirm your teaching status.',
                 'required' => false
