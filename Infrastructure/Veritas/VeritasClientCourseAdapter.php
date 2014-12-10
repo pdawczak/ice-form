@@ -29,7 +29,7 @@ class VeritasClientCourseAdapter
             $courseApplicationRequirements[] = new CourseApplicationRequirement(
                 $vcRequirement->getCode(),
                 $vcRequirement->getVersion(),
-                $vcRequirement->getDescription(),
+                $vcRequirement->getTitle(),
                 $i
             );
             $i++;

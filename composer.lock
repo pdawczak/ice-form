@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c13aa2b94ffece4b3435d1d90b1c2287",
+    "hash": "756017d9ffb728cea969da46a021568b",
     "packages": [
         {
             "name": "cambridgeuniversity/ice-paymentplan",
@@ -679,16 +679,16 @@
         },
         {
             "name": "ice/veritasclient-bundle",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cambridgeuniversity/ice-veritasclient.git",
-                "reference": "a66a9d5a1e4d0da24839a38bad1f8aa59ecc24c9"
+                "reference": "ddbc754c2dc1b1f518ef3078a4b4e1df726a9ac5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/a66a9d5a1e4d0da24839a38bad1f8aa59ecc24c9",
-                "reference": "a66a9d5a1e4d0da24839a38bad1f8aa59ecc24c9",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/ddbc754c2dc1b1f518ef3078a4b4e1df726a9ac5",
+                "reference": "ddbc754c2dc1b1f518ef3078a4b4e1df726a9ac5",
                 "shasum": ""
             },
             "require": {
@@ -730,7 +730,7 @@
                 }
             ],
             "description": "Client for the ICE Veritas API",
-            "time": "2014-11-18 12:22:18"
+            "time": "2014-12-10 15:51:24"
         },
         {
             "name": "jms/metadata",
