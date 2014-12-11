@@ -39,7 +39,9 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
             $fieldNames[] = 'grantedHumanitarianProtectionStatus';
         }
 
-        $fieldNames[] = 'requireVisa';
+        if ($this->enableVisaRequiredQuestion()) {
+            $fieldNames[] = 'requireVisa';
+        }
 
         if ($this->enableVisaQuestion()) {
             $fieldNames[] = 'visaStatus';

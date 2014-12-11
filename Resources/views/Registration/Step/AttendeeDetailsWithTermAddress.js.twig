@@ -41,6 +41,7 @@
         $('input:checkbox[name=termTimeAddressTheSame]').each(function(index, domElement){
             $(domElement).change(onChangeTermTimeAddressTheSame);
         });
+        onChangeTermTimeAddressTheSame();
 
         $('.term-time-address input').on('change', function () {
             if (isTermTimeAddressTheSameChecked()) {
