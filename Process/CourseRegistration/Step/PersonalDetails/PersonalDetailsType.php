@@ -89,7 +89,7 @@ class PersonalDetailsType extends AbstractRegistrationStep
                 ));
             } else {
                 $builder->add('sex', 'display', array(
-                    'label' => 'Sex',
+                    'label' => 'Gender',
                     'data' => $sex == 'm' ? 'Male' : 'Female',
                     'mapped' => false));
             }
