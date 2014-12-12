@@ -127,7 +127,7 @@ class NationalityAndResidenceType extends AbstractRegistrationStep
                 )
             )
             ->add('settledInUk', 'choice', array(
-                    'label' => 'Are you a non-UK/EU citizen settled in the UK?',
+                    'label' => 'Are you a non-EU or non-UK citizen settled in the UK?',
                     'expanded'=>true,
                     'multiple'=>false,
                     'choices'=>array(
