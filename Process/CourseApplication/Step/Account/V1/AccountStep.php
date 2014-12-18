@@ -135,6 +135,7 @@ class AccountStep extends AbstractFormStep implements
                 ->setFirstNames($data->getFirstNames())
                 ->setTitle($data->getTitle())
                 ->setEmailAddress($data->getEmailAddress())
+                ->setDateOfBirth($data->getDob())
             ;
 
             try {

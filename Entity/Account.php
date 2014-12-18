@@ -30,6 +30,11 @@ class Account
     private $emailAddress;
 
     /**
+     * @var \DateTime
+     */
+    private $dateOfBirth;
+
+    /**
      * @param string $iceId
      * @return Account
      */
@@ -117,5 +122,23 @@ class Account
     public function getEmailAddress()
     {
         return $this->emailAddress;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * @param \DateTime $dob
+     * @return $this
+     */
+    public function setDateOfBirth($dob)
+    {
+        $this->dateOfBirth = $dob;
+        return $this;
     }
 }
