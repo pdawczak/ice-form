@@ -20,6 +20,8 @@ use Ice\MinervaClientBundle\Entity\AcademicInformation;
 use Ice\MercuryClientBundle\Service\PaymentPlanService;
 use Ice\FormBundle\Process\PlaceOrder\Progress;
 
+use Ice\FormBundle\Process\PlaceOrder\CalculatedPlanFactory;
+
 use Symfony\Component\HttpFoundation\Response;
 
 class PlaceOrder extends AbstractProcess
@@ -39,9 +41,6 @@ class PlaceOrder extends AbstractProcess
     /** @var AcademicInformation[] */
     private $academicInformations;
 
-    /** @var PaymentPlanService */
-    private $paymentPlanService;
-
     /** @var Progress */
     private $progress;
 
@@ -50,6 +49,9 @@ class PlaceOrder extends AbstractProcess
 
     /** @var Response */
     private $ajaxResponse;
+
+    /** @var CalculatedPlanFactory */
+    private $planFactory;
 
     /**
      * @param $index
@@ -319,28 +321,11 @@ class PlaceOrder extends AbstractProcess
                 ($ai->getApplicationStatusCode() === null || $ai->isApplicationAccepted()) &&
                 ($booking = $ai->getActiveBooking())
             ) {
+                $booking->setAcademicInformation($ai);
                 $bookings[] = $booking;
             }
         }
         return $bookings;
-    }
-
-    /**
-     * @param \Ice\MercuryClientBundle\Service\PaymentPlanService $paymentPlanService
-     * @return PlaceOrder
-     */
-    public function setPaymentPlanService($paymentPlanService)
-    {
-        $this->paymentPlanService = $paymentPlanService;
-        return $this;
-    }
-
-    /**
-     * @return \Ice\MercuryClientBundle\Service\PaymentPlanService
-     */
-    public function getPaymentPlanService()
-    {
-        return $this->paymentPlanService;
     }
 
     /**
@@ -394,5 +379,23 @@ class PlaceOrder extends AbstractProcess
     public function getAjaxResponse()
     {
         return $this->ajaxResponse;
+    }
+
+    /**
+     * @return CalculatedPlanFactory
+     */
+    public function getPlanFactory()
+    {
+        return $this->planFactory;
+    }
+
+    /**
+     * @param CalculatedPlanFactory $paymentPlanCalculator
+     * @return $this
+     */
+    public function setPlanFactory($paymentPlanCalculator)
+    {
+        $this->planFactory = $paymentPlanCalculator;
+        return $this;
     }
 }

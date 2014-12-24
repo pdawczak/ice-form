@@ -1,13 +1,15 @@
 <?php
 namespace Ice\FormBundle\Process\PlaceOrder\Step\Confirm;
 
+use Ice\FormBundle\Infrastructure\Minerva\MinervaClientBookingAdapter;
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
 use Ice\MercuryClientBundle\Entity\Order;
 use Ice\MercuryClientBundle\Entity\Receivable;
 use Ice\MercuryClientBundle\Exception\CapacityException as OrderBuilderCapacityException;
 use Ice\FormBundle\Exception\CapacityException;
+use Ice\PaymentPlan\PaymentPlan;
 use Symfony\Component\HttpFoundation\Request;
-use Ice\MercuryClientBundle\Entity\PaymentPlanInterface;
+use Ice\FormBundle\Process\PlaceOrder\Step\ChoosePlans\PlanChoice;
 
 class ConfirmType extends AbstractType
 {
@@ -66,23 +68,35 @@ class ConfirmType extends AbstractType
 
         $builder->setCustomer($this->getParentProcess()->getCustomer());
 
+        $calculator = $this->getParentProcess()->getPlanFactory();
+
+
         $progress = $this->getParentProcess()->getProgress();
+
         foreach ($this->getParentProcess()->getBookingsAvailableToOrder() as $booking) {
             if ($planChoice = $progress->getPlanChoiceByBookingId($booking->getId())) {
-                $course = $this->getParentProcess()->getVeritasClient()
-                    ->getCourse($booking->getAcademicInformation()->getCourseId());
+                $course = $booking->getAcademicInformation()->getCourse();
 
-                /** @var PaymentPlanInterface $paymentPlan */
-                $paymentPlan = $this->getParentProcess()->getPaymentPlanService()->getPaymentPlan(
-                    $planChoice->getCode(),
-                    $planChoice->getVersion()
+                foreach ($course->getAvailablePaymentPlans() as $availablePlan) {
+                    if (PlanChoice::getDefinitionHash($availablePlan->getDefinition()) === $planChoice->getHash()) {
+                        $chosenPlan = $availablePlan;
+                    }
+                }
+
+                if (!isset($chosenPlan)) {
+                    throw new \Exception("A payment plan has been selected which is not available");
+                }
+
+                /** @var PaymentPlan $paymentPlan */
+                $paymentPlan = $calculator->calculatePlan(
+                    $chosenPlan->getDefinition(),
+                    (new MinervaClientBookingAdapter())->getBooking($booking)
                 );
 
-                //FIXME: This probably shouldn't be fixed to online
-                $paymentPlan->setPaymentMethod(Receivable::METHOD_ONLINE);
+                $mercuryPaymentPlan = MercuryPaymentPlanAdapter::withPaymentPlan($paymentPlan);
 
                 try {
-                    $builder->addNewBooking($booking, $paymentPlan, $course);
+                    $builder->addNewBooking($booking, $mercuryPaymentPlan, $course);
                 } catch (OrderBuilderCapacityException $mercuryCapacityException) {
                     $e = (new CapacityException('Capacity problems'))
                         ->setBookingItem($mercuryCapacityException->getBookingItem())
@@ -96,11 +110,6 @@ class ConfirmType extends AbstractType
         }
         $this->order = $builder->getOrder();
         $this->setPrepared();
-    }
-
-    private function getCustomer()
-    {
-
     }
 
     public function getReference()
