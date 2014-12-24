@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "756017d9ffb728cea969da46a021568b",
+    "hash": "69a56958c297e6fdb8b32dcce532c5d7",
     "packages": [
         {
             "name": "cambridgeuniversity/ice-paymentplan",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cambridgeuniversity/ice-paymentplan.git",
-                "reference": "0ead374d9db52a74c45d549b453acd5ae14ce0f9"
+                "reference": "f38e720ed6e9fdf8201bcf3984bdcb1d9c098bd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cambridgeuniversity/ice-paymentplan/zipball/0ead374d9db52a74c45d549b453acd5ae14ce0f9",
-                "reference": "0ead374d9db52a74c45d549b453acd5ae14ce0f9",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-paymentplan/zipball/f38e720ed6e9fdf8201bcf3984bdcb1d9c098bd1",
+                "reference": "f38e720ed6e9fdf8201bcf3984bdcb1d9c098bd1",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,50 @@
                 }
             ],
             "description": "Calculate payment plans",
-            "time": "2014-10-22 10:31:19"
+            "time": "2014-12-24 20:50:29"
+        },
+        {
+            "name": "cambridgeuniversity/ice-paymentplan-bundle",
+            "version": "v1.0.0",
+            "target-dir": "Ice/PaymentPlanBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cambridgeuniversity/ice-paymentplan-bundle.git",
+                "reference": "305ad9eb11124174860ec28ef6e6ddc8aab54b94"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-paymentplan-bundle/zipball/305ad9eb11124174860ec28ef6e6ddc8aab54b94",
+                "reference": "305ad9eb11124174860ec28ef6e6ddc8aab54b94",
+                "shasum": ""
+            },
+            "require": {
+                "cambridgeuniversity/ice-paymentplan": "~1.0",
+                "symfony/framework-bundle": "~2.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Ice\\PaymentPlanBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Hogan",
+                    "email": "rob.hogan@admin.cam.ac.uk"
+                }
+            ],
+            "description": "Provides the wiring for the use of cambridgeuniversity/ice-paymentplan as a Symfony2 service",
+            "time": "2014-10-22 14:25:29"
         },
         {
             "name": "doctrine/annotations",
