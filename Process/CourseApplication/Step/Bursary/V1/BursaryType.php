@@ -121,6 +121,6 @@ class BursaryType implements FormTypeInterface
 
     public function getName()
     {
-        return 'education';
+        return 'bursary';
     }
 }

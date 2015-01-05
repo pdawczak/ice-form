@@ -10,6 +10,8 @@ class EnglishLanguageData
     private $caeCpaIdNumber;
     private $caeCpaSecret;
     private $noTestAgreement;
+    private $nationality;
+    private $qualifications;
 
     /**
      * @param mixed $englishFirstLanguage
@@ -117,5 +119,37 @@ class EnglishLanguageData
     public function getNoTestAgreement()
     {
         return $this->noTestAgreement;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * @param string $nationality
+     */
+    public function setNationality($nationality = '')
+    {
+        $this->nationality = $nationality;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQualifications()
+    {
+        return $this->qualifications;
+    }
+
+    /**
+     * @param string $qualifications
+     */
+    public function setQualifications($qualifications = '')
+    {
+        $this->qualifications = $qualifications;
     }
 }

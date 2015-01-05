@@ -25,7 +25,7 @@ class EducationStep extends AbstractFormStep implements
 
     public function getFormType()
     {
-        return new EducationType();
+        return new EducationType($this->getVersion());
     }
 
     public function getData()

@@ -34,7 +34,7 @@ class AccountData
     private $plainPassword;
 
     /**
-     * @var string
+     * @var \DateTime
      */
     private $dob;
 
@@ -134,7 +134,7 @@ class AccountData
     }
 
     /**
-     * @param string $dob
+     * @param \DateTime $dob
      * @return AccountData
      */
     public function setDob($dob)
@@ -144,7 +144,7 @@ class AccountData
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getDob()
     {

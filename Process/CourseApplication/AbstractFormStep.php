@@ -26,6 +26,10 @@ abstract class AbstractFormStep implements StepInterface, HasFormInterface, Form
 
     protected $applicationId;
 
+    protected $courseId;
+
+    protected $iceId;
+
     private $formFactory;
 
     public function __construct($reference, $version)
@@ -173,6 +177,8 @@ abstract class AbstractFormStep implements StepInterface, HasFormInterface, Form
 
     public function initialiseWithApplication($courseId, $iceId, $applicationId)
     {
+        $this->iceId = $iceId;
+        $this->courseId = $courseId;
         $this->applicationId = $applicationId;
     }
 }

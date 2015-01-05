@@ -1,6 +1,16 @@
 {% extends "Registration/Step/default.html.twig" %}
 
 {% block form_content %}
-    <p>Please enter your address</p>
-    {{ parent() }}
+    <p>Please enter your permanent address</p>
+
+    {{ form_row(form.address1, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address2, {'form_type':'horizontal'}) }}
+    {{ form_row(form.address3, {'form_type':'horizontal'}) }}
+    {{ form_row(form.town, {'form_type':'horizontal'}) }}
+    {{ form_row(form.county, {'form_type':'horizontal'}) }}
+    {{ form_row(form.postCode, {'form_type':'horizontal'}) }}
+    {{ form_row(form.country, {'form_type':'horizontal'}) }}
+    {{ form_row(form.telephone, {'form_type':'horizontal'}) }}
+
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
 {% endblock %}

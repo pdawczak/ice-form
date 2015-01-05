@@ -15,6 +15,11 @@ class Course
     private $courseApplicationRequirements;
 
     /**
+     * @var AvailableBursary[]
+     */
+    private $availableBursaries;
+
+    /**
      * @param int $id
      */
     public function __construct($id)
@@ -46,5 +51,23 @@ class Course
     public function getCourseApplicationRequirements()
     {
         return $this->courseApplicationRequirements;
+    }
+
+    /**
+     * @return AvailableBursary[]
+     */
+    public function getAvailableBursaries()
+    {
+        return $this->availableBursaries;
+    }
+
+    /**
+     * @param AvailableBursary[] $availableBursaries
+     * @return Course
+     */
+    public function setAvailableBursaries($availableBursaries)
+    {
+        $this->availableBursaries = $availableBursaries;
+        return $this;
     }
 }

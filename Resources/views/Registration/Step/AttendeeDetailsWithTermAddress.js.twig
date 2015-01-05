@@ -1,0 +1,53 @@
+{% extends "Registration/Step/default.js.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function capitaliseFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function isTermTimeAddressTheSameChecked() {
+            return $('input:checkbox[name=termTimeAddressTheSame]:checked').val() == 1;
+        }
+
+        function uncheckTermTimeAddressTheSame() {
+            $('input:checkbox[name=termTimeAddressTheSame]').prop('checked', false);
+        }
+
+        function copyValues() {
+            var fields = [
+                'address1',
+                'address2',
+                'address3',
+                'town',
+                'county',
+                'postCode',
+                'country',
+                'telephone'
+            ];
+
+            for (var i = 0; i < fields.length; i++) {
+                var val = $('#' + fields[i]).val();
+                $('#termTime' + capitaliseFirstLetter(fields[i])).val(val);
+            }
+        }
+
+        function onChangeTermTimeAddressTheSame(){
+            if (isTermTimeAddressTheSameChecked()) {
+                copyValues();
+            }
+        }
+
+        $('input:checkbox[name=termTimeAddressTheSame]').each(function(index, domElement){
+            $(domElement).change(onChangeTermTimeAddressTheSame);
+        });
+        onChangeTermTimeAddressTheSame();
+
+        $('.term-time-address input').on('change', function () {
+            if (isTermTimeAddressTheSameChecked()) {
+                uncheckTermTimeAddressTheSame();
+            }
+        });
+    </script>
+{% endblock %}

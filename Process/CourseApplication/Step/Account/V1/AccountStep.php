@@ -34,7 +34,7 @@ class AccountStep extends AbstractFormStep implements
      */
     private $accountRepository;
 
-    private $iceId;
+    protected $iceId;
 
     private $data;
 
@@ -135,6 +135,7 @@ class AccountStep extends AbstractFormStep implements
                 ->setFirstNames($data->getFirstNames())
                 ->setTitle($data->getTitle())
                 ->setEmailAddress($data->getEmailAddress())
+                ->setDateOfBirth($data->getDob())
             ;
 
             try {

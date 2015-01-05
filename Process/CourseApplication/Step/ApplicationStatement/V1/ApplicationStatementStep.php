@@ -29,7 +29,7 @@ class ApplicationStatementStep extends AbstractFormStep implements
 
     public function getTitle()
     {
-        return 'Application part 1';
+        return 'Application statement';
     }
 
     public function getData()

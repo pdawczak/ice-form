@@ -39,14 +39,20 @@ class JanusClientAccountCommandHandler implements AccountCommandHandlerInterface
     {
         $account = $newAccountCommand->getAccount();
 
+        $parameters = [
+            'title' => $account->getTitle(),
+            'email' => $account->getEmailAddress(),
+            'firstNames' => $account->getFirstNames(),
+            'lastNames' => $account->getLastNames(),
+            'plainPassword' => $newAccountCommand->getPlainPassword()
+        ];
+
+        if ($account->getDateOfBirth() instanceof \DateTime) {
+            $parameters['dob'] = $account->getDateOfBirth()->format('Y-m-d');
+        }
+
         try {
-            $responseUser = $this->client->createUser([
-                'title' => $account->getTitle(),
-                'email' => $account->getEmailAddress(),
-                'firstNames' => $account->getFirstNames(),
-                'lastNames' => $account->getLastNames(),
-                'plainPassword' => $newAccountCommand->getPlainPassword()
-            ]);
+            $responseUser = $this->client->createUser($parameters);
 
             $account->setIceId($responseUser->getUsername());
         } catch (ValidationException $exception) {
