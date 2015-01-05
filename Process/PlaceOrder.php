@@ -17,7 +17,6 @@ use Ice\MercuryClientBundle\Entity\CustomerInterface;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Ice\MinervaClientBundle\Entity\AcademicInformation;
-use Ice\MercuryClientBundle\Service\PaymentPlanService;
 use Ice\FormBundle\Process\PlaceOrder\Progress;
 
 use Ice\FormBundle\Process\PlaceOrder\CalculatedPlanFactory;
