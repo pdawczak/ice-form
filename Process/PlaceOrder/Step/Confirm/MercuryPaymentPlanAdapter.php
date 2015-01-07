@@ -13,6 +13,11 @@ class MercuryPaymentPlanAdapter implements PaymentPlanInterface
      */
     private $paymentPlan;
 
+    /**
+     * @var string
+     */
+    private $paymentMethod = Receivable::METHOD_ONLINE;
+
     //Construct using factory methods only
     private function __construct() {}
 
@@ -45,17 +50,23 @@ class MercuryPaymentPlanAdapter implements PaymentPlanInterface
             $receivables[] = (new Receivable())
                 ->setDueDate($dueDate)
                 ->setAmount($plannedPayment->getAmount()->getAmount())
-                ->setMethod(Receivable::METHOD_ONLINE)
+                ->setMethod($this->paymentMethod)
             ;
         }
         return $receivables;
     }
 
+    /**
+     * @return string
+     */
     public function getShortDescription()
     {
         return $this->paymentPlan->getShortDescription();
     }
 
+    /**
+     * @return string
+     */
     public function getLongDescription()
     {
         return $this->paymentPlan->getLongDescription();
@@ -68,6 +79,7 @@ class MercuryPaymentPlanAdapter implements PaymentPlanInterface
      */
     public function setPaymentMethod($method)
     {
-        // TODO: Implement setPaymentMethod() method.
+        $this->paymentMethod = $method;
+        return $this;
     }
 }
