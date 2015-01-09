@@ -108,6 +108,7 @@ class FormService
     {
         $placeOrder = new PlaceOrder();
         $placeOrder
+            ->setPlanFactory(new PlaceOrder\CalculatedPlanFactory($this->getContainer()->get('ice.payment_plan.calculator')))
             ->setCustomerId($customerId)
             ->setFormFactory($this->getFormFactory())
             ->setTemplating($this->getTemplating())
@@ -115,7 +116,8 @@ class FormService
             ->setJanusClient($this->getJanusClient())
             ->setMinervaClient($this->getMinervaClient())
             ->setMercuryClient($this->getMercuryClient())
-            ->setPaymentPlanService($this->getContainer()->get('mercury.payment_plans'));
+            ->setProposedSuborderFactory($this->getContainer()->get('mercury.proposed_suborder_factory'))
+        ;
         return $placeOrder;
     }
 

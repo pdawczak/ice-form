@@ -1,13 +1,22 @@
 <?php
 namespace Ice\FormBundle\Process\PlaceOrder\Step\Confirm;
 
+use Ice\FormBundle\Infrastructure\Minerva\MinervaClientBookingAdapter;
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
+use Ice\MercuryClientBundle\Adapter\Builder\Input\JanusClientUserAdapter;
+use Ice\MercuryClientBundle\Adapter\Builder\Input\VeritasClientCourseAdapter;
+use Ice\MercuryClientBundle\Adapter\Builder\Input\VeritasClientCourseAndMinervaBookingAdapter;
+use Ice\MercuryClientBundle\Adapter\Builder\Input\VeritasClientCourseAndMinervaClientBookingAdapter;
+use Ice\MercuryClientBundle\Builder\Input\OrderableBookingInterface;
+use Ice\MercuryClientBundle\Builder\OrderBuilder;
 use Ice\MercuryClientBundle\Entity\Order;
 use Ice\MercuryClientBundle\Entity\Receivable;
-use Ice\MercuryClientBundle\Exception\CapacityException as OrderBuilderCapacityException;
 use Ice\FormBundle\Exception\CapacityException;
+use Ice\MinervaClientBundle\Entity\Booking;
+use Ice\PaymentPlan\PaymentPlan;
+use Ice\VeritasClientBundle\Entity\Course;
 use Symfony\Component\HttpFoundation\Request;
-use Ice\MercuryClientBundle\Entity\PaymentPlanInterface;
+use Ice\FormBundle\Process\PlaceOrder\Step\ChoosePlans\PlanChoice;
 
 class ConfirmType extends AbstractType
 {
@@ -66,41 +75,64 @@ class ConfirmType extends AbstractType
 
         $builder->setCustomer($this->getParentProcess()->getCustomer());
 
+        $calculator = $this->getParentProcess()->getPlanFactory();
+
+
         $progress = $this->getParentProcess()->getProgress();
+
         foreach ($this->getParentProcess()->getBookingsAvailableToOrder() as $booking) {
             if ($planChoice = $progress->getPlanChoiceByBookingId($booking->getId())) {
-                $course = $this->getParentProcess()->getVeritasClient()
-                    ->getCourse($booking->getAcademicInformation()->getCourseId());
+                $course = $booking->getAcademicInformation()->getCourse();
 
-                /** @var PaymentPlanInterface $paymentPlan */
-                $paymentPlan = $this->getParentProcess()->getPaymentPlanService()->getPaymentPlan(
-                    $planChoice->getCode(),
-                    $planChoice->getVersion()
+                foreach ($course->getAvailablePaymentPlans() as $availablePlan) {
+                    if (PlanChoice::getDefinitionHash($availablePlan->getDefinition()) === $planChoice->getHash()) {
+                        $chosenPlan = $availablePlan;
+                    }
+                }
+
+                if (!isset($chosenPlan)) {
+                    throw new \Exception("A payment plan has been selected which is not available");
+                }
+
+                /** @var PaymentPlan $paymentPlan */
+                $paymentPlan = $calculator->calculatePlan(
+                    $chosenPlan->getDefinition(),
+                    (new MinervaClientBookingAdapter())->getBooking($booking)
                 );
 
-                //FIXME: This probably shouldn't be fixed to online
-                $paymentPlan->setPaymentMethod(Receivable::METHOD_ONLINE);
+                $proposedSuborderFactory = $this->getParentProcess()->getProposedSuborderFactory();
 
-                try {
-                    $builder->addNewBooking($booking, $paymentPlan, $course);
-                } catch (OrderBuilderCapacityException $mercuryCapacityException) {
-                    $e = (new CapacityException('Capacity problems'))
-                        ->setBookingItem($mercuryCapacityException->getBookingItem())
-                        ->setCourseItem($mercuryCapacityException->getCourseItem())
-                        ->setBooking($booking)
-                        ->setCourse($course);
+                $orderableBooking = VeritasClientCourseAndMinervaClientBookingAdapter::adaptCourseAndBooking($booking, $course);
 
-                    throw $e;
-                }
+                $this->throwExceptionIfStockIssue($orderableBooking, $booking, $course);
+
+                $builder->addProposedSuborder(
+                    $proposedSuborderFactory->getProposedSuborder(
+                        $orderableBooking,
+                        null,
+                        VeritasClientCourseAdapter::adaptCourse($course),
+                        JanusClientUserAdapter::adaptUser($this->getParentProcess()->getUser()),
+                        $paymentPlan,
+                        Receivable::METHOD_ONLINE
+                    )
+                );
             }
         }
         $this->order = $builder->getOrder();
         $this->setPrepared();
     }
 
-    private function getCustomer()
+    private function throwExceptionIfStockIssue(OrderableBookingInterface $orderableBooking, Booking $booking, Course $course)
     {
+        foreach ($orderableBooking->getOrderableItems() as $orderableItem) {
+            if (!$orderableItem->isInStock()) {
+                $e = (new CapacityException('Capacity problems'))
+                    ->setBooking($booking)
+                    ->setCourse($course);
 
+                throw $e;
+            }
+        }
     }
 
     public function getReference()
