@@ -116,6 +116,7 @@ class FormService
             ->setJanusClient($this->getJanusClient())
             ->setMinervaClient($this->getMinervaClient())
             ->setMercuryClient($this->getMercuryClient())
+            ->setProposedSuborderFactory($this->getContainer()->get('mercury.proposed_suborder_factory'))
         ;
         return $placeOrder;
     }

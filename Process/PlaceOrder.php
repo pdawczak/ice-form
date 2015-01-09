@@ -23,6 +23,8 @@ use Ice\FormBundle\Process\PlaceOrder\CalculatedPlanFactory;
 
 use Symfony\Component\HttpFoundation\Response;
 
+use Ice\MercuryClientBundle\Builder\ProposedSuborderFactory;
+
 class PlaceOrder extends AbstractProcess
 {
     /** @var Step\AbstractType */
@@ -51,6 +53,12 @@ class PlaceOrder extends AbstractProcess
 
     /** @var CalculatedPlanFactory */
     private $planFactory;
+
+    /** @var ProposedSuborderFactory */
+    private $proposedSuborderFactory;
+
+    /** @var User */
+    private $user;
 
     /**
      * @param $index
@@ -283,6 +291,16 @@ class PlaceOrder extends AbstractProcess
     }
 
     /**
+     * @param User $user
+     * @return PlaceOrder
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
      * @throws \LogicException
      * @return \Ice\MercuryClientBundle\Entity\CustomerInterface
      */
@@ -292,6 +310,18 @@ class PlaceOrder extends AbstractProcess
             throw new \LogicException("getCustomer called but Customer has not been set");
         }
         return $this->customer;
+    }
+
+    /**
+     * @throws \LogicException
+     * @return User
+     */
+    public function getUser()
+    {
+        if (!$this->user) {
+            throw new \LogicException("getUser called but User has not been set");
+        }
+        return $this->user;
     }
 
     /**
@@ -395,6 +425,24 @@ class PlaceOrder extends AbstractProcess
     public function setPlanFactory($paymentPlanCalculator)
     {
         $this->planFactory = $paymentPlanCalculator;
+        return $this;
+    }
+
+    /**
+     * @return ProposedSuborderFactory
+     */
+    public function getProposedSuborderFactory()
+    {
+        return $this->proposedSuborderFactory;
+    }
+
+    /**
+     * @param ProposedSuborderFactory $proposedSuborderFactory
+     * @return $this
+     */
+    public function setProposedSuborderFactory($proposedSuborderFactory)
+    {
+        $this->proposedSuborderFactory = $proposedSuborderFactory;
         return $this;
     }
 }
