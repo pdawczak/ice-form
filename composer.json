@@ -17,7 +17,7 @@
         "ice/minervaclient-bundle": "~2.0",
         "ice/janusclient-bundle": ">=1.4.1",
         "ice/mercuryclient-bundle": "~3.0",
-        "ice/veritasclient-bundle": ">=2.1.3",
+        "ice/veritasclient-bundle": "~2.2",
         "cambridgeuniversity/ice-paymentplan": "~1.1",
         "cambridgeuniversity/ice-paymentplan-bundle": "~1.0",
         "misd/guzzle-bundle": "@stable"
