@@ -1,6 +1,7 @@
 <?php
 namespace Ice\FormBundle\Process\CourseRegistration\Step\ElmAccommodation;
 
+use Ice\FormBundle\Process\CourseRegistration;
 use Ice\JanusClientBundle\Exception\ValidationException;
 use Ice\VeritasClientBundle\Entity\Course;
 use JMS\Serializer\Tests\Fixtures\Person;
@@ -28,10 +29,20 @@ class ElmAccommodationType extends AbstractRegistrationStep
     /**
      * @var array confirmation value
      */
-    protected $childFormOrder = [
-        1 => 'accommodation',
-        2 => 'sundayAccommodation'
-    ];
+    protected $childFormOrder;
+
+    public function __construct(CourseRegistration $parentProcess, $reference = null, $version = null)
+    {
+        $this->childFormOrder = [
+            1 => 'accommodation'
+        ];
+
+        if ($this->enableSundayAccommodation()) {
+            $this->childFormOrder[2] = 'sundayAccommodation';
+        }
+
+        parent::__construct($parentProcess, $reference, $version);
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -229,19 +240,21 @@ class ElmAccommodationType extends AbstractRegistrationStep
 
         $builder->add('accommodation', 'choice', $options);
 
-        $choice = $choices['ACCOMMODATION-SUNDAY-ENSUITE-'.$course->getId()];
-        $builder->add('sundayEnsuite', 'checkbox', [
-            'required'=>false,
-            'property_path'=>'sundayAccommodationAsBool',
-            'label'=>sprintf('I wish to book %s (£%0.2f)', lcfirst($choice['label']), $choice['price']/100)
-        ]);
+        if ($this->enableSundayAccommodation()) {
+            $choice = $choices['ACCOMMODATION-SUNDAY-ENSUITE-' . $course->getId()];
+            $builder->add('sundayEnsuite', 'checkbox', [
+                'required' => false,
+                'property_path' => 'sundayAccommodationAsBool',
+                'label' => sprintf('I wish to book %s (£%0.2f)', lcfirst($choice['label']), $choice['price'] / 100)
+            ]);
 
-        $choice = $choices['ACCOMMODATION-SUNDAY-STANDARD-'.$course->getId()];
-        $builder->add('sundayStandard', 'checkbox', [
-            'required'=>false,
-            'property_path'=>'sundayAccommodationAsBool',
-            'label'=>sprintf('I wish to book %s (£%0.2f)', lcfirst($choice['label']), $choice['price']/100)
-        ]);
+            $choice = $choices['ACCOMMODATION-SUNDAY-STANDARD-' . $course->getId()];
+            $builder->add('sundayStandard', 'checkbox', [
+                'required' => false,
+                'property_path' => 'sundayAccommodationAsBool',
+                'label' => sprintf('I wish to book %s (£%0.2f)', lcfirst($choice['label']), $choice['price'] / 100)
+            ]);
+        }
     }
 
 
@@ -321,33 +334,26 @@ class ElmAccommodationType extends AbstractRegistrationStep
             }
         }
 
-        foreach (
-            [
-                'sundayEnsuite'=>'ACCOMMODATION-SUNDAY-ENSUITE-'.$course->getId(),
-                'sundayStandard'=>'ACCOMMODATION-SUNDAY-STANDARD-'.$course->getId()
-            ] as $fieldName=>$code) {
+        if ($this->enableSundayAccommodation()) {
+            foreach (
+                [
+                    'sundayEnsuite' => 'ACCOMMODATION-SUNDAY-ENSUITE-' . $course->getId(),
+                    'sundayStandard' => 'ACCOMMODATION-SUNDAY-STANDARD-' . $course->getId()
+                ] as $fieldName => $code) {
 
-            $bookingItem = $course->getBookingItemByCode($code);
-            $field = $view->children[$fieldName];
+                $bookingItem = $course->getBookingItemByCode($code);
+                $field = $view->children[$fieldName];
 
-            if (!$bookingItem->isInStock()) {
-                $field->vars['label'] = $options['unavailableMessage'] . ' - ' . $field->vars['label'];
-                $field->vars['attr']['disabled'] = 'disabled';
+                if (!$bookingItem->isInStock()) {
+                    $field->vars['label'] = $options['unavailableMessage'] . ' - ' . $field->vars['label'];
+                    $field->vars['attr']['disabled'] = 'disabled';
+                }
             }
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function isAvailable()
+    public function enableSundayAccommodation()
     {
-        //This step is only available if no orders have been placed, because it requires an order amendment which we can't
-        //deal with yet.
-        return $this->areRegistrantAndCourseKnown() &&
-        $this->getParentProcess()->getBooking(false) &&
-        !$this->getParentProcess()->getBooking(false)->getOrderReference();
+        return $this->version == 1;
     }
 }

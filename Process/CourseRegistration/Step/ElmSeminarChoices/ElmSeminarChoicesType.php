@@ -63,13 +63,13 @@ class ElmSeminarChoicesType extends AbstractRegistrationStep
     {
         return array(
             'Civil Procedure' => 'Civil Procedure',
-            'Criminal Law' => 'Criminal Law',
-            'Law of Torts' => 'Law of Torts',
             'Company Law' => 'Company Law',
-            'Law of Contract' => 'Law of Contract',
-            'Private International Law' => 'Private International Law',
             'Constitutional and Administrative Law' => 'Constitutional and Administrative Law',
-            'Law of Trusts' => 'Law of Trusts'
+            'Criminal Law' => 'Criminal Law',
+            'Law of Contract' => 'Law of Contract',
+            'Law of Torts' => 'Law of Torts',
+            'Law of Trusts' => 'Law of Trusts',
+            'Private International Law' => 'Private International Law'
         );
     }
 
