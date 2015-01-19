@@ -91,9 +91,9 @@ class AvailableBursary
         return stripos($this->title, 'Ivy Rose Hood') !== false;
     }
 
-    public function isJamesStewart()
+    public function isJamesStuart()
     {
-        return stripos($this->title, 'James Stewart') !== false;
+        return stripos($this->title, 'James Stuart') !== false;
     }
 
     public function isCambridgeUniversityPress()

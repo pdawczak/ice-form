@@ -110,7 +110,7 @@ class BursaryStep extends AbstractFormStep implements
                 $filteredBursaries['cup'] = $availableBursary;
             } else if ($availableBursary->isIvyRoseHood()) {
                 $filteredBursaries['irh'] = $availableBursary;
-            } else if ($availableBursary->isJamesStewart()) {
+            } else if ($availableBursary->isJamesStuart()) {
                 $filteredBursaries['js'] = $availableBursary;
             }
         }
