@@ -31,6 +31,11 @@ class EnglishLanguageType implements FormTypeInterface
             'choices' => [
                 'Y' => 'Yes',
                 'N' => 'No'
+            ],
+            'constraints' => [
+                'not_blank' => [
+                    'message' => 'Please indicate whether English is your first language',
+                ]
             ]
         ]);
         $builder->add('englishTest', 'choice', [
