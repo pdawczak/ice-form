@@ -1,8 +1,12 @@
 <?php
 namespace Ice\FormBundle\Process\PlaceOrder\Step\ChoosePlans;
 
+use Ice\FormBundle\Infrastructure\Minerva\MinervaClientBookingAdapter;
 use Ice\FormBundle\Process\PlaceOrder\Step\AbstractType;
 use Ice\MinervaClientBundle\Response\FormError;
+use Ice\PaymentPlan\PlanDefinition;
+use Ice\PaymentPlan\PlanParameters;
+use Money\Money;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 use Ice\MinervaClientBundle\Entity\Booking;
@@ -50,7 +54,7 @@ class ChoosePlansType extends AbstractType
 
             $data = null;
             if ($existingChoice = $this->getParentProcess()->getProgress()->getPlanChoiceByBookingId($booking->getId())) {
-                $data = $existingChoice->getCode();
+                $data = $existingChoice->getHash();
             }
 
 
@@ -85,14 +89,8 @@ class ChoosePlansType extends AbstractType
                 $booking = $line['booking'];
                 $rawChoice = $data['plan-choice-booking-' . $booking->getId()];
                 if ($rawChoice !== 'later') {
-                    $matches = array();
-                    if (preg_match("/^([^:]+):(.*)$/", $rawChoice, $matches) === 1) {
-                        $planChoice = new PlanChoice();
-                        $planChoice->setCode($matches[1]);
-                        $planChoice->setBookingId($booking->getId());
-                        $planChoice->setVersion($matches[2]);
-                        $planChoices[] = $planChoice;
-                    }
+                    $planChoice = PlanChoice::withBookingIdAndHash($booking->getId(), $rawChoice);
+                    $planChoices[] = $planChoice;
                 }
             }
 
@@ -115,24 +113,28 @@ class ChoosePlansType extends AbstractType
             return;
 
         $lines = array();
-        $paymentPlanService = $this->getParentProcess()->getPaymentPlanService();
+        $paymentPlanFactory = $this->getParentProcess()->getPlanFactory();
+        $bookingAdapter = new MinervaClientBookingAdapter();
 
         foreach ($this->getParentProcess()->getBookingsAvailableToOrder() as $booking) {
-            $course = $this->getParentProcess()->getVeritasClient()->getCourse(
-                $booking->getAcademicInformation()->getCourseId());
+            $course = $booking->getAcademicInformation()->getCourse();
             $plans = array();
-            foreach ($course->getPaymentPlans() as $plan) {
-                $plans[sprintf("%s:%s", $plan->getCode(), $plan->getVersion())] = array(
-                    'code' => $plan->getCode(),
-                    'version' => $plan->getVersion(),
-                    'description' => $paymentPlanService->getPaymentPlan($plan->getCode(), $plan->getVersion())->getShortDescription(),
-                    'receivables' => $paymentPlanService->getReceivables(
-                        $plan->getCode(),
-                        $plan->getVersion(),
-                        $course->getStartDate(),
-                        $booking->getBookingTotalPriceInPence()
-                    )
+            $i=1;
+            foreach ($course->getAvailablePaymentPlans() as $availablePlan) {
+
+                $calculatedPlan = $paymentPlanFactory->calculatePlan(
+                    $availablePlan->getDefinition(),
+                    $bookingAdapter->getBooking($booking)
                 );
+
+                $hash = PlanChoice::getDefinitionHash($availablePlan->getDefinition());
+
+                $plans[$hash] = array(
+                    'code' => $availablePlan->getDefinition()->getName(),
+                    'description' => $calculatedPlan->getShortDescription(),
+                    'planned_payments' => $calculatedPlan->getPlannedPayments()
+                );
+                $i++;
             }
             $lines[] = array(
                 'booking' => $booking,

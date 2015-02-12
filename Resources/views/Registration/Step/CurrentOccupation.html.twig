@@ -1,0 +1,19 @@
+{% extends "Registration/Step/default.html.twig" %}
+
+{% block form_content %}
+
+    {{ form_row(form.currentOccupation, {'form_type':'horizontal'}) }}
+
+    <p>Name and address of current place of work or study:</p>
+
+    {{ form_row(form.companyOrInstitution, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionAddress1, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionAddress2, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionAddress3, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionTown, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionCounty, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionPostCode, {'form_type':'horizontal'}) }}
+    {{ form_row(form.institutionCountry, {'form_type':'horizontal'}) }}
+
+    {{ form_rest(form, {'form_type':'horizontal'}) }}
+{% endblock %}

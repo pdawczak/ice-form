@@ -47,8 +47,8 @@ class VeritasClientCourseAdapter
                 $vcBookingItem->getCode(),
                 $vcBookingItem->getTitle(),
                 $vcBookingItem->getPrice(),
-                $vcBookingItem->getAvailableInBackend(),
-                $vcBookingItem->getAvailableInFrontend()
+                $vcBookingItem->getAvailableInFrontend(),
+                $vcBookingItem->getAvailableInBackend()
             );
         }
 

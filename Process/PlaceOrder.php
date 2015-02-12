@@ -17,10 +17,13 @@ use Ice\MercuryClientBundle\Entity\CustomerInterface;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Ice\MinervaClientBundle\Entity\AcademicInformation;
-use Ice\MercuryClientBundle\Service\PaymentPlanService;
 use Ice\FormBundle\Process\PlaceOrder\Progress;
 
+use Ice\FormBundle\Process\PlaceOrder\CalculatedPlanFactory;
+
 use Symfony\Component\HttpFoundation\Response;
+
+use Ice\MercuryClientBundle\Builder\ProposedSuborderFactory;
 
 class PlaceOrder extends AbstractProcess
 {
@@ -39,9 +42,6 @@ class PlaceOrder extends AbstractProcess
     /** @var AcademicInformation[] */
     private $academicInformations;
 
-    /** @var PaymentPlanService */
-    private $paymentPlanService;
-
     /** @var Progress */
     private $progress;
 
@@ -50,6 +50,15 @@ class PlaceOrder extends AbstractProcess
 
     /** @var Response */
     private $ajaxResponse;
+
+    /** @var CalculatedPlanFactory */
+    private $planFactory;
+
+    /** @var ProposedSuborderFactory */
+    private $proposedSuborderFactory;
+
+    /** @var User */
+    private $user;
 
     /**
      * @param $index
@@ -282,6 +291,16 @@ class PlaceOrder extends AbstractProcess
     }
 
     /**
+     * @param User $user
+     * @return PlaceOrder
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
      * @throws \LogicException
      * @return \Ice\MercuryClientBundle\Entity\CustomerInterface
      */
@@ -291,6 +310,18 @@ class PlaceOrder extends AbstractProcess
             throw new \LogicException("getCustomer called but Customer has not been set");
         }
         return $this->customer;
+    }
+
+    /**
+     * @throws \LogicException
+     * @return User
+     */
+    public function getUser()
+    {
+        if (!$this->user) {
+            throw new \LogicException("getUser called but User has not been set");
+        }
+        return $this->user;
     }
 
     /**
@@ -319,28 +350,11 @@ class PlaceOrder extends AbstractProcess
                 ($ai->getApplicationStatusCode() === null || $ai->isApplicationAccepted()) &&
                 ($booking = $ai->getActiveBooking())
             ) {
+                $booking->setAcademicInformation($ai);
                 $bookings[] = $booking;
             }
         }
         return $bookings;
-    }
-
-    /**
-     * @param \Ice\MercuryClientBundle\Service\PaymentPlanService $paymentPlanService
-     * @return PlaceOrder
-     */
-    public function setPaymentPlanService($paymentPlanService)
-    {
-        $this->paymentPlanService = $paymentPlanService;
-        return $this;
-    }
-
-    /**
-     * @return \Ice\MercuryClientBundle\Service\PaymentPlanService
-     */
-    public function getPaymentPlanService()
-    {
-        return $this->paymentPlanService;
     }
 
     /**
@@ -394,5 +408,41 @@ class PlaceOrder extends AbstractProcess
     public function getAjaxResponse()
     {
         return $this->ajaxResponse;
+    }
+
+    /**
+     * @return CalculatedPlanFactory
+     */
+    public function getPlanFactory()
+    {
+        return $this->planFactory;
+    }
+
+    /**
+     * @param CalculatedPlanFactory $paymentPlanCalculator
+     * @return $this
+     */
+    public function setPlanFactory($paymentPlanCalculator)
+    {
+        $this->planFactory = $paymentPlanCalculator;
+        return $this;
+    }
+
+    /**
+     * @return ProposedSuborderFactory
+     */
+    public function getProposedSuborderFactory()
+    {
+        return $this->proposedSuborderFactory;
+    }
+
+    /**
+     * @param ProposedSuborderFactory $proposedSuborderFactory
+     * @return $this
+     */
+    public function setProposedSuborderFactory($proposedSuborderFactory)
+    {
+        $this->proposedSuborderFactory = $proposedSuborderFactory;
+        return $this;
     }
 }

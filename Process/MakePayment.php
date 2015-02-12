@@ -17,7 +17,6 @@ use Ice\MercuryClientBundle\Entity\CustomerInterface;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Ice\MinervaClientBundle\Entity\AcademicInformation;
-use Ice\MercuryClientBundle\Service\PaymentPlanService;
 use Ice\FormBundle\Process\MakePayment\Progress;
 
 use Ice\MercuryClientBundle\Entity\Order;
@@ -39,9 +38,6 @@ class MakePayment extends AbstractProcess
 
     /** @var AcademicInformation[] */
     private $academicInformations;
-
-    /** @var PaymentPlanService */
-    private $paymentPlanService;
 
     /** @var Progress */
     private $progress;
@@ -374,24 +370,6 @@ class MakePayment extends AbstractProcess
             }
         }
         return $bookings;
-    }
-
-    /**
-     * @param \Ice\MercuryClientBundle\Service\PaymentPlanService $paymentPlanService
-     * @return MakePayment
-     */
-    public function setPaymentPlanService($paymentPlanService)
-    {
-        $this->paymentPlanService = $paymentPlanService;
-        return $this;
-    }
-
-    /**
-     * @return \Ice\MercuryClientBundle\Service\PaymentPlanService
-     */
-    public function getPaymentPlanService()
-    {
-        return $this->paymentPlanService;
     }
 
     /**

@@ -24,11 +24,16 @@ class EducationType implements FormTypeInterface
     {
         if ($this->enableHighestQualificationQuestion()) {
             $builder->add('highestQualification', 'textarea', [
-                'label' => 'If you have an academic qualification please indicate the highest that you currently hold. If degree, please state: Degree, Subject, Class, University/Institution and Year awarded. If other qualification: Level, Subject, Class or Mark and Institution. '
+                'label' => 'If you have an academic qualification please indicate the highest that you currently hold. If degree, please state: Degree, Subject, Class, University/Institution and Year awarded. If other qualification: Level, Subject, Class or Mark and Institution. ',
             ]);
         }
         $builder->add('recentInvolvement', 'textarea', [
-            'label'=>'Please describe briefly your recent involvement in the subject area, if any, e.g. courses attended (title/level/date), practical work undertaken, qualifications gained (subject/level/date) etc. and other information in support of your application.'
+            'label'=>'Please describe briefly your recent involvement in the subject area, if any, e.g. courses attended (title/level/date), practical work undertaken, qualifications gained (subject/level/date) etc. and other information in support of your application.',
+            'constraints' => [
+                'not_blank' => [
+                    'message' => 'Please describe your recent involvement in the subject area'
+                ]
+            ]
         ]);
     }
 

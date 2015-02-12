@@ -1,60 +1,23 @@
 <?php
 namespace Ice\FormBundle\Process\PlaceOrder\Step\ChoosePlans;
 
+use Ice\PaymentPlan\PlanDefinition;
+
 class PlanChoice{
     /** @var string */
-    private $code;
-
-    /** @var string */
-    private $version;
+    private $hash;
 
     /** @var int */
     private $bookingId;
 
-    /**
-     * @param string $code
-     * @return PlanChoice
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-        return $this;
-    }
+    private function __construct(){}
 
     /**
      * @return string
      */
-    public function getCode()
+    public function getHash()
     {
-        return $this->code;
-    }
-
-    /**
-     * @param string $version
-     * @return PlanChoice
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * @param int $bookingId
-     * @return PlanChoice
-     */
-    public function setBookingId($bookingId)
-    {
-        $this->bookingId = $bookingId;
-        return $this;
+        return $this->hash;
     }
 
     /**
@@ -63,5 +26,23 @@ class PlanChoice{
     public function getBookingId()
     {
         return $this->bookingId;
+    }
+
+    public static function getDefinitionHash(PlanDefinition $definition)
+    {
+        return md5(serialize($definition));
+    }
+
+    /**
+     * @param $bookingId
+     * @param $hash
+     * @return PlanChoice
+     */
+    public static function withBookingIdAndHash($bookingId, $hash)
+    {
+        $instance = new self();
+        $instance->bookingId = $bookingId;
+        $instance->hash = $hash;
+        return $instance;
     }
 }

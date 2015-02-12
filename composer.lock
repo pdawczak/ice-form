@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69a56958c297e6fdb8b32dcce532c5d7",
+    "hash": "560e43cbbd384985a0553e259cc5fa73",
     "packages": [
         {
             "name": "cambridgeuniversity/ice-paymentplan",
@@ -637,27 +637,29 @@
         },
         {
             "name": "ice/mercuryclient-bundle",
-            "version": "2.19.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cambridgeuniversity/ice-mercuryclient.git",
-                "reference": "ac27cdf664cf771cb78d7bfa03bc4068d0e67ba4"
+                "reference": "adedc9aeff92c80c41fbdd43f3b41125521ab6fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cambridgeuniversity/ice-mercuryclient/zipball/ac27cdf664cf771cb78d7bfa03bc4068d0e67ba4",
-                "reference": "ac27cdf664cf771cb78d7bfa03bc4068d0e67ba4",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-mercuryclient/zipball/adedc9aeff92c80c41fbdd43f3b41125521ab6fa",
+                "reference": "adedc9aeff92c80c41fbdd43f3b41125521ab6fa",
                 "shasum": ""
             },
             "require": {
+                "cambridgeuniversity/ice-paymentplan": "~1.1",
                 "ice/janusclient-bundle": ">=0.2",
-                "ice/minervaclient-bundle": ">=1.1.0",
+                "ice/minervaclient-bundle": "~2.0",
                 "ice/veritasclient-bundle": ">=0.2.2",
                 "jms/serializer-bundle": ">=0.12.0@dev",
                 "misd/guzzle-bundle": "@stable"
             },
             "require-dev": {
-                "liip/functional-test-bundle": "dev-master"
+                "liip/functional-test-bundle": "dev-master",
+                "phpspec/phpspec": "~2.1"
             },
             "suggest": {
                 "ice/patchpatch": "Helps processing Patch REST requests."
@@ -683,16 +685,21 @@
                 }
             ],
             "description": "Client for the ICE Mercury API",
-            "time": "2014-09-02 13:17:32"
+            "time": "2015-01-09 16:03:53"
         },
         {
             "name": "ice/minervaclient-bundle",
-            "version": "dev-trunk",
-            "target-dir": "Ice/MinervaClientBundle",
+            "version": "2.0.0",
             "source": {
-                "type": "svn",
-                "url": "http://repositories.internal.admin.cam.ac.uk/svn/ice-minervaclient",
-                "reference": "/trunk/@126"
+                "type": "git",
+                "url": "https://github.com/cambridgeuniversity/ice-minervaclient.git",
+                "reference": "999738a8ef6c8ce901da163eb022ff700fd3df13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-minervaclient/zipball/999738a8ef6c8ce901da163eb022ff700fd3df13",
+                "reference": "999738a8ef6c8ce901da163eb022ff700fd3df13",
+                "shasum": ""
             },
             "require": {
                 "jms/serializer-bundle": ">=0.12.0@dev",
@@ -701,37 +708,38 @@
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "Ice\\MinervaClientBundle": ""
+                    "": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Rob Hogan",
-                    "email": "rob.hogan@admin.cam.ac.uk"
-                },
-                {
                     "name": "Stuart Chapman",
                     "email": "stuart.chapman@admin.cam.ac.uk"
+                },
+                {
+                    "name": "Rob Hogan",
+                    "email": "rob.hogan@admin.cam.ac.uk"
                 }
             ],
             "description": "Client for the ICE Minerva API",
-            "time": "2014-05-01 01:12:27"
+            "time": "2015-01-09 15:46:13"
         },
         {
             "name": "ice/veritasclient-bundle",
-            "version": "2.1.3",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cambridgeuniversity/ice-veritasclient.git",
-                "reference": "ddbc754c2dc1b1f518ef3078a4b4e1df726a9ac5"
+                "reference": "e160d374928e1f53071ed7c53163f560a5580ecd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/ddbc754c2dc1b1f518ef3078a4b4e1df726a9ac5",
-                "reference": "ddbc754c2dc1b1f518ef3078a4b4e1df726a9ac5",
+                "url": "https://api.github.com/repos/cambridgeuniversity/ice-veritasclient/zipball/e160d374928e1f53071ed7c53163f560a5580ecd",
+                "reference": "e160d374928e1f53071ed7c53163f560a5580ecd",
                 "shasum": ""
             },
             "require": {
@@ -773,7 +781,7 @@
                 }
             ],
             "description": "Client for the ICE Veritas API",
-            "time": "2014-12-10 15:51:24"
+            "time": "2015-01-16 12:32:39"
         },
         {
             "name": "jms/metadata",
@@ -1723,11 +1731,11 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ice/minervaclient-bundle": 20,
         "misd/guzzle-bundle": 0,
         "twig/extensions": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }
