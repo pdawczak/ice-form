@@ -30,6 +30,33 @@ class PersonalDetailsType extends AbstractRegistrationStep
         13 => 'crsId',
     );
 
+    protected $titles = array(
+        ''      => 'Please select',
+        'Capt'  => 'Capt',
+        'Col'   => 'Col',
+        'Cmdr'  => 'Cmdr',
+        'Dr'    => 'Dr',
+        'Fthr'  => 'Fthr',
+        'Herr'  => 'Herr',
+        'Judg'  => 'Judg',
+        'Lady'  => 'Lady',
+        'Lt'    => 'Lt',
+        'Lord'  => 'Lord',
+        'Mdme'  => 'Mdme',
+        'Mlle'  => 'Mlle',
+        'Maj'   => 'Maj',
+        'Miss'  => 'Miss',
+        'M'     => 'M',
+        'Mr'    => 'Mr',
+        'Mrs'   => 'Mrs',
+        'Ms'    => 'Ms',
+        'Prof'  => 'Prof',
+        'Rev'   => 'Rev',
+        'RevD'  => 'RevD',
+        'Sir'   => 'Sir',
+        'SqLd'  => 'SqLd',
+    );
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -100,18 +127,7 @@ class PersonalDetailsType extends AbstractRegistrationStep
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
-                    'choices' => array(
-                        '' => 'Please select',
-                        'Dr' => 'Dr',
-                        'Misc' => 'Misc',
-                        'Miss' => 'Miss',
-                        'Mr' => 'Mr',
-                        'Mrs' => 'Mrs',
-                        'Ms' => 'Ms',
-                        'Mx' => 'Mx',
-                        'Prof' => 'Prof',
-                        'Revd' => 'Revd',
-                    )
+                    'choices' => $this->titles
                 ))
                 ->add('firstNames', 'text', array(
                     'label' => 'First name'
@@ -171,17 +187,7 @@ class PersonalDetailsType extends AbstractRegistrationStep
                 'label' => 'Previous title',
                 'multiple' => false,
                 'expanded' => false,
-                'choices' => array(
-                    'Mr' => 'Mr',
-                    'Mrs' => 'Mrs',
-                    'Miss' => 'Miss',
-                    'Ms' => 'Ms',
-                    'Dr' => 'Dr',
-                    'Prof' => 'Prof',
-                    'Revd' => 'Revd',
-                    'Misc' => 'Misc',
-                    'Mx' => 'Mx',
-                ),
+                'choices' => $this->titles,
                 'required' => false,
             ))
             ->add('previousFirstName', 'text', array(
