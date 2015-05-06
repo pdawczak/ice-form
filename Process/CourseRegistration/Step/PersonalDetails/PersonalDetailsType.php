@@ -38,7 +38,7 @@ class PersonalDetailsType extends AbstractRegistrationStep
         'Mrs'   => 'Mrs',
         'Ms'    => 'Ms',
         'Prof'  => 'Prof',
-        'Revd'   => 'Rev',
+        'Rev'   => 'Revd',
     );
 
     /**
