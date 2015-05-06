@@ -32,29 +32,13 @@ class PersonalDetailsType extends AbstractRegistrationStep
 
     protected $titles = array(
         ''      => 'Please select',
-        'Capt'  => 'Capt',
-        'Col'   => 'Col',
-        'Cmdr'  => 'Cmdr',
         'Dr'    => 'Dr',
-        'Fthr'  => 'Fthr',
-        'Herr'  => 'Herr',
-        'Judg'  => 'Judg',
-        'Lady'  => 'Lady',
-        'Lt'    => 'Lt',
-        'Lord'  => 'Lord',
-        'Mdme'  => 'Mdme',
-        'Mlle'  => 'Mlle',
-        'Maj'   => 'Maj',
         'Miss'  => 'Miss',
-        'M'     => 'M',
         'Mr'    => 'Mr',
         'Mrs'   => 'Mrs',
         'Ms'    => 'Ms',
         'Prof'  => 'Prof',
-        'Rev'   => 'Rev',
-        'RevD'  => 'RevD',
-        'Sir'   => 'Sir',
-        'SqLd'  => 'SqLd',
+        'Rev'   => 'Revd',
     );
 
     /**
